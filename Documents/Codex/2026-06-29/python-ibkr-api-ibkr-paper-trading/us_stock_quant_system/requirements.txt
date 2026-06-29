@@ -1,0 +1,13 @@
+pandas
+numpy
+yfinance
+ta
+matplotlib
+pydantic
+python-dotenv
+PyYAML
+loguru
+pytest
+rich
+tabulate
+ibapi

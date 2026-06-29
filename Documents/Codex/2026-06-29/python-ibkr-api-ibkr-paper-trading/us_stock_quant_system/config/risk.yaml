@@ -1,0 +1,27 @@
+account:
+  account_equity: 20000
+  base_currency: "USD"
+
+risk:
+  risk_per_trade_pct: 0.005
+  max_position_pct: 0.15
+  max_total_stock_exposure_pct: 0.50
+  max_sector_exposure_pct: 0.35
+  max_open_risk_pct: 0.025
+  max_positions: 4
+  semiconductor_max_positions: 2
+  max_order_value_usd: 3000
+  max_daily_order_count: 10
+  max_total_new_exposure_usd: 10000
+  allow_fractional_shares: true
+
+stops:
+  atr_period: 14
+  atr_multiplier: 1.8
+  min_stop_distance_pct: 0.03
+  max_stop_distance_pct: 0.15
+  buy_allowed_max_stop_distance_pct: 0.12
+
+drawdown_control:
+  warning_drawdown_pct: 0.08
+  stop_new_positions_drawdown_pct: 0.12

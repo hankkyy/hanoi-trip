@@ -1,0 +1,36 @@
+universe:
+  benchmark:
+    - SPY
+    - QQQ
+
+  stocks:
+    - AAPL
+    - MSFT
+    - NVDA
+    - AMD
+    - MU
+    - AVGO
+    - GOOGL
+    - AMZN
+    - META
+
+sectors:
+  SPY: ETF
+  QQQ: ETF
+  AAPL: Technology
+  MSFT: Technology
+  NVDA: Semiconductor
+  AMD: Semiconductor
+  MU: Semiconductor
+  AVGO: Semiconductor
+  GOOGL: Communication
+  AMZN: Consumer
+  META: Communication
+
+excluded:
+  - small_cap
+  - biotech_binary_event
+  - penny_stock
+  - meme_stock
+  - leveraged_etf
+  - options

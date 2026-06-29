@@ -1,0 +1,3 @@
+ticker,side,quantity,order_type,limit_price,stop_price,time_in_force,reason,strategy_name,broker_mode,live_trading,paper_trading,dry_run,date,status
+AAPL,BUY,1.0,LIMIT,100.0,,DAY,ibkr_paper_test_order,trend_pullback_v1,dry_run,False,True,True,2026-06-29,DRY_RUN_ONLY
+AAPL,BUY,1.0,LIMIT,100.0,,DAY,,trend_pullback_v1,dry_run,False,True,True,2026-06-29,DRY_RUN_ONLY

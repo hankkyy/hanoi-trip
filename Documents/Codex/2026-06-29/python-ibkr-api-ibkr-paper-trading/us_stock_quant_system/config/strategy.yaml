@@ -1,0 +1,33 @@
+strategy:
+  active: "trend_pullback_v1"
+
+market_filter:
+  require_spy_above_sma200: true
+  require_qqq_above_sma200: false
+  minimum_market_score_for_buy: 15
+
+indicators:
+  sma_short: 20
+  sma_mid: 50
+  sma_long: 200
+  rsi_period: 14
+  atr_period: 14
+  bollinger_period: 20
+  bollinger_std: 2
+  macd_fast: 12
+  macd_slow: 26
+  macd_signal: 9
+  breakout_lookback: 20
+  fib_lookback: 60
+
+score_thresholds:
+  buy_candidate: 80
+  watch: 70
+  neutral: 60
+
+rules:
+  no_buy_if_close_below_sma200: true
+  no_buy_if_rsi_above: 78
+  high_volatility_atr_pct: 0.08
+  preferred_rsi_min: 45
+  preferred_rsi_max: 70

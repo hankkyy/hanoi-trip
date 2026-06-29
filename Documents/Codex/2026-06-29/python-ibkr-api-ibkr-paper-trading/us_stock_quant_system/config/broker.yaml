@@ -1,0 +1,30 @@
+broker:
+  active: "dry_run"
+  allowed_brokers:
+    - dry_run
+    - ibkr_paper
+    - ibkr_live
+
+ibkr:
+  host: "127.0.0.1"
+  client_id: 101
+  tws_paper_port: 7497
+  tws_live_port: 7496
+  gateway_paper_port: 4002
+  gateway_live_port: 4001
+  default_mode: "paper"
+  use_gateway: false
+  read_only_first: true
+  account_id: ""
+
+safety:
+  dry_run: true
+  paper_trading: true
+  live_trading: false
+  confirm_live_trading: ""
+  auto_submit_paper_orders: false
+  allow_market_orders: false
+  allow_fractional_shares: true
+  max_order_value_usd: 3000
+  max_daily_order_count: 10
+  max_total_new_exposure_usd: 10000
