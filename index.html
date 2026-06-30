@@ -1,0 +1,1134 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
+<title>河内 · 下龙湾 4日行程</title>
+<style>
+:root {
+  --gold:#C8974A; --emerald:#1A6B4A; --bg:#FEFCF5; --card:#FFF;
+  --text:#1E293B; --muted:#64748B; --radius:16px; --max-w:1100px;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body {
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  background:var(--bg); color:var(--text); line-height:1.55;
+  -webkit-font-smoothing:antialiased; -webkit-tap-highlight-color:transparent;
+  font-size:16px;
+}
+
+#now-bar {
+  position:sticky; top:0; z-index:1000;
+  background:rgba(30,41,59,0.95); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
+  color:#FFF; padding:10px 20px; font-size:14px; display:flex; align-items:center; gap:8px; justify-content:center; transition:all 0.5s;
+}
+#now-bar.active { background:rgba(26,107,74,0.95); }
+.pulse { width:8px; height:8px; border-radius:50%; background:#4ADE80; animation:pulse 1.5s ease-in-out infinite; }
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1);} 50%{opacity:0.4;transform:scale(2);} }
+
+.wx-tip { background:#07C160; color:#FFF; text-align:center; padding:6px 16px; font-size:13px; display:flex; align-items:center; justify-content:center; gap:8px; }
+.edit-btn { background:rgba(255,255,255,0.2); border:1px solid rgba(255,255,255,0.3); color:#FFF; padding:4px 12px; border-radius:50px; font-size:12px; cursor:pointer; }
+.edit-btn.active { background:#FFF; color:#07C160; }
+
+/* hero */
+.hero {
+  color:#FFF; padding:32px 24px 28px; text-align:center; position:relative; overflow:hidden;
+  background:linear-gradient(160deg,rgba(15,55,35,0.25) 0%,rgba(10,40,25,0.4) 100%),
+             url('https://images.weserv.nl/?url=images.unsplash.com/photo-1528127269322-539801943592&w=1200&h=600&fit=cover') center/cover;
+}
+.hero::before { content:''; position:absolute; inset:0; pointer-events:none; background:radial-gradient(ellipse at 15% 85%,rgba(200,151,74,0.25) 0%,transparent 45%),radial-gradient(ellipse at 85% 15%,rgba(13,148,136,0.15) 0%,transparent 45%); }
+.hero-content { position:relative; z-index:2; max-width:700px; margin:0 auto; }
+.hero-badge { display:inline-block; border:1px solid rgba(255,255,255,0.5); border-radius:50px; padding:5px 16px; font-size:12px; letter-spacing:4px; margin-bottom:12px; background:rgba(0,0,0,0.15); }
+.hero h1 { font-size:clamp(34px,5vw,52px); font-weight:900; letter-spacing:2px; }
+.hero h1 span { color:var(--gold); }
+.hero .sub { margin-top:6px; font-size:14px; opacity:0.9; font-weight:400; }
+
+.flight-row { display:flex; flex-direction:column; align-items:center; gap:16px; margin-top:22px; }
+
+.flight-card {
+  display:flex; flex-direction:column;
+  background:linear-gradient(170deg,#FFFEF8,#FDFBF2);
+  border-radius:16px; overflow:hidden;
+  box-shadow:0 4px 24px rgba(0,0,0,0.18);
+  cursor:pointer; transition:all 0.35s; width:100%; max-width:440px;
+}
+.flight-card:hover { transform:translateY(-4px); box-shadow:0 10px 36px rgba(0,0,0,0.25); }
+
+/* boarding pass top strip */
+.bp-header {
+  background:linear-gradient(135deg,#152E20,#0E2418);
+  color:rgba(255,255,255,0.8); padding:10px 18px;
+  display:flex; align-items:center; justify-content:space-between;
+}
+.bp-header .bp-label { font-size:12px; letter-spacing:4px; font-weight:700; }
+.bp-header .bp-arrow { font-size:13px; opacity:0.6; }
+
+/* main body */
+.bp-body {
+  display:grid; grid-template-columns:1fr auto 1fr; align-items:center;
+  padding:20px 18px 10px;
+}
+.bp-station { text-align:center; }
+.bp-code { font-size:34px; font-weight:900; letter-spacing:6px; color:var(--text); line-height:1; }
+.bp-code.arr { color:var(--gold); }
+.bp-city { font-size:12px; color:var(--muted); margin-top:2px; }
+.bp-time { font-size:26px; font-weight:700; color:var(--text); margin-top:10px; letter-spacing:2px; line-height:1; }
+.bp-date { font-size:12px; color:var(--muted); margin-top:2px; }
+
+/* route center */
+.bp-route {
+  display:flex; flex-direction:column; align-items:center; gap:8px;
+  padding:0 12px;
+}
+.bp-route-visual {
+  display:flex; align-items:center; gap:0;
+}
+.bp-dot { width:7px; height:7px; border-radius:50%; background:var(--gold); flex-shrink:0; }
+.bp-dash {
+  width:38px; height:0;
+  border-top:2px dashed rgba(200,151,74,0.45);
+}
+.bp-plane { font-size:16px; margin:0 2px; animation:flyPulse 2.5s ease-in-out infinite; flex-shrink:0; }
+@keyframes flyPulse { 0%,100%{transform:scale(1);opacity:0.7;} 50%{transform:scale(1.2);opacity:1;} }
+.bp-flight-no { font-size:12px; font-weight:700; color:var(--text); letter-spacing:3px; }
+.bp-dur { font-size:11px; color:var(--muted); }
+
+/* info row */
+.bp-info {
+  display:flex; justify-content:space-around;
+  padding:6px 18px 0;
+  font-size:12px; color:var(--muted);
+}
+.bp-info span { text-align:center; }
+
+/* perforation */
+.bp-perf {
+  border-top:2px dotted rgba(0,0,0,0.08);
+  margin:10px 18px 0;
+}
+
+/* footer */
+.bp-footer {
+  padding:10px 18px 14px;
+  display:flex; justify-content:space-between; align-items:center;
+  font-size:12px; color:var(--muted);
+}
+
+/* expandable extra */
+.flight-card .fextra {
+  max-height:0; overflow:hidden; transition:all 0.4s;
+  font-size:11px; color:var(--muted); text-align:center;
+  padding:0 18px; opacity:0;
+}
+.flight-card.tapped .fextra { max-height:32px; opacity:1; padding:2px 18px 10px; }
+.flight-card.tapped .bp-perf { margin-bottom:0; }
+
+.page { max-width:var(--max-w); margin:0 auto; padding:0 20px; }
+
+/* weather */
+.weather-row { display:flex; flex-direction:column; align-items:center; padding:14px 0 0; }
+.weather-box {
+  background:#FFF; border-radius:18px; padding:18px 24px;
+  box-shadow:0 2px 16px rgba(0,0,0,0.05); cursor:pointer;
+  display:flex; align-items:center; gap:16px; transition:all 0.3s;
+  width:100%; max-width:460px;
+}
+.weather-box:hover { box-shadow:0 4px 20px rgba(0,0,0,0.08); }
+.weather-box .w-icon { font-size:44px; line-height:1; flex-shrink:0; }
+.weather-box .w-main { flex:1; min-width:0; }
+.weather-box .w-temp { font-weight:800; font-size:24px; color:var(--text); line-height:1.1; }
+.weather-box .w-desc { font-size:14px; color:var(--muted); }
+.weather-box .w-extra { text-align:right; flex-shrink:0; }
+.weather-box .w-hum { font-size:13px; color:var(--muted); }
+.weather-box .w-hint { font-size:12px; color:var(--muted); margin-top:4px; opacity:0.5; }
+
+/* forecast panel */
+.weather-fc {
+  display:flex; gap:10px; background:transparent; padding:4px 0;
+  margin-top:10px; overflow-x:auto; width:100%; max-width:500px;
+  -webkit-overflow-scrolling:touch; scroll-snap-type:x mandatory;
+}
+.weather-fc .fc-day {
+  flex:0 0 auto; min-width:88px; text-align:center;
+  padding:16px 10px 14px; border-radius:14px;
+  background:#FFF; box-shadow:0 1px 6px rgba(0,0,0,0.04);
+  transition:all 0.25s; scroll-snap-align:start;
+}
+.weather-fc .fc-day:hover { transform:translateY(-3px); box-shadow:0 4px 16px rgba(0,0,0,0.08); }
+.weather-fc .fc-day.today {
+  background:linear-gradient(160deg,#FFF9EE,#FFF3DC);
+  box-shadow:0 2px 12px rgba(200,151,74,0.15);
+}
+.weather-fc .fc-day.selected {
+  background:linear-gradient(160deg,#F0F9FF,#E0F2FE);
+  box-shadow:0 2px 12px rgba(14,165,233,0.2);
+  transform:translateY(-3px);
+}
+.weather-fc .fc-day .fc-dow { font-size:14px; font-weight:700; color:var(--text); }
+.weather-fc .fc-day .fc-date { font-size:11px; color:var(--muted); margin-top:2px; }
+.weather-fc .fc-day .fc-icon { font-size:36px; margin:10px 0 6px; display:block; line-height:1; }
+.weather-fc .fc-day .fc-temp { font-size:15px; font-weight:700; color:var(--text); }
+.weather-fc .fc-day .fc-desc { font-size:12px; color:var(--muted); margin-top:3px; }
+/* hourly panel */
+.hourly-panel {
+  display:flex; gap:6px; background:transparent; padding:4px 0;
+  margin-top:6px; overflow-x:auto; width:100%; max-width:500px;
+  -webkit-overflow-scrolling:touch; scroll-snap-type:x mandatory;
+}
+.hourly-panel .hr-card {
+  flex:0 0 auto; min-width:62px; text-align:center;
+  padding:12px 6px 10px; border-radius:12px;
+  background:#FFF; box-shadow:0 1px 4px rgba(0,0,0,0.04);
+  transition:all 0.25s; scroll-snap-align:start;
+}
+.hourly-panel .hr-card:hover { transform:translateY(-2px); box-shadow:0 3px 12px rgba(0,0,0,0.08); }
+.hourly-panel .hr-card.now-hr {
+  background:linear-gradient(160deg,#FFF9EE,#FFF3DC);
+  box-shadow:0 2px 8px rgba(200,151,74,0.15);
+}
+.hourly-panel .hr-time { font-size:12px; font-weight:700; color:var(--text); }
+.hourly-panel .hr-icon { font-size:24px; margin:4px 0 2px; display:block; line-height:1; }
+.hourly-panel .hr-temp { font-size:14px; font-weight:700; color:var(--text); }
+.hourly-panel .hr-desc { font-size:10px; color:var(--muted); margin-top:1px; }
+.hourly-panel .hr-rain { font-size:10px; color:#3B82F6; margin-top:1px; }
+
+.top-cards { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-top:12px; }
+@media(max-width:640px){ .top-cards { grid-template-columns:1fr 1fr; } }
+.top-card { background:#FFF; border-radius:14px; padding:14px 10px; text-align:center; box-shadow:0 1px 8px rgba(0,0,0,0.04); transition:all 0.3s; }
+.top-card .icon { font-size:26px; margin-bottom:3px; }
+.top-card .label { font-size:11px; color:var(--muted); letter-spacing:1px; }
+.top-card .value { font-size:13px; font-weight:700; margin-top:2px; }
+
+.cdown {
+  background:linear-gradient(135deg,#FFFBF3,#FEF7E6); color:var(--text);
+  text-align:center; padding:22px 20px; border-radius:var(--radius); margin:14px 0;
+  border:1px solid rgba(200,151,74,0.15); box-shadow:0 2px 12px rgba(0,0,0,0.04);
+}
+.cd-rings { display:flex; justify-content:center; gap:clamp(12px,3vw,28px); align-items:center; flex-wrap:wrap; }
+.cd-ring-item { text-align:center; position:relative; }
+.cd-ring-item svg { width:clamp(64px,10vw,90px); height:clamp(64px,10vw,90px); transform:rotate(-90deg); }
+.cd-ring-item .bg { fill:none; stroke:rgba(0,0,0,0.06); stroke-width:6; }
+.cd-ring-item .fg { fill:none; stroke:var(--gold); stroke-width:6; stroke-linecap:round; transition:stroke-dashoffset 0.8s ease; }
+.cd-ring-item .fg.days { stroke:#E85D3A; } .cd-ring-item .fg.hours { stroke:#F59E0B; } .cd-ring-item .fg.mins { stroke:#0D9488; } .cd-ring-item .fg.secs { stroke:#7C3AED; }
+.cd-ring-label { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+.cd-ring-label .val { font-size:clamp(16px,2.5vw,24px); font-weight:900; line-height:1; color:var(--text); }
+.cd-ring-label .lbl { font-size:12px; color:var(--muted); margin-top:2px; letter-spacing:2px; text-transform:uppercase; opacity:0.75; }
+.cd-ring-colon { font-size:clamp(18px,3vw,28px); font-weight:400; color:var(--muted); opacity:0.35; display:none; }
+@media(min-width:500px){ .cd-ring-colon{display:block;} }
+
+.section { padding:14px 0; }
+.sec-head { display:flex; align-items:center; gap:8px; margin-bottom:10px; }
+.sec-head .dot { width:8px; height:8px; border-radius:50%; }
+.sec-head .title { font-size:13px; letter-spacing:3px; color:var(--muted); font-weight:600; }
+
+/* day preview cards */
+.day-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+@media(max-width:768px){ .day-grid { grid-template-columns:1fr; } }
+.day-preview {
+  border-radius:var(--radius); overflow:hidden; background:#FFF;
+  box-shadow:0 2px 16px rgba(0,0,0,0.04); cursor:pointer;
+  transition:all 0.4s; border:2px solid transparent; position:relative;
+}
+.day-preview:hover { transform:translateY(-3px); box-shadow:0 8px 32px rgba(0,0,0,0.08); }
+.day-preview.now-day { border-color:var(--gold); box-shadow:0 0 0 8px rgba(200,151,74,0.08),0 6px 32px rgba(0,0,0,0.1); }
+.now-ribbon { display:none; position:absolute; top:12px; right:-28px; background:var(--gold); color:#FFF; padding:4px 32px; font-size:11px; font-weight:800; letter-spacing:3px; transform:rotate(45deg); z-index:10; }
+.day-preview.now-day .now-ribbon { display:block; }
+
+.day-bar { padding:18px 20px; color:#FFF; display:flex; align-items:center; gap:12px; transition:padding 0.3s; }
+.db1 { background:linear-gradient(135deg,#E85D3A,#CC4A2A); } .db2 { background:linear-gradient(135deg,#0D9488,#0A756C); } .db3 { background:linear-gradient(135deg,#7C3AED,#6B21D0); } .db4 { background:linear-gradient(135deg,#F59E0B,#D98A08); }
+.day-num { min-width:44px; height:44px; border-radius:50%; background:rgba(255,255,255,0.18); display:flex; align-items:center; justify-content:center; font-size:24px; font-weight:900; }
+.day-info { flex:1; }
+.day-date { font-size:13px; opacity:0.85; }
+.day-theme { font-size:17px; font-weight:700; }
+.day-peek { padding:12px 20px; font-size:13px; color:var(--muted); display:flex; flex-wrap:wrap; gap:6px; }
+.day-peek span { background:#F8F6F0; padding:3px 10px; border-radius:50px; font-size:12px; }
+.day-hint { text-align:center; padding:6px 20px 10px; font-size:12px; color:var(--muted); opacity:0.5; }
+
+.day-body { max-height:0; overflow:hidden; transition:max-height 0.6s cubic-bezier(0.25,0.8,0.25,1); padding:0 20px; background:#FAFAF8; }
+.day-preview.expanded .day-body { max-height:4000px; }
+.day-preview.expanded .day-hint { display:none; }
+.day-preview.expanded .day-peek { display:none; }
+
+.tl-row { display:flex; gap:10px; padding:10px 0; border-bottom:1px solid #EDEAE2; align-items:flex-start; cursor:pointer; transition:all 0.25s; }
+.tl-row:last-child { border-bottom:none; }
+.tl-row:hover { background:#FFFDF7; margin:0 -8px; padding:10px 8px; border-radius:8px; }
+.tl-row.now-activity { background:linear-gradient(135deg,#FFFBEB,#FEF0C0); border-radius:10px; transform:scale(1.02); margin:0 -4px; padding:10px 8px; box-shadow:0 2px 10px rgba(251,191,36,0.12); }
+.tl-time { min-width:44px; font-size:13px; font-weight:700; color:var(--muted); text-align:right; padding-top:1px; }
+.tl-info { flex:1; min-width:0; }
+.tl-title { font-size:14px; font-weight:600; }
+.tl-sub { font-size:13px; color:var(--muted); margin-top:2px; }
+.tl-detail { max-height:0; overflow:hidden; transition:all 0.4s; font-size:12px; color:var(--muted); line-height:1.6; opacity:0; }
+.tl-row.tapped .tl-detail { max-height:200px; padding-top:6px; opacity:1; }
+
+.map-link { display:inline-flex; align-items:center; gap:3px; font-size:12px; color:#3B82F6; text-decoration:none; margin-top:5px; padding:4px 8px; border-radius:8px; background:#EFF6FF; }
+.hl-box { background:linear-gradient(135deg,#E8F5E9,#E0F2F1); border-radius:14px; padding:16px; margin:8px 0 12px; }
+.hl-box h3 { font-size:17px; margin-bottom:4px; }
+.hl-box .hl-desc { font-size:13px; color:var(--muted); margin-bottom:10px; }
+.hl-tags { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; }
+@media(max-width:480px){ .hl-tags { grid-template-columns:1fr 1fr; } }
+.hl-tag { background:#FFF; border-radius:10px; padding:10px 8px; font-size:12px; font-weight:600; text-align:center; transition:all 0.3s; }
+.hl-tag .big { font-size:20px; display:block; margin-bottom:2px; }
+
+/* photo strip */
+.photo-strip { display:flex; gap:8px; margin:10px 0 12px; overflow-x:auto; scroll-snap-type:x mandatory; padding-bottom:4px; }
+.photo-strip::-webkit-scrollbar { display:none; }
+.ps-img { min-width:110px; height:75px; border-radius:10px; background-size:cover; background-position:center; scroll-snap-align:start; flex-shrink:0; background-color:#E8ECDF; }
+
+/* map thumb */
+.map-thumb { width:100%; height:100px; border-radius:12px; background-size:cover; background-position:center; margin:4px 0 12px; cursor:pointer; border:1px solid #E5E7EB; background-color:#F0F4F0; display:block; }
+
+/* spot popup */
+.spot-popup {
+  position:absolute; bottom:16px; left:10px; right:10px; z-index:1000;
+  background:#FFF; border-radius:16px; overflow:hidden;
+  box-shadow:0 8px 40px rgba(0,0,0,0.18);
+  transform:translateY(120%); opacity:0; transition:all 0.35s cubic-bezier(0.25,0.8,0.25,1);
+  pointer-events:none; max-width:480px; margin:0 auto;
+}
+.spot-popup.show { transform:translateY(0); opacity:1; pointer-events:auto; }
+.spot-popup .popup-photo { height:140px; background-size:cover; background-position:center; background-color:#E8ECDF; }
+.spot-popup .popup-close {
+  position:absolute; top:10px; right:10px; z-index:10;
+  width:28px; height:28px; border-radius:50%; border:none;
+  background:rgba(0,0,0,0.45); color:#FFF; font-size:14px;
+  cursor:pointer; display:flex; align-items:center; justify-content:center;
+  backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px);
+}
+.spot-popup .popup-body { padding:14px 16px 18px; }
+.spot-popup .popup-emoji { font-size:32px; display:inline-block; margin-bottom:4px; }
+.spot-popup .popup-title { font-size:17px; font-weight:800; color:var(--text); margin-bottom:6px; }
+.spot-popup .popup-desc { font-size:13px; color:var(--muted); line-height:1.7; }
+
+.wide-grid { display:grid; grid-template-columns:1.6fr 1fr; gap:20px; align-items:start; }
+@media(max-width:860px){ .wide-grid { grid-template-columns:1fr; } }
+.sticky-col { position:sticky; top:56px; }
+@media(max-width:860px){ .sticky-col { position:static; } }
+
+.hotel-card { background:#FFF; border-radius:var(--radius); padding:18px; box-shadow:0 2px 16px rgba(0,0,0,0.04); display:flex; gap:14px; align-items:flex-start; cursor:pointer; transition:all 0.3s; border:1px solid rgba(200,151,74,0.08); }
+.hotel-card .hicon { font-size:40px; }
+.hotel-card h3 { font-size:16px; }
+.hotel-card .addr { font-size:13px; color:var(--muted); margin-top:2px; }
+.htags { margin-top:6px; display:flex; gap:6px; flex-wrap:wrap; }
+.htag { background:#F0F9F4; color:var(--emerald); font-size:12px; padding:3px 10px; border-radius:50px; font-weight:500; }
+.hotel-detail { max-height:0; overflow:hidden; transition:all 0.5s; background:#F8FAFB; border-radius:12px; margin-top:12px; font-size:13px; opacity:0; padding:0 14px; }
+.hotel-detail.open { max-height:500px; opacity:1; padding:12px 14px; }
+.drow { display:flex; gap:10px; padding:5px 0; align-items:flex-start; }
+.drow .dl { min-width:75px; font-weight:600; color:var(--muted); font-size:12px; }
+.drow .dv { flex:1; font-size:13px; }
+
+/* restaurant */
+.resto-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+@media(max-width:500px){ .resto-grid { grid-template-columns:1fr; } }
+.resto-item { background:#FFF; border-radius:14px; box-shadow:0 1px 8px rgba(0,0,0,0.03); transition:all 0.3s; cursor:pointer; overflow:hidden; }
+.resto-item:hover { transform:translateY(-3px); box-shadow:0 6px 22px rgba(0,0,0,0.07); }
+.resto-preview { padding:14px; display:flex; gap:10px; align-items:center; }
+.resto-emoji { font-size:26px; }
+.resto-info { flex:1; min-width:0; }
+.resto-info h4 { font-size:15px; font-weight:700; }
+.resto-info .rd { font-size:12px; color:var(--muted); margin-top:2px; }
+.r-tag { display:inline-block; font-size:11px; padding:3px 8px; border-radius:50px; margin-top:4px; font-weight:600; }
+.tag-mich { background:#FFF7ED; color:#C2410C; } .tag-bib { background:#FFF1F2; color:#E11D48; } .tag-local { background:#F0FDF4; color:#15803D; }
+.resto-expand { max-height:0; overflow:hidden; transition:all 0.5s; }
+.resto-item.tapped .resto-expand { max-height:300px; }
+.resto-photo { height:100px; background-size:cover; background-position:center; }
+.resto-more { padding:10px 14px 14px; font-size:12px; color:var(--muted); line-height:1.5; }
+
+/* spa */
+.spa-card { background:linear-gradient(135deg,#FFF7ED,#FEF2E0); border-radius:var(--radius); padding:16px; margin-bottom:10px; border:1px solid rgba(200,151,74,0.15); }
+.spa-card h3 { font-size:16px; }
+.spa-card .spa-desc { font-size:13px; color:var(--muted); margin-top:4px; }
+.spa-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:10px; }
+.spa-opt { background:#FFF; border-radius:10px; padding:10px 12px; font-size:13px; }
+.spa-opt .name { font-weight:600; }
+.spa-opt .price { color:var(--muted); font-size:12px; margin-top:2px; }
+
+.souv-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+@media(max-width:500px){ .souv-grid { grid-template-columns:1fr 1fr; } }
+.souv-card { background:#FFF; border-radius:14px; padding:14px 12px; box-shadow:0 1px 8px rgba(0,0,0,0.03); transition:all 0.3s; cursor:pointer; overflow:hidden; }
+.souv-card:hover { transform:translateY(-3px); box-shadow:0 6px 22px rgba(0,0,0,0.08); }
+.souv-card .s-icon { font-size:26px; }
+.souv-card h4 { font-size:13px; margin-top:6px; font-weight:700; }
+.souv-card .s-price { font-size:12px; color:var(--muted); margin-top:2px; }
+.souv-card .s-where { font-size:11px; color:var(--emerald); margin-top:4px; font-weight:500; }
+.souv-card .souv-expand { max-height:0; overflow:hidden; transition:all 0.5s; }
+.souv-card.tapped .souv-expand { max-height:400px; }
+.souv-card .souv-photo { height:80px; background-size:cover; background-position:center; border-radius:8px; margin-top:8px; background-color:#E8ECDF; }
+.souv-card .souv-desc { font-size:12px; color:var(--muted); line-height:1.6; padding-top:8px; }
+
+.info-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+@media(max-width:500px){ .info-grid { grid-template-columns:1fr 1fr; } }
+.info-item { background:#FFF; border-radius:12px; padding:14px; box-shadow:0 1px 8px rgba(0,0,0,0.03); transition:all 0.3s; }
+.info-item .i-title { font-size:11px; color:var(--muted); letter-spacing:2px; }
+.info-item .i-value { font-size:13px; font-weight:700; margin-top:4px; }
+.info-item .i-sub { font-size:11px; color:var(--muted); margin-top:2px; }
+
+/* budget */
+.budget-section { background:#FFF; border-radius:var(--radius); padding:18px; box-shadow:0 1px 8px rgba(0,0,0,0.03); }
+.budget-table { width:100%; border-collapse:collapse; font-size:14px; }
+.budget-table td { padding:8px 12px; border-bottom:1px solid #F3EFE5; }
+.budget-table td:last-child { text-align:right; font-weight:600; }
+.budget-table tr.total td { border-top:2px solid var(--gold); font-size:16px; font-weight:800; color:var(--emerald); border-bottom:none; padding-top:12px; }
+
+/* checklist */
+.cl-item { display:flex; gap:10px; align-items:center; padding:10px 4px; font-size:15px; cursor:pointer; transition:all 0.2s; border-radius:8px; }
+.cl-item:hover { background:#F8FAF5; }
+.cl-box { min-width:22px; height:22px; border-radius:6px; border:2px solid #D1D5DB; transition:all 0.3s; display:flex; align-items:center; justify-content:center; font-size:12px; color:transparent; }
+.cl-item.done .cl-box { background:var(--emerald); border-color:var(--emerald); color:#FFF; }
+.cl-item.done .cl-text { text-decoration:line-through; color:var(--muted); }
+
+.footer { text-align:center; padding:40px 20px 36px; color:var(--muted); font-size:13px; background:#F8F6F0; border-top:1px solid rgba(200,151,74,0.1); }
+.footer .bigemoji { font-size:36px; display:block; margin-bottom:8px; }
+
+/* editable mode */
+.editable [contenteditable="true"] { outline:2px dashed var(--gold); outline-offset:2px; border-radius:4px; padding:2px 4px; background:#FFFDF5; transition:all 0.2s; }
+.editable [contenteditable="true"]:focus { outline:2px solid var(--gold); background:#FFFBE6; }
+
+.fade-in { opacity:0; transform:translateY(16px); transition:opacity 0.6s,transform 0.6s; }
+.fade-in.visible { opacity:1; transform:translateY(0); }
+</style>
+</head>
+<body>
+
+<div id="now-bar"><span id="now-text">加载中…</span></div>
+
+<div class="wx-tip">
+  <span>💡 微信打开？右上角 <b>···</b> → <b>浮窗</b> 随时查看</span>
+  <button class="edit-btn" id="editToggle" onclick="toggleEdit()">✏️ 编辑模式</button>
+</div>
+
+<!-- ═══ HERO ═══ -->
+<div class="hero">
+  <div class="hero-content">
+    <div class="hero-badge">HANOI · VIETNAM</div>
+    <h1>河内 <span>×</span> 下龙湾</h1>
+    <p class="sub" contenteditable="false">7/23 – 7/26 · 4天4晚 · 子豪 & 舅舅</p>
+    <div class="flight-row">
+      <div class="flight-card" onclick="this.classList.toggle('tapped')">
+        <div class="bp-header">
+          <span class="bp-label">去程 · OUTBOUND</span>
+          <span class="bp-arrow">✈</span>
+        </div>
+        <div class="bp-body">
+          <div class="bp-station">
+            <div class="bp-code">SZX</div>
+            <div class="bp-city">深圳宝安</div>
+            <div class="bp-time">00:05</div>
+            <div class="bp-date">7/23 周四</div>
+          </div>
+          <div class="bp-route">
+            <div class="bp-route-visual">
+              <div class="bp-dot"></div>
+              <div class="bp-dash"></div>
+              <div class="bp-plane">✈️</div>
+              <div class="bp-dash"></div>
+              <div class="bp-dot"></div>
+            </div>
+            <div class="bp-flight-no">ZH107</div>
+            <div class="bp-dur">2h5m</div>
+          </div>
+          <div class="bp-station">
+            <div class="bp-code arr">HAN</div>
+            <div class="bp-city">河内内排</div>
+            <div class="bp-time">01:10</div>
+            <div class="bp-date">7/23 周四</div>
+          </div>
+        </div>
+        <div class="bp-info"><span>深圳航空</span><span>空客 A320</span></div>
+        <div class="bp-perf"></div>
+        <div class="bp-footer"><span>深圳 → 河内</span><span>时差 -1h</span></div>
+        <div class="fextra">到达河内后 Grab 打车约 40 分钟到老城区酒店</div>
+      </div>
+      <div class="flight-card" onclick="this.classList.toggle('tapped')">
+        <div class="bp-header">
+          <span class="bp-label">回程 · INBOUND</span>
+          <span class="bp-arrow">✈</span>
+        </div>
+        <div class="bp-body">
+          <div class="bp-station">
+            <div class="bp-code">HAN</div>
+            <div class="bp-city">河内内排</div>
+            <div class="bp-time">18:40</div>
+            <div class="bp-date">7/26 周日</div>
+          </div>
+          <div class="bp-route">
+            <div class="bp-route-visual">
+              <div class="bp-dot"></div>
+              <div class="bp-dash"></div>
+              <div class="bp-plane">✈️</div>
+              <div class="bp-dash"></div>
+              <div class="bp-dot"></div>
+            </div>
+            <div class="bp-flight-no">ZH106</div>
+            <div class="bp-dur">1h50m</div>
+          </div>
+          <div class="bp-station">
+            <div class="bp-code arr">SZX</div>
+            <div class="bp-city">深圳宝安</div>
+            <div class="bp-time">21:30</div>
+            <div class="bp-date">7/26 周日</div>
+          </div>
+        </div>
+        <div class="bp-info"><span>深圳航空</span><span>空客 A320</span></div>
+        <div class="bp-perf"></div>
+        <div class="bp-footer"><span>河内 → 深圳</span><span>到家约 22:30</span></div>
+        <div class="fextra">宝安机场有舅舅车位，免费停车</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="page">
+
+<div class="weather-row"><div class="weather-box" id="weather-box"><span>加载天气…</span></div></div>
+
+<div class="top-cards fade-in">
+  <div class="top-card"><div class="icon">🏨</div><div class="label">酒店</div><div class="value">Rey Hotel</div></div>
+  <div class="top-card"><div class="icon">🚢</div><div class="label">一日游</div><div class="value">下龙湾 Klook</div></div>
+  <div class="top-card"><div class="icon">👥</div><div class="label">出行人</div><div class="value">子豪 & 舅舅</div></div>
+  <div class="top-card"><div class="icon">💳</div><div class="label">支付</div><div class="value">Visa + ATM</div></div>
+</div>
+
+<!-- map -->
+<div class="section">
+  <div class="sec-head"><div class="dot" style="background:var(--emerald)"></div><div class="title">🗺️ 河内地图 · 可交互缩放</div></div>
+  <div id="hanoi-map" style="height:320px; border-radius:16px; z-index:1; box-shadow:0 2px 16px rgba(0,0,0,0.05);"></div>
+</div>
+
+<div class="cdown fade-in" id="countdown">
+  <div class="cd-rings">
+    <div class="cd-ring-item">
+      <svg viewBox="0 0 100 100"><circle class="bg" cx="50" cy="50" r="44"/><circle class="fg days" id="cd-d-ring" cx="50" cy="50" r="44" stroke-dasharray="276" stroke-dashoffset="0"/></svg>
+      <div class="cd-ring-label"><div class="val" id="cd-d">--</div><div class="lbl">天</div></div>
+    </div>
+    <div class="cd-ring-colon">:</div>
+    <div class="cd-ring-item">
+      <svg viewBox="0 0 100 100"><circle class="bg" cx="50" cy="50" r="44"/><circle class="fg hours" id="cd-h-ring" cx="50" cy="50" r="44" stroke-dasharray="276" stroke-dashoffset="0"/></svg>
+      <div class="cd-ring-label"><div class="val" id="cd-h">--</div><div class="lbl">时</div></div>
+    </div>
+    <div class="cd-ring-colon">:</div>
+    <div class="cd-ring-item">
+      <svg viewBox="0 0 100 100"><circle class="bg" cx="50" cy="50" r="44"/><circle class="fg mins" id="cd-m-ring" cx="50" cy="50" r="44" stroke-dasharray="276" stroke-dashoffset="0"/></svg>
+      <div class="cd-ring-label"><div class="val" id="cd-m">--</div><div class="lbl">分</div></div>
+    </div>
+    <div class="cd-ring-colon">:</div>
+    <div class="cd-ring-item">
+      <svg viewBox="0 0 100 100"><circle class="bg" cx="50" cy="50" r="44"/><circle class="fg secs" id="cd-s-ring" cx="50" cy="50" r="44" stroke-dasharray="276" stroke-dashoffset="0"/></svg>
+      <div class="cd-ring-label"><div class="val" id="cd-s">--</div><div class="lbl">秒</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 4 DAYS ═══ -->
+<div class="section">
+  <div class="sec-head"><div class="dot" style="background:#E85D3A"></div><div class="title">每日行程 · 点击展开</div></div>
+  <div class="day-grid">
+
+    <!-- DAY 1 -->
+    <div class="day-preview fade-in" id="day1" onclick="this.classList.toggle('expanded')">
+      <div class="now-ribbon">NOW</div>
+      <div class="day-bar db1"><div class="day-num">1</div><div class="day-info"><div class="day-date">7/23 周四</div><div class="day-theme">抵达 · 老城区漫游</div></div></div>
+      <div class="day-peek"><span>✈️ 凌晨到达</span><span>🥩 奥巴马同款米线</span><span>🚶 还剑湖</span><span>🎭 水上木偶剧</span></div>
+      <div class="day-hint">👆 点击展开完整行程</div>
+      <div class="day-body">
+        <a href="https://maps.google.com/?q=Hoan+Kiem+Lake+Hanoi" target="_blank" onclick="event.stopPropagation()"><div class="map-thumb" style="background-image:url('https://staticmap.openstreetmap.de/staticmap.php?center=21.0288,105.8525&zoom=15&size=400x120&maptype=mapnik&markers=21.0288,105.8525,red-pushpin')"></div></a>
+        <div class="photo-strip">
+          <div class="ps-img proxied-img" data-src="hanoi,old+quarter,street,cafe"></div>
+          <div class="ps-img proxied-img" data-src="hoan+kiem,lake,hanoi,vietnam"></div>
+        </div>
+        <div class="tl-row" data-day="1" data-time="0110" onclick="event.stopPropagation();this.classList.toggle('tapped')"><div class="tl-time">01:10</div><div class="tl-info"><div class="tl-title">✈️ 落地河内，Grab 去酒店</div><div class="tl-sub">Rey Hotel，约40分钟</div><div class="tl-detail">深夜到达 Grab 比出租车靠谱。准备好酒店地址给司机看。</div></div></div>
+        <div class="tl-row" data-day="1" data-time="1000" onclick="event.stopPropagation();this.classList.toggle('tapped')"><div class="tl-time">上午</div><div class="tl-info"><div class="tl-title">😴 补觉 · 酒店早餐</div><div class="tl-sub">红眼航班后恢复体力</div></div></div>
+        <div class="tl-row" data-day="1" data-time="1200" onclick="event.stopPropagation();this.classList.toggle('tapped')"><div class="tl-time">中午</div><div class="tl-info"><div class="tl-title">🥩 烤肉米线 Bún chả</div><div class="tl-sub">奥巴马同款！Hương Liên</div><div class="tl-detail">📍 24 Lê Văn Hưu · 40k-90k VND<br>2016 年奥巴马和 Bourdain 来过的店！<br><a class="map-link" href="https://maps.google.com/?q=Bun+Cha+Huong+Lien+Hanoi">🗺️ Google Maps</a></div></div></div>
+        <div class="tl-row" data-day="1" data-time="1400" onclick="event.stopPropagation();this.classList.toggle('tapped')"><div class="tl-time">下午</div><div class="tl-info"><div class="tl-title">🚶 还剑湖 → 大教堂</div><div class="tl-sub">Cafe Dinh 二楼俯瞰还剑湖</div><div class="tl-detail">☕ Cafe Dinh 鸡蛋咖啡 35k VND · 还剑湖免费<br><a class="map-link" href="https://maps.google.com/?q=Hoan+Kiem+Lake+Hanoi">🗺️ Google Maps</a></div></div></div>
+        <div class="tl-row" data-day="1" data-time="1800" onclick="event.stopPropagation();this.classList.toggle('tapped')"><div class="tl-time">晚上</div><div class="tl-info"><div class="tl-title">🎭 水上木偶剧 · 啤酒街</div><div class="tl-sub">越南国粹 + Bia Hơi</div><div class="tl-detail">🎭 升龙剧院 100k-200k VND · 🍺 啤酒 5k-10k VND<br><a class="map-link" href="https://maps.google.com/?q=Thang+Long+Water+Puppet+Theatre+Hanoi">🗺️ 剧院</a></div></div></div>
+      </div>
+    </div>
+
+    <!-- DAY 2 -->
+    <div class="day-preview fade-in" id="day2" onclick="this.classList.toggle('expanded')">
+      <div class="now-ribbon">NOW</div>
+      <div class="day-bar db2"><div class="day-num">2</div><div class="day-info"><div class="day-date">7/24 周五</div><div class="day-theme">下龙湾豪华一日游</div></div></div>
+      <div class="day-peek"><span>🚢 Klook 五星团</span><span>🕳️ 惊讶洞</span><span>🛶 皮划艇</span><span>🌅 日落派对</span></div>
+      <div class="day-hint">👆 点击展开完整行程</div>
+      <div class="day-body">
+        <a href="https://maps.google.com/?q=Ha+Long+Bay+Vietnam" target="_blank" onclick="event.stopPropagation()"><div class="map-thumb" style="background-image:url('https://staticmap.openstreetmap.de/staticmap.php?center=20.91,107.05&zoom=11&size=400x120&maptype=mapnik&markers=20.91,107.05,blue-pushpin')"></div></a>
+        <div class="photo-strip">
+          <div class="ps-img proxied-img" data-src="halong,bay,limestone,islands,boat"></div>
+          <div class="ps-img proxied-img" data-src="halong,cave,kayak,boat,tour"></div>
+          <div class="ps-img proxied-img" data-src="halong,bay,aerial,view,sunset"></div>
+        </div>
+        <div class="hl-box"><h3>🌊 海上桂林</h3><p class="hl-desc">Dolphin Cruise 海豚号 · 五星 · 酒店接送</p>
+          <div class="hl-tags"><div class="hl-tag"><span class="big">🏊</span>泳池</div><div class="hl-tag"><span class="big">🛶</span>皮划艇</div><div class="hl-tag"><span class="big">🦞</span>海鲜</div><div class="hl-tag"><span class="big">🌅</span>日落</div></div>
+        </div>
+        <div class="tl-row" data-day="2" data-time="0700" onclick="event.stopPropagation();this.classList.toggle('tapped')"><div class="tl-time">07:00</div><div class="tl-info"><div class="tl-title">🚗 酒店接人出发</div><div class="tl-sub">保姆车 · 2.5-3h车程</div></div></div>
+        <div class="tl-row" data-day="2" data-time="1030" onclick="event.stopPropagation();this.classList.toggle('tapped')"><div class="tl-time">10:30</div><div class="tl-info"><div class="tl-title">🛳️ 登船出发</div></div></div>
+        <div class="tl-row" data-day="2" data-time="1200" onclick="event.stopPropagation();this.classList.toggle('tapped')"><div class="tl-time">12:00</div><div class="tl-info"><div class="tl-title">🦞 海鲜自助午餐</div><div class="tl-detail">100+ 道越南海鲜料理</div></div></div>
+        <div class="tl-row" data-day="2" data-time="1330" onclick="event.stopPropagation();this.classList.toggle('tapped')"><div class="tl-time">13:30</div><div class="tl-info"><div class="tl-title">🕳️ 惊讶洞</div></div></div>
+        <div class="tl-row" data-day="2" data-time="1500" onclick="event.stopPropagation();this.classList.toggle('tapped')"><div class="tl-time">15:00</div><div class="tl-info"><div class="tl-title">🛶 皮划艇/竹筏</div><div class="tl-detail">2人一艘，穿过洞口进入泻湖</div></div></div>
+        <div class="tl-row" data-day="2" data-time="1600" onclick="event.stopPropagation();this.classList.toggle('tapped')"><div class="tl-time">16:00</div><div class="tl-info"><div class="tl-title">🏝️ 天堂岛</div></div></div>
+        <div class="tl-row" data-day="2" data-time="1700" onclick="event.stopPropagation();this.classList.toggle('tapped')"><div class="tl-time">17:00</div><div class="tl-info"><div class="tl-title">🍷 日落派对</div><div class="tl-detail">顶层甲板，日落+喀斯特山峰</div></div></div>
+        <div class="tl-row" data-day="2" data-time="2030"><div class="tl-time">20:30</div><div class="tl-info"><div class="tl-title">🏨 回到酒店</div></div></div>
+      </div>
+    </div>
+
+    <!-- DAY 3 -->
+    <div class="day-preview fade-in" id="day3" onclick="this.classList.toggle('expanded')">
+      <div class="now-ribbon">NOW</div>
+      <div class="day-bar db3"><div class="day-num">3</div><div class="day-info"><div class="day-date">7/25 周六</div><div class="day-theme">文化 + 洗头按摩 + 夜市</div></div></div>
+      <div class="day-peek"><span>🏛️ 胡志明陵</span><span>🚂 火车街</span><span>💆 越式洗头</span><span>🏮 夜市</span></div>
+      <div class="day-hint">👆 点击展开完整行程</div>
+      <div class="day-body">
+        <a href="https://maps.google.com/?q=Ho+Chi+Minh+Mausoleum+Hanoi" target="_blank" onclick="event.stopPropagation()"><div class="map-thumb" style="background-image:url('https://staticmap.openstreetmap.de/staticmap.php?center=21.0368,105.8347&zoom=15&size=400x120&maptype=mapnik&markers=21.0368,105.8347,red-pushpin')"></div></a>
+        <div class="tl-row" data-day="3" data-time="0800" onclick="event.stopPropagation();this.classList.toggle('tapped')"><div class="tl-time">08:00</div><div class="tl-info"><div class="tl-title">🏛️ 巴亭广场 → 胡志明陵墓</div><div class="tl-sub">❗不能短裤无袖，周六开放</div><div class="tl-detail">免费 · 排队早去 · 背包寄存<br><a class="map-link" href="https://maps.google.com/?q=Ho+Chi+Minh+Mausoleum+Hanoi">🗺️ Google Maps</a></div></div></div>
+        <div class="tl-row" data-day="3" data-time="1000"><div class="tl-time">10:00</div><div class="tl-info"><div class="tl-title">🪷 一柱寺 → 胡志明故居</div></div></div>
+        <div class="tl-row" data-day="3" data-time="1200" onclick="event.stopPropagation();this.classList.toggle('tapped')"><div class="tl-time">中午</div><div class="tl-info"><div class="tl-title">🍜 牛肉河粉 Phở bò</div><div class="tl-sub">Phở Gia Truyền 排队王</div><div class="tl-detail">📍 49 Bát Đàn · ⚠️ 只开到10am！备选 Phở Thìn (13 Lò Đúc)<br><a class="map-link" href="https://maps.google.com/?q=Pho+Gia+Truyen+49+Bat+Dan+Hanoi">🗺️ Google Maps</a></div></div></div>
+        <div class="tl-row" data-day="3" data-time="1400" onclick="event.stopPropagation();this.classList.toggle('tapped')"><div class="tl-time">下午</div><div class="tl-info"><div class="tl-title">📜 文庙 → 火车街</div><div class="tl-sub">世界遗产 + 网红拍照</div><div class="tl-detail">📜 文庙 30k VND · 🚂 火车约 15:20/17:30<br><a class="map-link" href="https://maps.google.com/?q=Train+Street+Hanoi">🗺️ 火车街</a></div></div></div>
+        <div class="tl-row" data-day="3" data-time="1630" onclick="event.stopPropagation();this.classList.toggle('tapped')"><div class="tl-time">16:30</div><div class="tl-info"><div class="tl-title">💆‍♂️ 越式洗头按摩！</div><div class="tl-sub">走了一天，来放松</div><div class="tl-detail">📍 Nhà Spa (75 Hàng Mã) · 150k VND/35min<br>洗头+头部按摩+吹整<br><a class="map-link" href="https://maps.google.com/?q=Nha+Spa+75+Hang+Ma+Hanoi">🗺️ Google Maps</a></div></div></div>
+        <div class="tl-row" data-day="3" data-time="1800" onclick="event.stopPropagation();this.classList.toggle('tapped')"><div class="tl-time">晚上</div><div class="tl-info"><div class="tl-title">🏮 还剑湖步行街 + 夜市</div><div class="tl-sub">周末限定！</div><div class="tl-detail">18:00-24:00 封路变步行街<br>🍢 炸春卷 · 青木瓜沙拉 · 糖水 · 越南披萨</div></div></div>
+      </div>
+    </div>
+
+    <!-- DAY 4 -->
+    <div class="day-preview fade-in" id="day4" onclick="this.classList.toggle('expanded')">
+      <div class="now-ribbon">NOW</div>
+      <div class="day-bar db4"><div class="day-num">4</div><div class="day-info"><div class="day-date">7/26 周日</div><div class="day-theme">购物 · 返程回家</div></div></div>
+      <div class="day-peek"><span>🛍️ 同春市场</span><span>☕ 鸡蛋咖啡</span><span>✈️ 18:40 起飞</span><span>🏠 21:30 到家</span></div>
+      <div class="day-hint">👆 点击展开完整行程</div>
+      <div class="day-body">
+        <a href="https://maps.google.com/?q=Dong+Xuan+Market+Hanoi" target="_blank" onclick="event.stopPropagation()"><div class="map-thumb" style="background-image:url('https://staticmap.openstreetmap.de/staticmap.php?center=21.0389,105.8498&zoom=16&size=400x120&maptype=mapnik&markers=21.0389,105.8498,orange-pushpin')"></div></a>
+        <div class="tl-row" data-day="4" data-time="0900" onclick="event.stopPropagation();this.classList.toggle('tapped')"><div class="tl-time">上午</div><div class="tl-info"><div class="tl-title">🛍️ 同春市场买特产</div><div class="tl-sub">咖啡豆·腰果·水果干</div><div class="tl-detail">📍 Đồng Xuân · 💡 对半砍！"Đắt quá" = 太贵<br><a class="map-link" href="https://maps.google.com/?q=Dong+Xuan+Market+Hanoi">🗺️ Google Maps</a></div></div></div>
+        <div class="tl-row" data-day="4" data-time="1200"><div class="tl-time">中午</div><div class="tl-info"><div class="tl-title">🥢 最后一顿越南味</div><div class="tl-sub">Bánh xèo 越南煎饼</div></div></div>
+        <div class="tl-row" data-day="4" data-time="1400" onclick="event.stopPropagation();this.classList.toggle('tapped')"><div class="tl-time">下午</div><div class="tl-info"><div class="tl-title">☕ Giảng Cafe · 取行李</div><div class="tl-detail">☕ 39 Nguyễn Hữu Huân · 35k VND · 1946<br><a class="map-link" href="https://maps.google.com/?q=Giang+Cafe+39+Nguyen+Huu+Huan+Hanoi">🗺️ Google Maps</a></div></div></div>
+        <div class="tl-row" data-day="4" data-time="1600"><div class="tl-time">16:00</div><div class="tl-info"><div class="tl-title">🚗 Grab 去机场</div><div class="tl-sub">约40分钟到内排 T2</div></div></div>
+        <div class="tl-row" data-day="4" data-time="1840"><div class="tl-time">18:40</div><div class="tl-info"><div class="tl-title">✈️ ZH106 起飞</div></div></div>
+        <div class="tl-row" data-day="4" data-time="2130"><div class="tl-time">21:30</div><div class="tl-info"><div class="tl-title">🏠 落地深圳，开车回家</div><div class="tl-sub">周一上班！</div></div></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══ HOTEL + SPA + RESTAURANTS ═══ -->
+<div class="wide-grid">
+<div>
+  <div class="section">
+    <div class="sec-head"><div class="dot" style="background:var(--emerald)"></div><div class="title">🏨 酒店 · 点击展开</div></div>
+    <div class="hotel-card" onclick="this.querySelector('.hotel-detail').classList.toggle('open')">
+      <div class="hicon">🏩</div>
+      <div style="flex:1;min-width:0;">
+        <h3>REY Hotel Hanoi</h3>
+        <div class="addr">14 P. Lý Nam Đế, Hoàn Kiếm · 老城区</div>
+        <div class="htags"><span class="htag">2024年新开</span><span class="htag">评分 9.2</span><span class="htag">还剑湖步行10分钟</span><span class="htag">Capital One 预订</span></div>
+        <div class="hotel-detail">
+          <div class="hotel-photos" style="display:flex;gap:6px;margin-bottom:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:2px;">
+            <div class="proxied-img" data-src="hanoi,boutique,hotel,lobby,design" style="flex:0 0 auto;width:160px;height:100px;border-radius:10px;background-size:cover;background-position:center;scroll-snap-align:start;background-color:#E8ECDF;"></div>
+            <div class="proxied-img" data-src="hotel,room,bed,modern,interior" style="flex:0 0 auto;width:160px;height:100px;border-radius:10px;background-size:cover;background-position:center;scroll-snap-align:start;background-color:#E8ECDF;"></div>
+            <div class="proxied-img" data-src="hotel,breakfast,buffet,vietnam" style="flex:0 0 auto;width:160px;height:100px;border-radius:10px;background-size:cover;background-position:center;scroll-snap-align:start;background-color:#E8ECDF;"></div>
+          </div>
+          <div class="drow"><div class="dl">🏨 房型</div><div class="dv"><b>Superior 2 Single</b> — 两张单人床 · 25㎡<br>现代越南风格，雨林中庭景观</div></div>
+          <div class="drow"><div class="dl">🛏️ 设施</div><div class="dv">空调 · 免费 WiFi · 电视 · 私人浴室 · 迷你吧 · 保险箱</div></div>
+          <div class="drow"><div class="dl">🍳 早餐</div><div class="dv">双人早餐（越南河粉+西式自助）6:30-10:00</div></div>
+          <div class="drow"><div class="dl">🕒 入住</div><div class="dv">入住 7/23 凌晨 2:00（7/22 当晚）· 退房 7/26 12:00<br>共4晚 · 凌晨到达请提前告知酒店</div></div>
+          <a class="map-link" href="https://maps.google.com/?q=Rey+Hotel+Hanoi+14+Ly+Nam+De">🗺️ Google Maps</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- spa -->
+  <div class="section">
+    <div class="sec-head"><div class="dot" style="background:#E85D3A"></div><div class="title">💆‍♂️ 越式洗头按摩</div></div>
+    <div class="spa-card">
+      <h3>💆 越南必体验！</h3>
+      <p class="spa-desc">越式洗头含头部按摩、肩颈按摩、脸部清洁，性价比超高！逛完一天来放松。</p>
+      <div class="spa-photos" style="display:flex;gap:6px;margin-bottom:10px;overflow-x:auto;scroll-snap-type:x mandatory;">
+        <div class="proxied-img" data-src="vietnam,hair+wash,head+spa,massage" style="flex:0 0 auto;width:140px;height:90px;border-radius:10px;background-size:cover;background-position:center;scroll-snap-align:start;background-color:#E8ECDF;"></div>
+        <div class="proxied-img" data-src="spa,massage,relaxation,wellness,aroma" style="flex:0 0 auto;width:140px;height:90px;border-radius:10px;background-size:cover;background-position:center;scroll-snap-align:start;background-color:#E8ECDF;"></div>
+      </div>
+      <div class="spa-grid">
+        <div class="spa-opt"><div class="name">📍 Nhà Spa ⭐首推</div><div class="price">75 Hàng Mã · 150k VND/35min</div><div class="price">天然产品，环境好</div></div>
+        <div class="spa-opt"><div class="name">📍 Kadupul Spa</div><div class="price">42A Hàng Giầy · 250k起</div><div class="price">60min养护洗头 450k</div></div>
+        <div class="spa-opt"><div class="name">📍 La Flora Spa</div><div class="price">22 Ấu Triệu（大教堂旁）</div><div class="price">24小时！泰式按摩</div></div>
+        <div class="spa-opt"><div class="name">👣 足部按摩</div><div class="price">老城区随处可见</div><div class="price">30-60min · 250k-300k</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- restaurants -->
+  <div class="section">
+    <div class="sec-head"><div class="dot" style="background:#E11D48"></div><div class="title">🍜 必吃餐厅 · 点击展开</div></div>
+    <div class="resto-grid">
+      <div class="resto-item fade-in" onclick="this.classList.toggle('tapped')">
+        <div class="resto-preview"><div class="resto-emoji">🥇</div><div class="resto-info"><h4>Phở Gia Truyền</h4><div class="rd">49 Bát Đàn · 50k-80k</div><span class="r-tag tag-bib">Bib Gourmand</span></div></div>
+        <div class="resto-expand"><div class="resto-photo proxied-img" data-src="vietnam,pho,beef,noodle,soup,bowl"></div><div class="resto-more">河内牛肉河粉排队王。汤底熬 12 小时，只开 6-10am！<br><a class="map-link" href="https://maps.google.com/?q=Pho+Gia+Truyen+49+Bat+Dan+Hanoi">🗺️ 地图</a></div></div>
+      </div>
+      <div class="resto-item fade-in" onclick="this.classList.toggle('tapped')">
+        <div class="resto-preview"><div class="resto-emoji">🍜</div><div class="resto-info"><h4>Phở Thìn</h4><div class="rd">13 Lò Đúc · 50k-80k</div><span class="r-tag tag-local">全天营业</span></div></div>
+        <div class="resto-expand"><div class="resto-photo proxied-img" data-src="stir+fried,pho,beef,hanoi,noodles"></div><div class="resto-more">炒牛肉放在汤河粉上，不同于传统。<br><a class="map-link" href="https://maps.google.com/?q=Pho+Thin+13+Lo+Duc+Hanoi">🗺️ 地图</a></div></div>
+      </div>
+      <div class="resto-item fade-in" onclick="this.classList.toggle('tapped')">
+        <div class="resto-preview"><div class="resto-emoji">🥩</div><div class="resto-info"><h4>Bún Chả Hương Liên</h4><div class="rd">24 Lê Văn Hưu · 40k-90k</div><span class="r-tag tag-mich">Michelin</span></div></div>
+        <div class="resto-expand"><div class="resto-photo proxied-img" data-src="bun+cha,vietnam,grilled,pork,vermicelli"></div><div class="resto-more">烤肉蘸鱼露甜汤配米粉。奥巴马 2016 年同款！<br><a class="map-link" href="https://maps.google.com/?q=Bun+Cha+Huong+Lien+Hanoi">🗺️ 地图</a></div></div>
+      </div>
+      <div class="resto-item fade-in" onclick="this.classList.toggle('tapped')">
+        <div class="resto-preview"><div class="resto-emoji">🥖</div><div class="resto-info"><h4>Bánh Mì 25</h4><div class="rd">25 Hàng Cá · 25k-40k</div><span class="r-tag tag-local">法棍天花板</span></div></div>
+        <div class="resto-expand"><div class="resto-photo proxied-img" data-src="banh+mi,vietnam,sandwich,bread,crispy"></div><div class="resto-more">外酥里软，夹烤肉/火腿/腌菜。<br><a class="map-link" href="https://maps.google.com/?q=Banh+Mi+25+25+Hang+Ca+Hanoi">🗺️ 地图</a></div></div>
+      </div>
+      <div class="resto-item fade-in" onclick="this.classList.toggle('tapped')">
+        <div class="resto-preview"><div class="resto-emoji">☕</div><div class="resto-info"><h4>Giảng Cafe</h4><div class="rd">39 Nguyễn Hữu Huân · 35k</div><span class="r-tag tag-local">1946年创店</span></div></div>
+        <div class="resto-expand"><div class="resto-photo proxied-img" data-src="egg+coffee,vietnam,cafe,hanoi,drink"></div><div class="resto-more">鸡蛋咖啡发源地！蛋黄+炼乳+咖啡。<br><a class="map-link" href="https://maps.google.com/?q=Giang+Cafe+39+Nguyen+Huu+Huan+Hanoi">🗺️ 地图</a></div></div>
+      </div>
+      <div class="resto-item fade-in" onclick="this.classList.toggle('tapped')">
+        <div class="resto-preview"><div class="resto-emoji">🐟</div><div class="resto-info"><h4>Chả Cá Thăng Long</h4><div class="rd">Đường Thành · 古法煎鱼</div><span class="r-tag tag-mich">Michelin</span></div></div>
+        <div class="resto-expand"><div class="resto-photo proxied-img" data-src="vietnam,pho,beef,noodle,soup,bowl"></div><div class="resto-more">姜黄煎鱼配莳萝，桌上现煎，河内独有！<br><a class="map-link" href="https://maps.google.com/?q=Cha+Ca+Thang+Long+Hanoi">🗺️ 地图</a></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="sticky-col">
+  <!-- souvenirs -->
+  <div class="section">
+    <div class="sec-head"><div class="dot" style="background:#F59E0B"></div><div class="title">🛍️ 伴手礼</div></div>
+    <div class="souv-grid">
+      <div class="souv-card" onclick="this.classList.toggle('tapped')">
+        <div class="s-icon">☕</div><h4>越南咖啡</h4><div class="s-price">G7 / Legend</div><div class="s-where">📍 Big C / 同春</div>
+        <div class="souv-expand"><div class="souv-photo proxied-img" data-src="vietnam,coffee,beans,robusta,drip"></div><div class="souv-desc">越南是世界第二大咖啡出口国，以罗布斯塔豆闻名。G7速溶适合送礼，Legend精品适合自用。推荐买滴漏壶+咖啡粉套装，在家也能做正宗越式咖啡。</div></div>
+      </div>
+      <div class="souv-card" onclick="this.classList.toggle('tapped')">
+        <div class="s-icon">🥜</div><h4>盐焗腰果</h4><div class="s-price">带皮烘烤</div><div class="s-where">📍 Langfarm</div>
+        <div class="souv-expand"><div class="souv-photo proxied-img" data-src="cashew,nuts,roasted,salted,vietnam"></div><div class="souv-desc">越南是全球最大腰果出口国。带皮盐焗是经典款，香脆不油腻。Langfarm 是连锁品牌品质稳定，同春市场也能买到散装更便宜。一大袋约50k-100k VND。</div></div>
+      </div>
+      <div class="souv-card" onclick="this.classList.toggle('tapped')">
+        <div class="s-icon">🍫</div><h4>MAROU 巧克力</h4><div class="s-price">越南精品可可</div><div class="s-where">📍 机场免税</div>
+        <div class="souv-expand"><div class="souv-photo proxied-img" data-src="chocolate,dark,artisan,vietnam,cocoa"></div><div class="souv-desc">法国人创立的越南本土精品巧克力品牌，Bean-to-Bar 工艺，包装是越南传统花纹。推荐 Tien Giang 70% 黑巧或椰子味。市内专卖店和机场免税都有售，约80k-150k VND/块。</div></div>
+      </div>
+      <div class="souv-card" onclick="this.classList.toggle('tapped')">
+        <div class="s-icon">🫖</div><h4>滴漏咖啡壶</h4><div class="s-price">~50k VND</div><div class="s-where">📍 咖啡店</div>
+        <div class="souv-expand"><div class="souv-photo proxied-img" data-src="vietnam,coffee,phin,filter,drip,brewing"></div><div class="souv-desc">越式咖啡的灵魂工具——Phin 滴漏壶（phin cà phê）。铝制或不锈钢，小巧便携。用法：壶底放炼乳→加咖啡粉→压滤片→倒热水→等5分钟。老城区咖啡店都能买到。</div></div>
+      </div>
+      <div class="souv-card" onclick="this.classList.toggle('tapped')">
+        <div class="s-icon">🧣</div><h4>丝巾/奥黛</h4><div class="s-price">80k-200k</div><div class="s-where">📍 裁缝店</div>
+        <div class="souv-expand"><div class="souv-photo proxied-img" data-src="vietnam,silk,ao+dai,scarf,traditional"></div><div class="souv-desc">越南国服奥黛（Áo Dài）修身优雅，丝巾色彩艳丽。可去老城区裁缝店定制（2-3天可取），或买现成丝巾当伴手礼。Hàng Đào 丝绸街选择最多，记得砍价。</div></div>
+      </div>
+      <div class="souv-card" onclick="this.classList.toggle('tapped')">
+        <div class="s-icon">💊</div><h4>白虎活络膏</h4><div class="s-price">万能药膏</div><div class="s-where">📍 超市/药房</div>
+        <div class="souv-expand"><div class="souv-photo proxied-img" data-src="tiger,baim,ointment,herbal,vietnam,medicine"></div><div class="souv-desc">越南国民神药（Cao Bạch Hổ），含薄荷脑、樟脑等草本成分。对蚊虫叮咬、肌肉酸痛、晕车头痛都有奇效。超市和药房都有，一罐约20k-40k VND，买几罐送长辈超实用。</div></div>
+      </div>
+    </div>
+  </div>
+  <!-- info -->
+  <div class="section">
+    <div class="sec-head"><div class="dot" style="background:var(--gold)"></div><div class="title">实用信息</div></div>
+    <div class="info-grid">
+      <div class="info-item"><div class="i-title">💳 支付</div><div class="i-value">Fidelity ATM</div><div class="i-sub">机场取现无手续费</div></div>
+      <div class="info-item"><div class="i-title">📱 子豪</div><div class="i-value">eSIM</div><div class="i-sub">Airalo/Nomad</div></div>
+      <div class="info-item"><div class="i-title">📱 舅舅</div><div class="i-value">实体SIM</div><div class="i-sub">淘宝提前买</div></div>
+      <div class="info-item"><div class="i-title">🛂 签证</div><div class="i-value">另纸签</div><div class="i-sub">提前1-2周办</div></div>
+      <div class="info-item"><div class="i-title">🚗 停车</div><div class="i-value">舅舅车位 🆓</div><div class="i-sub">宝安机场</div></div>
+      <div class="info-item"><div class="i-title">📲 App</div><div class="i-value">Grab + Maps</div><div class="i-sub">打车+导航</div></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- checklist -->
+<div class="section">
+  <div class="sec-head"><div class="dot" style="background:#E85D3A"></div><div class="title">出发前清单（点击勾选，自动保存）</div></div>
+  <div class="day-preview fade-in" style="cursor:default;"><div class="day-body" style="max-height:none;padding:16px 20px;background:#FFF;">
+    <div class="cl-item" onclick="this.classList.toggle('done')"><div class="cl-box">✓</div><span class="cl-text">Capital One Travel 订 ZH107 + ZH106</span></div>
+    <div class="cl-item" onclick="this.classList.toggle('done')"><div class="cl-box">✓</div><span class="cl-text">Capital One Travel 订 Rey Hotel（4晚 Superior 2 Single）</span></div>
+    <div class="cl-item" onclick="this.classList.toggle('done')"><div class="cl-box">✓</div><span class="cl-text">办理另纸签（¥300/人）</span></div>
+    <div class="cl-item" onclick="this.classList.toggle('done')"><div class="cl-box">✓</div><span class="cl-text">子豪：买 eSIM</span></div>
+    <div class="cl-item" onclick="this.classList.toggle('done')"><div class="cl-box">✓</div><span class="cl-text">舅舅：淘宝买 SIM 卡</span></div>
+    <div class="cl-item" onclick="this.classList.toggle('done')"><div class="cl-box">✓</div><span class="cl-text">Klook 订下龙湾 Dolphin Cruise（7/24 周五）</span></div>
+    <div class="cl-item" onclick="this.classList.toggle('done')"><div class="cl-box">✓</div><span class="cl-text">下载 Grab、Google Maps</span></div>
+    <div class="cl-item" onclick="this.classList.toggle('done')"><div class="cl-box">✓</div><span class="cl-text">防晒·雨具·泳衣·快干衣·拖鞋</span></div>
+  </div></div>
+</div>
+
+<!-- ═══ CURRENCY ═══ -->
+<div class="section">
+  <div class="sec-head"><div class="dot" style="background:var(--gold)"></div><div class="title">💱 汇率参考</div></div>
+  <div style="display:flex;gap:10px;flex-wrap:wrap;">
+    <div class="info-item fade-in" style="flex:1;min-width:140px;"><div class="i-title">🇨🇳 人民币 → 越南盾</div><div class="i-value" style="font-size:16px;">1 RMB ≈ 3,400 VND</div><div class="i-sub">10元 ≈ 34k · 100元 ≈ 340k</div></div>
+    <div class="info-item fade-in" style="flex:1;min-width:140px;"><div class="i-title">🇺🇸 美元 → 越南盾</div><div class="i-value" style="font-size:16px;">1 USD ≈ 25,000 VND</div><div class="i-sub">ATM取现直接出越南盾</div></div>
+    <div class="info-item fade-in" style="flex:1;min-width:140px;"><div class="i-title">🧠 心算技巧</div><div class="i-value" style="font-size:16px;">VND ÷ 3,400 ≈ RMB</div><div class="i-sub">去掉3个零÷3.4 = 人民币</div></div>
+  </div>
+</div>
+
+<!-- ═══ BUDGET ═══ -->
+<div class="section">
+  <div class="sec-head"><div class="dot" style="background:var(--muted)"></div><div class="title">💰 预算（人均）</div></div>
+  <div class="budget-section fade-in">
+    <table class="budget-table">
+      <tr><td>✈️ 机票往返 ZH107+ZH106</td><td>¥2,100</td></tr>
+      <tr><td>🏨 Rey Hotel 4晚（待确认）</td><td>¥---</td></tr>
+      <tr><td>🛂 另纸签</td><td>~¥300</td></tr>
+      <tr><td>🚢 下龙湾 Klook 豪华团</td><td>~¥500</td></tr>
+      <tr><td>🍜 餐饮 4天（~¥150/天）</td><td>~¥600</td></tr>
+      <tr><td>🚗 Grab 交通（机场往返+市区）</td><td>~¥300</td></tr>
+      <tr><td>📱 SIM 卡 + eSIM</td><td>~¥80</td></tr>
+      <tr><td>🎫 门票+水上木偶剧</td><td>~¥150</td></tr>
+      <tr><td>💆 按摩SPA（越式洗头+按摩+足疗）</td><td>~¥200</td></tr>      <tr><td>🎒 杂项（小费·零食·咖啡）</td><td>~¥200</td></tr>
+      <tr class="total"><td>合计（不含酒店）</td><td>~¥4,430</td></tr>
+    </table>
+    <p style="font-size:12px;color:var(--muted);margin-top:8px;">* 宽松估算，实际花销通常低于预算。酒店价格待 Capital One Travel 预订后更新。点击 ✏️ 编辑模式可修改金额。</p>
+  </div>
+</div>
+
+</div><!-- /page -->
+
+<div class="footer">
+  <span class="bigemoji">🇻🇳</span>
+  <p style="font-weight:700;font-size:15px;">深圳 ↔ 河内 · 7/23 – 7/26 2026</p>
+  <p style="margin-top:3px;font-size:12px;">ZH107 / ZH106 · Rey Hotel · 下龙湾 Dolphin Cruise</p>
+</div>
+
+<script>
+// ── PROXIED IMAGES ──
+function loadProxiedImages() {
+  document.querySelectorAll('.proxied-img').forEach(el => {
+    const q = el.dataset.src;
+    if (!q) return;
+    const url = `https://wsrv.nl/?url=https://source.unsplash.com/400x160/?${encodeURIComponent(q)}&output=jpg`;
+    el.style.backgroundImage = `url('${url}')`;
+    el.onerror = function() {
+      el.style.backgroundImage = 'none';
+      el.style.background = 'linear-gradient(135deg, #E8ECDF, #D4D8C8)';
+    };
+  });
+}
+loadProxiedImages();
+
+// ── EDIT MODE ──
+let editMode = false;
+function toggleEdit() {
+  editMode = !editMode;
+  const btn = document.getElementById('editToggle');
+  const body = document.body;
+
+  if (editMode) {
+    body.classList.add('editable');
+    btn.classList.add('active');
+    btn.textContent = '💾 保存';
+    // make key text elements editable
+    document.querySelectorAll('.day-theme, .day-date, .tl-title, .tl-sub, .tl-detail, .resto-info h4, .resto-info .rd, .souv-card h4, .souv-card .s-price, .hotel-card h3, .hotel-card .addr, .spa-desc, .budget-table td:last-child, [contenteditable]').forEach(el => {
+      if (!el.hasAttribute('contenteditable')) el.setAttribute('contenteditable', 'true');
+    });
+    // save original content
+    document.querySelectorAll('[contenteditable="true"]').forEach(el => {
+      if (!el.dataset.orig) el.dataset.orig = el.innerHTML;
+    });
+  } else {
+    body.classList.remove('editable');
+    btn.classList.remove('active');
+    btn.textContent = '✏️ 编辑模式';
+    // save to localStorage
+    const edits = {};
+    document.querySelectorAll('[contenteditable="true"]').forEach((el, i) => {
+      if (el.innerHTML !== el.dataset.orig) {
+        edits[i] = el.innerHTML;
+      }
+      el.setAttribute('contenteditable', 'false');
+    });
+    localStorage.setItem('hanoi_edits', JSON.stringify(edits));
+    alert('已保存！刷新页面后修改依然生效。');
+  }
+}
+
+// restore edits on load
+(function restoreEdits() {
+  const edits = JSON.parse(localStorage.getItem('hanoi_edits') || '{}');
+  if (Object.keys(edits).length === 0) return;
+  document.querySelectorAll('[contenteditable="true"]').forEach((el, i) => {
+    if (edits[i]) el.innerHTML = edits[i];
+  });
+})();
+
+// ── NOW BAR ──
+const TRIP_START=new Date('2026-07-22T16:00:00+08:00'),TRIP_END=new Date('2026-07-26T21:30:00+08:00'),VN_OFFSET=7*60;
+const SCHEDULE=[
+  {day:1,h:1,m:10,text:'✈️ 落地！Grab 去酒店'},{day:1,h:12,m:0,text:'🥢 烤肉米线'},{day:1,h:14,m:0,text:'🚶 还剑湖'},{day:1,h:18,m:0,text:'🎭 水上木偶剧'},
+  {day:2,h:7,m:0,text:'🚗 下龙湾出发'},{day:2,h:12,m:0,text:'🦞 海鲜自助'},{day:2,h:13,m:30,text:'🕳️ 惊讶洞'},{day:2,h:15,m:0,text:'🛶 皮划艇'},{day:2,h:17,m:0,text:'🍷 日落派对'},
+  {day:3,h:8,m:0,text:'🏛️ 胡志明陵墓'},{day:3,h:12,m:0,text:'🍜 牛肉河粉'},{day:3,h:14,m:0,text:'📜 文庙 · 火车街'},{day:3,h:16,m:30,text:'💆 越式洗头！'},{day:3,h:18,m:0,text:'🏮 周末夜市'},
+  {day:4,h:9,m:0,text:'🛍️ 同春市场'},{day:4,h:14,m:0,text:'☕ 鸡蛋咖啡'},{day:4,h:16,m:0,text:'🚗 去机场'},{day:4,h:18,m:40,text:'✈️ ZH106 起飞'},{day:4,h:21,m:30,text:'🏠 到家'}
+];
+function getVNTime(d){return new Date(d.getTime()+(VN_OFFSET-d.getTimezoneOffset())*60000)}function pad(n){return String(n).padStart(2,'0')}
+const CIRCUMFERENCE = 2 * Math.PI * 44; // ~276.46
+function setRing(id, value, max) {
+  const el = document.getElementById(id+'-ring');
+  if (!el) return;
+  const fraction = Math.min(value / max, 1);
+  el.style.strokeDashoffset = CIRCUMFERENCE * (1 - fraction);
+}
+function updateCountdownDisplay(diff) {
+  const d = Math.floor(diff / 86400000);
+  const h = Math.floor((diff % 86400000) / 3600000);
+  const m = Math.floor((diff % 3600000) / 60000);
+  const s = Math.floor((diff % 60000) / 1000);
+  const elD=document.getElementById('cd-d'), elH=document.getElementById('cd-h'), elM=document.getElementById('cd-m'), elS=document.getElementById('cd-s');
+  if(elD)elD.textContent=d; if(elH)elH.textContent=h; if(elM)elM.textContent=m; if(elS)elS.textContent=s;
+  setRing('cd-d', d, 30);
+  setRing('cd-h', h, 24);
+  setRing('cd-m', m, 60);
+  setRing('cd-s', s, 60);
+}
+function updateNowBar(){
+  const now=new Date(),nowVN=getVNTime(now),bar=document.getElementById('now-bar'),text=document.getElementById('now-text');
+  if(now<TRIP_START){bar.className='';const diff=TRIP_START-now;text.textContent=`⏳ 距出发 ${Math.floor(diff/86400000)}天${Math.floor((diff%86400000)/3600000)}时`;updateCountdownDisplay(diff);return}
+  if(now>TRIP_END){bar.className='';text.textContent='✅ 旅途已结束';document.getElementById('countdown').style.display='none';return}
+  bar.className='active';
+  const nowDay=nowVN.getDate(),nowH=nowVN.getHours(),nowM=nowVN.getMinutes(),nowVal=nowH*100+nowM;
+  let tripDay=null;if(nowDay===23)tripDay=1;else if(nowDay===24)tripDay=2;else if(nowDay===25)tripDay=3;else if(nowDay===26)tripDay=4;
+  let activity=null,next=null;
+  if(tripDay){for(let i=SCHEDULE.length-1;i>=0;i--){const s=SCHEDULE[i];if(s.day===tripDay&&s.h*100+s.m<=nowVal){activity=s;break}}for(let i=0;i<SCHEDULE.length;i++){const s=SCHEDULE[i];if(s.day===tripDay&&s.h*100+s.m>nowVal){next=s;break}}
+    text.innerHTML=`<span class="pulse"></span> <b>Day ${tripDay}</b> · ${pad(nowH)}:${pad(nowM)} 河内 · ${activity?activity.text:'自由时间'}`;
+    document.querySelectorAll('.day-preview').forEach(c=>c.classList.remove('now-day'));const dc=document.getElementById('day'+tripDay);if(dc)dc.classList.add('now-day');
+    document.querySelectorAll('.tl-row').forEach(r=>r.classList.remove('now-activity'));
+    if(activity){const rows=document.querySelectorAll(`.tl-row[data-day="${tripDay}"]`);let best=null,bestV=-1;rows.forEach(r=>{const t=parseInt(r.dataset.time);if(t<=nowVal&&t>bestV){bestV=t;best=r}});if(best){best.classList.add('now-activity');best.scrollIntoView({behavior:'smooth',block:'center'})}}
+    if(next){
+      const d=document.getElementById('cd-d');if(d)d.textContent=pad(next.h);
+      const h=document.getElementById('cd-h');if(h)h.textContent=pad(next.m);
+      const m=document.getElementById('cd-m');if(m)m.textContent='--';
+      const s=document.getElementById('cd-s');if(s)s.textContent='--';
+      // reset rings for trip mode
+      setRing('cd-d',0,30); setRing('cd-h',0,24); setRing('cd-m',0,60); setRing('cd-s',0,60);
+      const lbl=document.querySelector('.cd-rings');
+      if(lbl) lbl.style.opacity='0.4';
+    }
+  }
+}
+updateNowBar();setInterval(updateNowBar,30000);
+setInterval(function(){if(new Date()<TRIP_START)updateCountdownDisplay(TRIP_START-new Date())},1000);
+
+// ── WEATHER ──
+(async function(){
+  const em={0:'☀️',1:'🌤️',2:'⛅',3:'☁️',45:'🌫️',51:'🌦️',53:'🌦️',55:'🌧️',61:'🌧️',63:'🌧️',65:'🌧️',80:'🌦️',81:'🌧️',82:'⛈️',95:'⛈️'};
+  const de={0:'晴',1:'少云',2:'多云',3:'阴',45:'雾',51:'小雨',53:'小雨',55:'中雨',61:'小雨',63:'中雨',65:'大雨',80:'阵雨',81:'阵雨',82:'暴雨',95:'雷暴'};
+  const days=['周日','周一','周二','周三','周四','周五','周六'];
+  let hourlyByDate = {}; // 按日期存储逐小时数据
+  try{
+    const r=await fetch('https://api.open-meteo.com/v1/forecast?latitude=21.0285&longitude=105.8542&current=temperature_2m,relative_humidity_2m,weather_code&daily=temperature_2m_max,temperature_2m_min,weather_code&hourly=temperature_2m,weather_code,precipitation_probability&timezone=Asia/Bangkok&forecast_days=5');
+    const d=await r.json(),c=d.current;
+
+    // ── 处理逐小时数据，按日期分组 ──
+    if(d.hourly){
+      d.hourly.time.forEach((t,i)=>{
+        const dateKey = t.substring(0,10); // '2026-07-23'
+        if(!hourlyByDate[dateKey]) hourlyByDate[dateKey]=[];
+        hourlyByDate[dateKey].push({
+          time: t.substring(11,16), // '14:00'
+          temp: Math.round(d.hourly.temperature_2m[i]),
+          code: d.hourly.weather_code[i],
+          precip: d.hourly.precipitation_probability[i]
+        });
+      });
+    }
+
+    // ── 生成每天的预报卡 ──
+    let fcHTML = '';
+    for(let i=0;i<d.daily.time.length;i++){
+      const dateKey=d.daily.time[i];
+      const date=new Date(dateKey); const dn=days[date.getDay()];
+      const md=String(date.getMonth()+1).padStart(2,'0'),dd=String(date.getDate()).padStart(2,'0');
+      const wc=d.daily.weather_code[i];
+      const isToday = i===0 ? ' today' : '';
+      fcHTML+=`<div class="fc-day${isToday}" data-date="${dateKey}" onclick="event.stopPropagation();showHourly('${dateKey}',this)" style="cursor:pointer;">
+        <div class="fc-dow">${dn}</div><div class="fc-date">${md}/${dd}</div>
+        <span class="fc-icon">${em[wc]||'🌡️'}</span>
+        <div class="fc-temp">${Math.round(d.daily.temperature_2m_max[i])}°/${Math.round(d.daily.temperature_2m_min[i])}°</div>
+        <div class="fc-desc">${de[wc]||''}</div>
+        <div style="font-size:10px;color:#94A3B8;margin-top:4px;">👆 看分时</div>
+      </div>`;
+    }
+
+    document.getElementById('weather-box').innerHTML=`<span class="w-icon">${em[c.weather_code]||'🌡️'}</span><div class="w-main"><div class="w-temp">${Math.round(c.temperature_2m)}°C</div><div class="w-desc">${de[c.weather_code]||''}</div></div><div class="w-extra"><div class="w-hum">💧 ${c.relative_humidity_2m}%</div><div class="w-hint">河内实时 · 点击展开预报</div></div>`;
+    document.getElementById('weather-box').onclick = function(e){
+      if(e.target.closest('.fc-day')||e.target.closest('.hourly-panel')) return;
+      const row = document.querySelector('.weather-row');
+      let panel = document.getElementById('weather-fc');
+      if(!panel){ panel=document.createElement('div'); panel.id='weather-fc'; panel.className='weather-fc'; panel.innerHTML=fcHTML; row.appendChild(panel); }
+      else { panel.style.display = panel.style.display==='none'?'flex':'none'; }
+    };
+
+    // ── 暴露逐小时展示函数到全局 ──
+    window.showHourly = function(dateKey, el){
+      // 移除旧的面板和高亮
+      document.querySelectorAll('.fc-day.selected').forEach(d=>d.classList.remove('selected'));
+      document.querySelectorAll('.hourly-panel').forEach(p=>p.remove());
+
+      // 如果点的是同一个已选中的天，就取消
+      if(el.classList.contains('selected')){ el.classList.remove('selected'); return; }
+
+      el.classList.add('selected');
+      const hours = hourlyByDate[dateKey];
+      if(!hours || hours.length===0) return;
+
+      // 获取当前越南时间来判断哪个小时是"现在"
+      const now=new Date();
+      const vnNow=new Date(now.getTime()+(7*60-now.getTimezoneOffset())*60000);
+      const nowDateKey = vnNow.toISOString().substring(0,10);
+      const nowHour = vnNow.getHours();
+
+      let hrHTML = '<div class="hourly-panel">';
+      hours.forEach(h=>{
+        const hh = parseInt(h.time.split(':')[0]);
+        const isNow = (dateKey===nowDateKey && hh===nowHour) ? ' now-hr' : '';
+        hrHTML+=`<div class="hr-card${isNow}">
+          <div class="hr-time">${h.time}</div>
+          <span class="hr-icon">${em[h.code]||'🌡️'}</span>
+          <div class="hr-temp">${h.temp}°</div>
+          <div class="hr-desc">${de[h.code]||''}</div>
+          ${h.precip!==null&&h.precip>0?`<div class="hr-rain">💧${h.precip}%</div>`:''}
+        </div>`;
+      });
+      hrHTML+='</div>';
+
+      // 插入到被点击的 fc-day 后面
+      const wrapper = document.createElement('div');
+      wrapper.innerHTML = hrHTML;
+      el.parentNode.insertBefore(wrapper.firstChild, el.nextSibling);
+      // 滚动到可见
+      el.nextSibling.scrollIntoView({behavior:'smooth',block:'nearest'});
+    };
+
+  }catch(e){
+    document.getElementById('weather-box').innerHTML=`<span class="w-icon">🌡️</span><div class="w-main"><div class="w-temp">28-35°C</div><div class="w-desc">河内 7月 · 雨季</div></div><div class="w-extra"><div class="w-hum">记得带伞</div><div class="w-hint">天气加载失败</div></div>`;
+  }
+})();
+
+// ── SCROLL + CHECKLIST ──
+document.querySelectorAll('.fade-in').forEach(el=>new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')}),{threshold:0.08}).observe(el));
+document.querySelectorAll('.cl-item').forEach((el,i)=>{if(localStorage.getItem('cl_'+i)==='done')el.classList.add('done');el.addEventListener('click',function(){localStorage.setItem('cl_'+i,this.classList.contains('done')?'':'done')})});
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script>
+(function initMap(){
+  if(typeof L==='undefined'){setTimeout(initMap,300);return;}
+  if(!document.getElementById('hanoi-map')) return;
+  const map=L.map('hanoi-map').setView([21.03,105.85],13);
+  // 简约浅色底图
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{
+    attribution:'&copy; CartoDB', maxZoom:18
+  }).addTo(map);
+
+  const spots=[
+    // ═══ 河内市区 ═══
+    {lat:21.0305,lng:105.8485,label:'Rey Hotel',emoji:'🏨',color:'#1A6B4A',desc:'本次入住的精品酒店，2024年新开，评分9.2。位于老城区核心，步行10分钟到还剑湖，顶楼可俯瞰36古街。',search:'hanoi,boutique,hotel,lobby,room'},
+    {lat:21.0288,lng:105.8525,label:'还剑湖',emoji:'🌊',color:'#E85D3A',desc:'河内第一地标，市中心天然淡水湖。传说黎利皇帝在此将神剑归还金龟，故名「还剑」。湖中有玉山祠，北岸有龟塔。夜景灯光璀璨，周末周边封路变步行街。',search:'hoan+kiem,lake,hanoi,vietnam,waterfront'},
+    {lat:21.0307,lng:105.8523,label:'玉山祠',emoji:'⛩️',color:'#E85D3A',desc:'坐落于还剑湖北部小岛上，通过红色栖旭桥（Thê Húc）连接岸边。供奉文昌帝君与关帝，是河内香火最旺的寺庙之一。',search:'vietnam,temple,pagoda,shrine,traditional'},
+    {lat:21.0273,lng:105.8519,label:'水上木偶剧院',emoji:'🎭',color:'#0D9488',desc:'升龙水上木偶剧院（Thăng Long Water Puppet），越南国粹——水上木偶剧的发源地。木偶在水面上演绎民间传说与农耕生活，乐队现场配乐。场场爆满，建议提前购票。',search:'water,puppet,theatre,performance,vietnam'},
+    {lat:21.0286,lng:105.8491,label:'圣约瑟夫大教堂',emoji:'⛪',color:'#C8974A',desc:'河内最古老的天主教堂，1886年法国殖民时期建造，哥特复兴风格，仿巴黎圣母院。外墙历经岁月沉淀呈深灰色，是还剑湖区域最显眼的欧式建筑。',search:'cathedral,church,gothic,hanoi,france'},
+    {lat:21.0318,lng:105.8465,label:'鸡蛋咖啡',emoji:'☕',color:'#C8974A',desc:'河内特色——鸡蛋咖啡（Cà Phê Trứng）诞生于1946年。蛋黄加炼乳打至蓬松，浇在黑咖啡上，口感像提拉米苏。最有名的 Giảng Cafe 由创始人之子经营。',search:'egg,coffee,vietnam,cafe,drink,foam'},
+    {lat:21.0338,lng:105.8509,label:'三十六古街',emoji:'🏮',color:'#F59E0B',desc:'河内千年古街，因36条以行业命名的小巷得名：Hàng Bạc（银器街）、Hàng Mã（祭品街）、Hàng Đào（丝绸街）……迷宫般交错，每走一步都是市井烟火气。',search:'hanoi,old+quarter,street,night,lantern'},
+    {lat:21.0389,lng:105.8498,label:'同春市场',emoji:'🛍️',color:'#F59E0B',desc:'河内最大的室内批发市场，法国殖民时期建造。从咖啡豆、腰果、奥黛到日用百货无所不卖。砍价对半起，「Đắt quá」（太贵了）是必备用语。',search:'market,bazaar,hanoi,shopping,stall'},
+    {lat:21.0253,lng:105.8465,label:'火炉监狱',emoji:'🏛️',color:'#64748B',desc:'又名「河内希尔顿」（Hanoi Hilton），法国殖民者1896年建造。越战期间关押美军飞行员，包括已故参议员麦凯恩。现为博物馆，展出殖民时期与越战历史。',search:'prison,museum,hanoi,historical,colonial'},
+    {lat:21.0432,lng:105.8392,label:'西湖',emoji:'🌿',color:'#2563EB',desc:'河内最大的湖泊，面积约500公顷，因形似一轮弯月而名。湖边有众多寺庙、咖啡馆和高档餐厅，是河内人散步、骑行、约会的最爱。',search:'lake,hanoi,scenic,sunset,park'},
+    {lat:21.0458,lng:105.8385,label:'竹帛湖',emoji:'🪷',color:'#2563EB',desc:'紧邻西湖的小湖，因湖中种满莲花而得名。湖畔有竹帛寺（Chùa Trấn Quốc），是河内最古老的佛寺，建于公元6世纪。',search:'lotus,lake,hanoi,temple,serene'},
+    {lat:21.0478,lng:105.8370,label:'镇国寺',emoji:'🛕',color:'#7C3AED',desc:'河内最古老的佛教寺庙，始建于公元541-548年。位于西湖东岸半岛上，11层高的红色莲花塔是标志。夕阳时分佛塔倒影湖中，被誉为河内最美夕照。',search:'buddhist,pagoda,temple,hanoi,ancient'},
+    {lat:21.0368,lng:105.8347,label:'胡志明陵',emoji:'🏛️',color:'#7C3AED',desc:'越南国父胡志明安息之地，位于巴亭广场西侧。陵墓由苏联援建，灰色花岗岩外观庄严肃穆。⚠️ 注意：不能穿短裤无袖，需排队入场，周六开放。',search:'mausoleum,hanoi,ho+chi+minh,monument'},
+    {lat:21.0362,lng:105.8333,label:'一柱寺',emoji:'🪷',color:'#7C3AED',desc:'越南最具标志性的佛寺之一，建于1049年李朝。整座寺庙矗立在一根石柱上，形如莲花出水，象征纯洁与佛性。被列入越南最独特建筑。',search:'one+pillar,pagoda,hanoi,lotus,unique'},
+    {lat:21.0383,lng:105.8327,label:'巴亭广场',emoji:'🏟️',color:'#E85D3A',desc:'越南的政治心脏，相当于中国的天安门广场。1945年胡志明在此宣读《独立宣言》。广场中央有国旗升旗台，每天清晨举行升旗仪式。',search:'ba+dinh,square,hanoi,flag,ceremony'},
+    {lat:21.0274,lng:105.8359,label:'文庙',emoji:'📜',color:'#7C3AED',desc:'越南第一所国立大学（1076年），供奉孔子与儒家先贤。院内82块进士碑刻于石龟背上，2010年被列为世界记忆遗产。越南学生考前必来祈福。',search:'temple+of+literature,hanoi,confucius,courtyard'},
+    {lat:21.0377,lng:105.8408,label:'升龙皇城',emoji:'🏯',color:'#7C3AED',desc:'世界文化遗产，11-19世纪越南历代王朝的政治中心。2010年入选联合国教科文组织，地下考古层展示了千年历史叠压的壮观景象。',search:'imperial,citadel,hanoi,unesco,archaeology'},
+    {lat:21.0325,lng:105.8392,label:'军事博物馆',emoji:'⚔️',color:'#64748B',desc:'越南军事历史博物馆，展示从古代到越战时期的军事文物。最震撼的是户外展区——击落的B-52轰炸机残骸、苏制坦克与米格战斗机。',search:'military,museum,hanoi,tank,aircraft'},
+    {lat:21.0310,lng:105.8370,label:'越南美术馆',emoji:'🎨',color:'#C8974A',desc:'法国殖民时期建筑内的国家级美术馆，收藏从古代占婆石雕到近现代漆画、绢画。是了解越南千年艺术史的最佳场所。',search:'art,gallery,museum,hanoi,painting,sculpture'},
+    {lat:21.0241,lng:105.8575,label:'河内歌剧院',emoji:'🎵',color:'#C8974A',desc:'1911年法国人仿巴黎歌剧院建造，新古典主义风格，是河内最具代表性的法式建筑之一。至今仍上演歌剧、芭蕾与交响乐，外立面是热门拍照点。',search:'opera,house,hanoi,france,architecture,theatre'},
+    {lat:21.0200,lng:105.8592,label:'统一公园',emoji:'🌳',color:'#2563EB',desc:'河内市中心最大的城市公园，前身为法国殖民时期的赛马场，后改名为列宁公园，统一后定名统一公园。湖中有岛、岛上有桥，是当地人晨练和周末休闲的好去处。',search:'park,hanoi,lake,green,walking,jogging'},
+    {lat:21.0406,lng:105.8566,label:'龙编桥',emoji:'🌉',color:'#64748B',desc:'河内地标性铁桥，由法国埃菲尔公司1899-1902年设计建造，横跨红河。虽经越战轰炸多次修复，至今仍在通行火车与摩托车，是河内最上镜的工业遗产。',search:'bridge,iron,hanoi,red+river,historical,eiffel'},
+    {lat:21.0415,lng:105.8565,label:'陶瓷路壁画',emoji:'🎨',color:'#F59E0B',desc:'世界最长的陶瓷壁画（约4公里），沿红河堤岸展开。由越南与国际艺术家共同创作，描绘越南历史与文化场景，被列入吉尼斯世界纪录。',search:'mosaic,mural,ceramic,hanoi,wall,colorful'},
+    {lat:21.0333,lng:105.8392,label:'河内旗塔',emoji:'🚩',color:'#E85D3A',desc:'河内升龙皇城的标志性建筑，建于1805-1812年阮朝。高33米，六角形底座三层平台，塔顶飘扬越南国旗，是河内古老的军事瞭望塔。',search:'flag,tower,hanoi,watchtower,citadel'},
+    // ═══ 下龙湾 ═══
+    {lat:20.91,lng:107.05,label:'下龙湾',emoji:'⛵',color:'#0D9488',desc:'世界自然遗产 + 世界新七大奇观，1600+座石灰岩岛屿耸立于碧绿海面，被誉为「海上桂林」。中国武侠片和007电影曾在此取景，是大自然最壮丽的雕塑群。',search:'halong,bay,limestone,island,karst,boat'},
+    {lat:20.843,lng:107.095,label:'惊讶洞',emoji:'🕳️',color:'#0D9488',desc:'下龙湾最大最美的溶洞，1901年法国人发现。洞内分三室，钟乳石千姿百态，彩色灯光下宛如地下宫殿。从洞口俯瞰海湾，视野绝佳。',search:'cave,stalactite,halong,underground,light'},
+    {lat:20.850,lng:107.080,label:'天堂岛',emoji:'🏝️',color:'#0D9488',desc:'下龙湾少数可登顶的岛屿（Titop Island），400级台阶上到山顶观景台，360°俯瞰下龙湾全貌。山脚有白色沙滩，可游泳戏水。',search:'titop,island,halong,beach,viewpoint,stairs'},
+    {lat:20.8517,lng:107.0694,label:'斗鸡石',emoji:'🐓',color:'#0D9488',desc:'下龙湾最具辨识度的地标——两块岩石像两只公鸡在海上对峙。被印在越南20万盾纸币背面，是下龙湾乃至越南旅游的象征符号。',search:'rock,formation,halong,iconic,sea,stack'},
+    {lat:20.9042,lng:107.0150,label:'天宫洞',emoji:'✨',color:'#0D9488',desc:'位于下龙湾木头岛上的钟乳石洞，以瑰丽的石笋和洞顶「天宫」壁画闻名。传说龙母在此为龙王诞下百颗龙蛋，是下龙湾最具神话色彩的溶洞。',search:'cave,halong,stalactite,colorful,chamber'},
+    {lat:20.9036,lng:107.0156,label:'木头洞',emoji:'🪨',color:'#0D9488',desc:'与天宫洞相邻，因古时渔民在此存放木料得名。洞内宽阔如大剧院，曾是陈朝抗击蒙古水军的秘密基地。钟乳石形态万变，有「海上迷宫」之称。',search:'cave,halong,limestone,grotto,boat'},
+    {lat:20.8642,lng:107.0731,label:'月亮湖',emoji:'🌙',color:'#0D9488',desc:'四面被峭壁环绕的圆形泻湖（Luon Cave），只能通过低矮洞口划小船或皮划艇进入。湖面平静如镜，常见野生猴子在崖壁上出没，是皮划艇爱好者的秘境。',search:'lagoon,kayak,halong,monkey,cliff,tunnel'},
+    {lat:20.9306,lng:106.9869,label:'巡洲岛码头',emoji:'🚢',color:'#0D9488',desc:'下龙湾最大的游船集散地，所有一日游和过夜游轮由此出发。岛上有度假村、水上乐园和海豚表演，是下龙湾旅游的门户。',search:'marina,cruise,port,halong,harbor,ship'},
+    {lat:20.9542,lng:107.0264,label:'太阳世界',emoji:'🎢',color:'#F59E0B',desc:'下龙湾大型综合娱乐区，拥有世界最高的缆车（Sun Wheel摩天轮+双层缆车），可俯瞰下龙湾全景。还有水上乐园、夜市和美食街。',search:'ferris+wheel,cable+car,amusement,park,halong'},
+    {lat:20.9611,lng:107.0417,label:'白斋海滩',emoji:'🏖️',color:'#2563EB',desc:'下龙市最受欢迎的人工沙滩，长约1公里。沙质细腻，设施齐全，是游船归来后游泳、看日落的绝佳去处。',search:'beach,sand,halong,swimming,sunset,coast'},
+    {lat:20.9622,lng:107.0489,label:'白斋桥',emoji:'🌉',color:'#64748B',desc:'连接下龙市两岸的斜拉桥，夜间LED彩灯璀璨。桥身优美的弧线倒映在海面，是下龙市最上镜的现代地标。',search:'cable+stayed,bridge,halong,night,lights'},
+    {lat:20.7278,lng:107.0481,label:'吉婆岛',emoji:'🏝️',color:'#2563EB',desc:'下龙湾最大的岛屿（Cat Ba），一半是国家公园原始森林，一半是沙滩渔村。可徒步、骑行、攀岩，是背包客的下龙湾秘境。',search:'cat+ba,island,national+park,jungle,beach'},
+    {lat:21.0167,lng:107.3667,label:'拜子龙湾',emoji:'⛰️',color:'#0D9488',desc:'下龙湾的「姐妹湾」，人少景美，保留了更原始的海上喀斯特地貌。是避开游客大军、独享「海上桂林」静谧之美的理想选择。',search:'bai+tu+long,bay,pristine,limestone,karst'},
+    // ═══ 机场 ═══
+    {lat:21.217,lng:105.805,label:'河内内排机场',emoji:'✈️',color:'#64748B',desc:'河内内排国际机场（Nội Bài），距市区约30公里，车程40分钟。T1国内、T2国际航站楼。深圳航空从T2出发，机场有免税店和越南特产店。',search:'airport,terminal,hanoi,international,aviation'}
+  ];
+  ];
+  // 创建详情弹窗
+  const popupEl = document.createElement('div');
+  popupEl.id = 'spot-popup';
+  popupEl.className = 'spot-popup';
+  popupEl.innerHTML = `
+    <button class="popup-close" onclick="document.getElementById('spot-popup').classList.remove('show')">✕</button>
+    <div class="popup-photo"></div>
+    <div class="popup-body">
+      <div class="popup-emoji"></div>
+      <h3 class="popup-title"></h3>
+      <p class="popup-desc"></p>
+    </div>`;
+  document.getElementById('hanoi-map').appendChild(popupEl);
+
+  const markers=[];
+  spots.forEach(s=>{
+    const icon=L.divIcon({
+      html:`<div style="display:flex;flex-direction:column;align-items:center;transform:translate(-50%,-100%);">
+        <span style="
+          background: ${s.color}BB;
+          color: #FFF;
+          padding: 3px 8px;
+          border-radius: 8px;
+          font-size: 11px;
+          font-weight: 600;
+          white-space: nowrap;
+          box-shadow: 0 2px 6px ${s.color}44;
+          margin-bottom: 5px;
+          letter-spacing: 0.5px;
+          cursor:pointer;
+          transition: transform 0.2s;
+        ">${s.label}</span>
+        <div style="
+          width: 10px; height: 10px;
+          background: ${s.color};
+          border: 2px solid #FFF;
+          border-radius: 50%;
+          box-shadow: 0 2px 6px ${s.color}55, 0 1px 2px rgba(0,0,0,0.15);
+          cursor:pointer;
+        "></div>
+      </div>`,
+      className:'', iconAnchor:[0,0], iconSize:[0,0]
+    });
+    const m=L.marker([s.lat,s.lng],{icon}).addTo(map);
+    m.on('click', function(e){
+      L.DomEvent.stopPropagation(e);
+      const photoUrl = `https://wsrv.nl/?url=https://source.unsplash.com/500x220/?${encodeURIComponent(s.search)}&output=jpg`;
+      popupEl.querySelector('.popup-photo').style.backgroundImage = `url('${photoUrl}')`;
+      popupEl.querySelector('.popup-emoji').textContent = s.emoji;
+      popupEl.querySelector('.popup-title').textContent = s.label;
+      popupEl.querySelector('.popup-desc').textContent = s.desc;
+      popupEl.classList.add('show');
+      // 调整地图视野让标记不被弹窗遮挡
+      map.panTo([s.lat, s.lng], {animate: true, duration: 0.3});
+    });
+    markers.push(m);
+  });
+  // 点击地图空白关闭弹窗
+  map.on('click', function(){
+    popupEl.classList.remove('show');
+  });
+  // 自动缩放到能看到所有标记
+  if(markers.length){
+    const group=new L.featureGroup(markers);
+    map.fitBounds(group.getBounds().pad(0.15),{maxZoom:13});
+  }
+  setTimeout(()=>map.invalidateSize(),500);
+})();
+</script>
+
+</body>
+</html>
