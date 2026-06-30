@@ -370,7 +370,7 @@ body {
 .souv-card .s-where { font-size:11px; color:var(--emerald); margin-top:4px; font-weight:500; }
 .souv-card .souv-expand { max-height:0; overflow:hidden; transition:all 0.5s; }
 .souv-card.tapped .souv-expand { max-height:400px; }
-.souv-card .souv-photo { height:80px; background-size:cover; background-position:center; border-radius:8px; margin-top:8px; background-color:#E8ECDF; }
+.souv-card .souv-photo { height:6px; border-radius:3px; margin-top:8px; background:linear-gradient(90deg, #1A6B4A, #4ADE80, #C8974A); }
 .souv-card .souv-desc { font-size:12px; color:var(--muted); line-height:1.6; padding-top:8px; word-break:break-word; }
 
 .info-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; min-width:0; max-width:100%; }
@@ -672,11 +672,7 @@ body {
         <div class="addr">14 P. Lý Nam Đế, Quán Thánh, Hoàn Kiếm</div>
         <div class="htags"><span class="htag">2024年新开</span><span class="htag">4星 · 108间房</span><span class="htag">中庭热带花园</span><span class="htag">Capital One 预订</span></div>
         <div class="hotel-detail">
-          <div class="hotel-photos" style="display:flex;gap:6px;margin-bottom:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:2px;">
-            <div class="proxied-img" data-src="rey,hotel,hanoi,lobby,tropical,garden" style="flex:0 0 auto;width:160px;height:100px;border-radius:10px;background-size:cover;background-position:center;scroll-snap-align:start;background-color:#D4D8CE;"></div>
-            <div class="proxied-img" data-src="rey,hotel,hanoi,room,king,modern" style="flex:0 0 auto;width:160px;height:100px;border-radius:10px;background-size:cover;background-position:center;scroll-snap-align:start;background-color:#D4D8CE;"></div>
-            <div class="proxied-img" data-src="rey,hotel,hanoi,courtyard,garden,tropical" style="flex:0 0 auto;width:160px;height:100px;border-radius:10px;background-size:cover;background-position:center;scroll-snap-align:start;background-color:#D4D8CE;"></div>
-          </div>
+          
           <div class="drow"><div class="dl">🏨 房型</div><div class="dv"><b>Superior Twin Room</b> — 两张单人床 · 26㎡<br>带窗+阳台，可赏中庭花园或城景。设计现代，隔音好，空调·电视·迷你吧·保险箱·免费WiFi</div></div>
           <div class="drow"><div class="dl">🌿 亮点</div><div class="dv">中央热带花园中庭，绿植环绕，水雾步道通往早餐厅——被称为「老城区的绿色绿洲」。大堂 Mojo Café & Bistro 是本地网红打卡点</div></div>
           <div class="drow"><div class="dl">🍳 早餐</div><div class="dv">双人早餐 6:30-9:30 · 1楼餐厅<br>牛肉河粉现煮 + 越式小菜 + 煎饼现做 + 水果咖啡</div></div>
@@ -709,35 +705,35 @@ body {
     <div class="resto-grid">
       <div class="resto-item fade-in" onclick="this.classList.toggle('tapped')">
         <div class="resto-preview"><div class="resto-emoji">🥇</div><div class="resto-info"><h4>Phở Gia Truyền</h4><div class="rd">49 Bát Đàn · 50k-80k</div><span class="r-tag tag-bib">Bib Gourmand</span></div></div>
-        <div class="resto-expand"><div class="resto-photo proxied-img" data-src="vietnam,pho,beef,noodle,soup,bowl"></div><div class="resto-more">河内牛肉河粉排队王。汤底熬 12 小时，只开 6-10am！<br><a class="map-link" href="https://maps.google.com/?q=Pho+Gia+Truyen+49+Bat+Dan+Hanoi">🗺️ 地图</a></div></div>
+        <div class="resto-expand"><div class="resto-more">河内牛肉河粉排队王。汤底熬 12 小时，只开 6-10am！<br><a class="map-link" href="https://maps.google.com/?q=Pho+Gia+Truyen+49+Bat+Dan+Hanoi">🗺️ 地图</a></div></div>
       </div>
       <div class="resto-item fade-in" onclick="this.classList.toggle('tapped')">
         <div class="resto-preview"><div class="resto-emoji">🍜</div><div class="resto-info"><h4>Phở Thìn</h4><div class="rd">13 Lò Đúc · 50k-80k</div><span class="r-tag tag-local">全天营业</span></div></div>
-        <div class="resto-expand"><div class="resto-photo proxied-img" data-src="stir+fried,pho,beef,hanoi,noodles"></div><div class="resto-more">炒牛肉放在汤河粉上，不同于传统。<br><a class="map-link" href="https://maps.google.com/?q=Pho+Thin+13+Lo+Duc+Hanoi">🗺️ 地图</a></div></div>
+        <div class="resto-expand"><div class="resto-more">炒牛肉放在汤河粉上，不同于传统。<br><a class="map-link" href="https://maps.google.com/?q=Pho+Thin+13+Lo+Duc+Hanoi">🗺️ 地图</a></div></div>
       </div>
       <div class="resto-item fade-in" onclick="this.classList.toggle('tapped')">
         <div class="resto-preview"><div class="resto-emoji">🥩</div><div class="resto-info"><h4>Bún Chả Hương Liên</h4><div class="rd">24 Lê Văn Hưu · 40k-90k</div><span class="r-tag tag-mich">Michelin</span></div></div>
-        <div class="resto-expand"><div class="resto-photo proxied-img" data-src="bun+cha,vietnam,grilled,pork,vermicelli"></div><div class="resto-more">烤肉蘸鱼露甜汤配米粉。奥巴马 2016 年同款！<br><a class="map-link" href="https://maps.google.com/?q=Bun+Cha+Huong+Lien+Hanoi">🗺️ 地图</a></div></div>
+        <div class="resto-expand"><div class="resto-more">烤肉蘸鱼露甜汤配米粉。奥巴马 2016 年同款！<br><a class="map-link" href="https://maps.google.com/?q=Bun+Cha+Huong+Lien+Hanoi">🗺️ 地图</a></div></div>
       </div>
       <div class="resto-item fade-in" onclick="this.classList.toggle('tapped')">
         <div class="resto-preview"><div class="resto-emoji">🥖</div><div class="resto-info"><h4>Bánh Mì 黄油烤肉法棍</h4><div class="rd">Ta Hiện 啤酒街 · 20k-40k</div><span class="r-tag tag-local">街头必吃</span></div></div>
-        <div class="resto-expand"><div class="resto-photo proxied-img" data-src="banh+mi,vietnam,grilled,pork,butter,sandwich"></div><div class="resto-more">Bánh Mì Bơ Thịt Nướng：炭火烤肉+黄油+腌菜夹入外酥里软的法棍，河内夜市的灵魂小吃！<br><a class="map-link" href="https://maps.google.com/?q=Ta+Hien+Street+Hanoi">🗺️ 地图</a></div></div>
+        <div class="resto-expand"><div class="resto-more">Bánh Mì Bơ Thịt Nướng：炭火烤肉+黄油+腌菜夹入外酥里软的法棍，河内夜市的灵魂小吃！<br><a class="map-link" href="https://maps.google.com/?q=Ta+Hien+Street+Hanoi">🗺️ 地图</a></div></div>
       </div>
       <div class="resto-item fade-in" onclick="this.classList.toggle('tapped')">
         <div class="resto-preview"><div class="resto-emoji">🍚</div><div class="resto-info"><h4>Xôi Yến 糯米饭</h4><div class="rd">35B Nguyễn Hữu Huân · 25k-50k</div><span class="r-tag tag-bib">河内早餐名店</span></div></div>
-        <div class="resto-expand"><div class="resto-photo proxied-img" data-src="xoi,sticky,rice,vietnam,breakfast,shredded"></div><div class="resto-more">Xôi Xéo：糯米饭+绿豆泥+猪油+炸洋葱干+叉烧，河内人的灵魂早餐！<br><a class="map-link" href="https://maps.google.com/?q=Xoi+Yen+35B+Nguyen+Huu+Huan+Hanoi">🗺️ 地图</a></div></div>
+        <div class="resto-expand"><div class="resto-more">Xôi Xéo：糯米饭+绿豆泥+猪油+炸洋葱干+叉烧，河内人的灵魂早餐！<br><a class="map-link" href="https://maps.google.com/?q=Xoi+Yen+35B+Nguyen+Huu+Huan+Hanoi">🗺️ 地图</a></div></div>
       </div>
       <div class="resto-item fade-in" onclick="this.classList.toggle('tapped')">
         <div class="resto-preview"><div class="resto-emoji">🥖</div><div class="resto-info"><h4>Bánh Mì 25</h4><div class="rd">25 Hàng Cá · 25k-40k</div><span class="r-tag tag-local">法棍天花板</span></div></div>
-        <div class="resto-expand"><div class="resto-photo proxied-img" data-src="banh+mi,vietnam,sandwich,bread,crispy"></div><div class="resto-more">外酥里软，夹烤肉/火腿/腌菜。<br><a class="map-link" href="https://maps.google.com/?q=Banh+Mi+25+25+Hang+Ca+Hanoi">🗺️ 地图</a></div></div>
+        <div class="resto-expand"><div class="resto-more">外酥里软，夹烤肉/火腿/腌菜。<br><a class="map-link" href="https://maps.google.com/?q=Banh+Mi+25+25+Hang+Ca+Hanoi">🗺️ 地图</a></div></div>
       </div>
       <div class="resto-item fade-in" onclick="this.classList.toggle('tapped')">
         <div class="resto-preview"><div class="resto-emoji">☕</div><div class="resto-info"><h4>Giảng Cafe</h4><div class="rd">39 Nguyễn Hữu Huân · 35k</div><span class="r-tag tag-local">1946年创店</span></div></div>
-        <div class="resto-expand"><div class="resto-photo proxied-img" data-src="egg+coffee,vietnam,cafe,hanoi,drink"></div><div class="resto-more">鸡蛋咖啡发源地！蛋黄+炼乳+咖啡。<br><a class="map-link" href="https://maps.google.com/?q=Giang+Cafe+39+Nguyen+Huu+Huan+Hanoi">🗺️ 地图</a></div></div>
+        <div class="resto-expand"><div class="resto-more">鸡蛋咖啡发源地！蛋黄+炼乳+咖啡。<br><a class="map-link" href="https://maps.google.com/?q=Giang+Cafe+39+Nguyen+Huu+Huan+Hanoi">🗺️ 地图</a></div></div>
       </div>
       <div class="resto-item fade-in" onclick="this.classList.toggle('tapped')">
         <div class="resto-preview"><div class="resto-emoji">🐟</div><div class="resto-info"><h4>Chả Cá Thăng Long</h4><div class="rd">Đường Thành · 古法煎鱼</div><span class="r-tag tag-mich">Michelin</span></div></div>
-        <div class="resto-expand"><div class="resto-photo proxied-img" data-src="cha+ca,vietnam,turmeric,fish,dill,pan"></div><div class="resto-more">姜黄煎鱼配莳萝，桌上现煎，河内独有！<br><a class="map-link" href="https://maps.google.com/?q=Cha+Ca+Thang+Long+Hanoi">🗺️ 地图</a></div></div>
+        <div class="resto-expand"><div class="resto-more">姜黄煎鱼配莳萝，桌上现煎，河内独有！<br><a class="map-link" href="https://maps.google.com/?q=Cha+Ca+Thang+Long+Hanoi">🗺️ 地图</a></div></div>
       </div>
     </div>
   </div>
@@ -750,27 +746,27 @@ body {
     <div class="souv-grid">
       <div class="souv-card" onclick="this.classList.toggle('tapped')">
         <div class="s-icon">☕</div><h4>越南咖啡</h4><div class="s-price">G7 / Legend</div><div class="s-where">📍 Big C / 同春</div>
-        <div class="souv-expand"><div class="souv-photo proxied-img" data-src="vietnam,coffee,beans,robusta,drip"></div><div class="souv-desc">越南是世界第二大咖啡出口国，以罗布斯塔豆闻名。G7速溶适合送礼，Legend精品适合自用。推荐买滴漏壶+咖啡粉套装，在家也能做正宗越式咖啡。</div></div>
+        <div class="souv-expand"><div class="souv-photo"></div><div class="souv-desc">越南是世界第二大咖啡出口国，以罗布斯塔豆闻名。G7速溶适合送礼，Legend精品适合自用。推荐买滴漏壶+咖啡粉套装，在家也能做正宗越式咖啡。</div></div>
       </div>
       <div class="souv-card" onclick="this.classList.toggle('tapped')">
         <div class="s-icon">🥜</div><h4>盐焗腰果</h4><div class="s-price">带皮烘烤</div><div class="s-where">📍 Langfarm</div>
-        <div class="souv-expand"><div class="souv-photo proxied-img" data-src="cashew,nuts,roasted,salted,vietnam"></div><div class="souv-desc">越南是全球最大腰果出口国。带皮盐焗是经典款，香脆不油腻。Langfarm 是连锁品牌品质稳定，同春市场也能买到散装更便宜。一大袋约50k-100k VND。</div></div>
+        <div class="souv-expand"><div class="souv-photo"></div><div class="souv-desc">越南是全球最大腰果出口国。带皮盐焗是经典款，香脆不油腻。Langfarm 是连锁品牌品质稳定，同春市场也能买到散装更便宜。一大袋约50k-100k VND。</div></div>
       </div>
       <div class="souv-card" onclick="this.classList.toggle('tapped')">
         <div class="s-icon">🍫</div><h4>MAROU 巧克力</h4><div class="s-price">越南精品可可</div><div class="s-where">📍 机场免税</div>
-        <div class="souv-expand"><div class="souv-photo proxied-img" data-src="chocolate,dark,artisan,vietnam,cocoa"></div><div class="souv-desc">法国人创立的越南本土精品巧克力品牌，Bean-to-Bar 工艺，包装是越南传统花纹。推荐 Tien Giang 70% 黑巧或椰子味。市内专卖店和机场免税都有售，约80k-150k VND/块。</div></div>
+        <div class="souv-expand"><div class="souv-photo"></div><div class="souv-desc">法国人创立的越南本土精品巧克力品牌，Bean-to-Bar 工艺，包装是越南传统花纹。推荐 Tien Giang 70% 黑巧或椰子味。市内专卖店和机场免税都有售，约80k-150k VND/块。</div></div>
       </div>
       <div class="souv-card" onclick="this.classList.toggle('tapped')">
         <div class="s-icon">🫖</div><h4>滴漏咖啡壶</h4><div class="s-price">~50k VND</div><div class="s-where">📍 咖啡店</div>
-        <div class="souv-expand"><div class="souv-photo proxied-img" data-src="vietnam,coffee,phin,filter,drip,brewing"></div><div class="souv-desc">越式咖啡的灵魂工具——Phin 滴漏壶（phin cà phê）。铝制或不锈钢，小巧便携。用法：壶底放炼乳→加咖啡粉→压滤片→倒热水→等5分钟。老城区咖啡店都能买到。</div></div>
+        <div class="souv-expand"><div class="souv-photo"></div><div class="souv-desc">越式咖啡的灵魂工具——Phin 滴漏壶（phin cà phê）。铝制或不锈钢，小巧便携。用法：壶底放炼乳→加咖啡粉→压滤片→倒热水→等5分钟。老城区咖啡店都能买到。</div></div>
       </div>
       <div class="souv-card" onclick="this.classList.toggle('tapped')">
         <div class="s-icon">🧣</div><h4>丝巾/奥黛</h4><div class="s-price">80k-200k</div><div class="s-where">📍 裁缝店</div>
-        <div class="souv-expand"><div class="souv-photo proxied-img" data-src="vietnam,silk,ao+dai,scarf,traditional"></div><div class="souv-desc">越南国服奥黛（Áo Dài）修身优雅，丝巾色彩艳丽。可去老城区裁缝店定制（2-3天可取），或买现成丝巾当伴手礼。Hàng Đào 丝绸街选择最多，记得砍价。</div></div>
+        <div class="souv-expand"><div class="souv-photo"></div><div class="souv-desc">越南国服奥黛（Áo Dài）修身优雅，丝巾色彩艳丽。可去老城区裁缝店定制（2-3天可取），或买现成丝巾当伴手礼。Hàng Đào 丝绸街选择最多，记得砍价。</div></div>
       </div>
       <div class="souv-card" onclick="this.classList.toggle('tapped')">
         <div class="s-icon">💊</div><h4>白虎活络膏</h4><div class="s-price">万能药膏</div><div class="s-where">📍 超市/药房</div>
-        <div class="souv-expand"><div class="souv-photo proxied-img" data-src="tiger,baim,ointment,herbal,vietnam,medicine"></div><div class="souv-desc">越南国民神药（Cao Bạch Hổ），含薄荷脑、樟脑等草本成分。对蚊虫叮咬、肌肉酸痛、晕车头痛都有奇效。超市和药房都有，一罐约20k-40k VND，买几罐送长辈超实用。</div></div>
+        <div class="souv-expand"><div class="souv-photo"></div><div class="souv-desc">越南国民神药（Cao Bạch Hổ），含薄荷脑、樟脑等草本成分。对蚊虫叮咬、肌肉酸痛、晕车头痛都有奇效。超市和药房都有，一罐约20k-40k VND，买几罐送长辈超实用。</div></div>
       </div>
     </div>
   </div>
@@ -814,7 +810,7 @@ body {
   <div class="sec-head"><div class="dot" style="background:var(--muted)"></div><div class="title">💰 预算（人均）</div></div>
   <div class="budget-section fade-in">
     <table class="budget-table">
-      <tr><td>✈️ 机票往返 ZH107+ZH106</td><td>¥799</td></tr>
+      <tr><td>✈️ 机票往返 ZH107+ZH106</td><td>¥2,080</td></tr>
       <tr><td>🏨 Rey Hotel 4晚（待确认）</td><td>¥1,050</td></tr>
       <tr><td>🛂 另纸签</td><td>~¥300</td></tr>
       <tr><td>🚢 下龙湾 Klook 豪华团</td><td>~¥500</td></tr>
@@ -824,7 +820,7 @@ body {
       <tr><td>🎫 门票+水上木偶剧</td><td>~¥150</td></tr>
       <tr><td>💆 按摩SPA（越式洗头+按摩+足疗）</td><td>~¥200</td></tr>
       <tr><td>🎒 杂项（小费·零食·咖啡）</td><td>~¥200</td></tr>
-      <tr class="total"><td>合计（不含酒店）</td><td>~¥3,329</td></tr>
+      <tr class="total"><td>合计（不含酒店）</td><td>~¥4,610</td></tr>
     </table>
   </div>
 </div>
