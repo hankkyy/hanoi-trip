@@ -373,6 +373,8 @@ body {
 .tips-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:10px; }
 .tip-title { font-weight:800; font-size:13px; color:var(--text); letter-spacing:0; margin-bottom:8px; }
 .tip-body { font-size:11px; color:var(--muted); line-height:1.75; }
+.tip-list { margin:0; padding-left:16px; font-size:11px; color:var(--muted); line-height:1.8; }
+.tip-list li { margin-bottom:3px; }
 
 /* budget */
 .budget-section { background:#FFF; border-radius:var(--radius); padding:18px; box-shadow:0 1px 8px rgba(0,0,0,0.03); }
@@ -480,6 +482,7 @@ body {
   .tips-grid { grid-template-columns:1fr; gap:8px; }
   .tip-title { font-size:11px; margin-bottom:4px; }
   .tip-body { font-size:10px; }
+  .tip-list { font-size:10px; padding-left:14px; }
   .budget-section { padding:14px; }
   .budget-table { font-size:12px; }
   .budget-table td { padding:6px 8px; }
@@ -815,14 +818,38 @@ body {
 <div class="section">
   <div class="sec-head"><div class="dot" style="background:#DC2626"></div><div class="title">📌 旅行贴士 · Tips & 避雷</div></div>
   <div class="tips-grid">
-    <div class="info-item"><div class="tip-title">🌦️ 7月天气 · 32-38°C</div><div class="tip-body">上午晴好下午暴雨，湿度80-90%。集中上午出行，午后咖啡馆避暑。穿搭：速干T恤+防晒衣+雨衣。下龙湾水温28-30°C适合游泳。</div></div>
-    <div class="info-item"><div class="tip-title">🏛️ 景点避雷 · 别跑空</div><div class="tip-body">🔴<b>胡志明陵6-8月关闭</b>（防腐维护）· 文庙周一休 · 胡志明故居周一休+午休 · 火車街官方关闭 · 圣约瑟夫正门常闭走侧门 · 禁短裤/无袖/拍照入内</div></div>
-    <div class="info-item"><div class="tip-title">🚗 交通防坑</div><div class="tip-body"><b>只认Grab</b> · 机场→老城300-400k盾（¥90-120）· 拒绝搭讪司机/好心带路人 · 过马路保持匀速别停 · 备Grab/Google Maps/Google Translate</div></div>
-    <div class="info-item"><div class="tip-title">💰 消费避坑</div><div class="tip-body">20k/500k盾同蓝色易混当面数清 · 备小额现金 · 砍价从半价起 · 海鲜去码头明码标价 · Spa去Google 4.5+ · 换汇去市区金店汇率比机场好10-15%</div></div>
-    <div class="info-item"><div class="tip-title">🍜 美食参考价</div><div class="tip-body">鸡蛋咖啡~35k · Pho~40-60k · Bún Chả~50k · Bánh Mì~15-25k · Bia Hơi生啤~5-10k · 选人潮多翻桌率高店 · 避免生水/不明冰块 · 咖啡排序：鸡蛋>椰子>酸奶</div></div>
-    <div class="info-item"><div class="tip-title">⛵ 下龙湾Tips</div><div class="tip-body">防滑鞋必备洞内陡滑 · 海上UV岸上2倍 · 防水手机套+防水包 · 晕船药提前30min吃 · 饮料另付40-80k/杯 · 部分游轮禁塑料瓶 · 日落派对仅茶+饼干别期待 · 7月台风季看退款政策</div></div>
-    <div class="info-item"><div class="tip-title">👔 文化礼仪</div><div class="tip-body">进寺庙遮肩膝脱鞋安静 · 不批越战/胡志明 · 用名字（非姓）称呼对方 · 双手递物 · 拍当地人先征同意 · 不摸小孩头 · 小费$1/天·10-20k行李 · 右边尊位让长辈</div></div>
-    <div class="info-item"><div class="tip-title">🛡️ 安全防骗</div><div class="tip-body">别边走边看手机 · 夜市包背前面 · 啤酒街手机不放桌上 · 拒绝水果贩拍照搭讪 · 拒绝街头擦鞋 · Spa提前Klook订 · 越南整体安全暴力犯罪极少 · 骗局多为高价宰客</div></div>
+    <div class="info-item">
+      <div class="tip-title">🌦️ 7月天气 · 32-38°C</div>
+      <ul class="tip-list"><li>上午晴好，午后常下暴雨（30-60min）</li><li>湿度 80-90%，体感闷热</li><li>行程集中上午，午后咖啡馆避暑</li><li>穿搭：速干T恤+防晒衣+雨衣/折叠伞</li><li>下龙湾水温 28-30°C，适合游泳</li></ul>
+    </div>
+    <div class="info-item">
+      <div class="tip-title">🏛️ 景点避雷 · 别跑空</div>
+      <ul class="tip-list"><li>🔴 <b>胡志明陵 6-8月关闭</b>（遗体送去俄罗斯防腐维护）</li><li>🟡 文庙 <b>周一休息</b>，别周一去</li><li>🟡 胡志明故居 <b>周一休 + 午休</b>（11:00-13:30）</li><li>🔴 火車街官方已关闭，需由店家带进</li><li>寺庙/陵墓禁短裤、无袖、拖鞋、拍照</li><li>圣约瑟夫大教堂正门常闭，从侧门进</li></ul>
+    </div>
+    <div class="info-item">
+      <div class="tip-title">🚗 交通防坑</div>
+      <ul class="tip-list"><li><b>只认 Grab App</b>叫车，价格透明不绕路</li><li>机场→老城 Grab 约 300-400k 盾（¥90-120）</li><li>机场大巴 86 路仅 45k 盾，但较慢</li><li>🚫 拒绝机场/街头主动搭讪的司机</li><li>🚫 拒绝"好心人"带路或推荐店铺</li><li>过马路保持匀速，摩托车会绕过你，别突然停</li></ul>
+    </div>
+    <div class="info-item">
+      <div class="tip-title">💰 消费避坑</div>
+      <ul class="tip-list"><li><b>20k 和 500k 盾都是蓝色</b>，容易搞混，当面数清</li><li>备小额现金（10k-200k 盾），街边摊不找大钞</li><li>砍价从半价起，不松口就转身走</li><li>海鲜去码头明码标价餐厅，避开船上"天价"</li><li>换汇去市区金店，汇率比机场好 10-15%</li><li>Spa/按摩去 Google 评分 4.5+ 的店</li></ul>
+    </div>
+    <div class="info-item">
+      <div class="tip-title">🍜 美食参考价</div>
+      <ul class="tip-list"><li>鸡蛋咖啡 ~35k · Pho ~40-60k · Bún Chả ~50k</li><li>Bánh Mì ~15-25k · Bia Hơi 生啤 ~5-10k</li><li>选人潮多、翻桌率高的店，排队即是品质保证</li><li>避免生水和来源不明的冰块</li><li>咖啡排序：鸡蛋咖啡 > 椰子咖啡 > 酸奶咖啡</li></ul>
+    </div>
+    <div class="info-item">
+      <div class="tip-title">⛵ 下龙湾 Tips</div>
+      <ul class="tip-list"><li>防滑鞋必备！洞穴台阶又陡又滑</li><li>海上紫外线是岸上 2 倍，防晒做到位</li><li>防水手机套+防水包（皮划艇会溅水）</li><li>晕船药提前 30 分钟吃（巴士 3h + 海上 5h）</li><li>饮料另付 40-80k 盾/杯，不含在套餐内</li><li>部分游轮禁一次性塑料瓶，带可重复用水瓶</li><li>"日落派对"通常只有茶+饼干，别期待太高</li><li>7 月台风季，订游轮前看清退款政策</li></ul>
+    </div>
+    <div class="info-item">
+      <div class="tip-title">👔 文化礼仪</div>
+      <ul class="tip-list"><li>进寺庙：遮肩遮膝、脱鞋、安静</li><li>不公开批评越战或胡志明，非常敏感</li><li>越南人用名字（非姓）称呼对方</li><li>传递东西用双手，不摸小孩的头</li><li>拍照前先征得同意，尤其拍当地人</li><li>小费不强制：床头 $1/天，行李 10-20k 盾</li></ul>
+    </div>
+    <div class="info-item">
+      <div class="tip-title">🛡️ 安全防骗</div>
+      <ul class="tip-list"><li>别边走边看手机（飞车抢夺虽少但仍有）</li><li>夜市/步行街包背前面，钱包贴身放</li><li>啤酒街（Tạ Hiện）手机不要放桌上</li><li>拒绝水果贩把担子放你肩上拍照→会要钱</li><li>拒绝街头擦鞋/修鞋搭讪</li><li>Spa/按摩提前在 Klook 订好，避开街头拉客</li></ul>
+    </div>
   </div>
 </div>
 
