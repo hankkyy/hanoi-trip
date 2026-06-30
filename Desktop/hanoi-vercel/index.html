@@ -6,6 +6,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 
 <title>🇻🇳 河内 · 下龙湾 4日行程</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <style>
 :root {
   --gold:#C8974A; --emerald:#1A6B4A; --bg:#FEFCF5; --card:#FFF;
@@ -301,72 +302,18 @@ body {
 .spot-popup .popup-desc { font-size:13px; color:var(--muted); line-height:1.7; }
 
 .trip-map {
-  position:relative; min-height:320px; border-radius:16px; overflow:hidden;
-  background:
-    url('./assets/photos/old-quarter.jpg') center/cover no-repeat;
+  position:relative; min-height:320px; height:500px; border-radius:16px; overflow:hidden;
   box-shadow:0 2px 16px rgba(0,0,0,0.08);
   border:1px solid rgba(26,107,74,0.1);
+  z-index:1;
 }
-.trip-map::after {
-  content:''; position:absolute; inset:0; z-index:1;
-  background:linear-gradient(180deg,
-    rgba(249,252,248,0.35) 0%,
-    rgba(238,246,241,0.25) 50%,
-    rgba(253,244,232,0.35) 100%);
-  pointer-events:none;
-}
-.trip-map::before {
-  content:''; position:absolute; inset:0;
-  background:
-    linear-gradient(rgba(255,255,255,0.42) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.42) 1px, transparent 1px);
-  background-size:42px 42px;
-  pointer-events:none;
-}
-.trip-map-stage { position:absolute; inset:0; }
-.trip-map-river { display:none; }
 .trip-map-legend {
-  position:absolute; left:14px; top:14px; z-index:2; display:flex; gap:8px; flex-wrap:wrap; max-width:78%;
+  position:absolute; left:14px; top:14px; z-index:1000; display:flex; gap:8px; flex-wrap:wrap; max-width:78%;
 }
 .trip-map-chip {
-  background:rgba(255,255,255,0.9); border:1px solid rgba(26,107,74,0.08);
-  padding:6px 10px; border-radius:999px; font-size:12px; color:var(--muted);
-  box-shadow:0 4px 14px rgba(0,0,0,0.05);
-}
-.trip-map-pin {
-  position:absolute; transform:translate(-50%,-50%); z-index:2;
-  display:flex; flex-direction:column; align-items:center; gap:4px;
-}
-.trip-map-pin button {
-  border:none; background:transparent; cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:4px;
-}
-.trip-map-pin .pin-label {
-  font-size:11px; font-weight:700; color:var(--text); background:rgba(255,255,255,0.92);
-  padding:3px 8px; border-radius:999px; box-shadow:0 4px 12px rgba(0,0,0,0.08); white-space:nowrap;
-}
-.trip-map-pin .pin-dot {
-  width:12px; height:12px; border-radius:50%; border:2px solid #FFF;
-  box-shadow:0 3px 10px rgba(0,0,0,0.15);
-}
-.trip-map-pin button:hover .pin-label { transform:translateY(-1px); }
-.trip-map-popup {
-  position:absolute; left:12px; right:12px; bottom:12px; z-index:3; display:none;
-  background:rgba(255,255,255,0.98); border-radius:16px; overflow:hidden;
-  box-shadow:0 12px 36px rgba(0,0,0,0.16); border:1px solid rgba(26,107,74,0.08);
-}
-.trip-map-popup.show { display:block; }
-.trip-map-popup .popup-photo { height:136px; background-size:cover; background-position:center; background-color:#E8ECDF; }
-.trip-map-popup .popup-body { padding:14px 16px 16px; }
-.trip-map-popup .popup-top { display:flex; justify-content:space-between; gap:10px; align-items:flex-start; }
-.trip-map-popup .popup-name { font-size:16px; font-weight:800; }
-.trip-map-popup .popup-copy { font-size:12px; color:var(--muted); line-height:1.65; margin-top:6px; }
-.trip-map-popup .popup-actions { display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
-.trip-map-popup .popup-actions a,
-.trip-map-popup .popup-actions button {
-  border:none; text-decoration:none; background:#EFF6FF; color:#2563EB; padding:7px 10px; border-radius:10px; font-size:12px; cursor:pointer;
-}
-.trip-map-popup .popup-close {
-  border:none; background:#F3F4F6; color:#475569; width:28px; height:28px; border-radius:50%; cursor:pointer;
+  background:rgba(255,255,255,0.92); border:1px solid rgba(26,107,74,0.12);
+  padding:6px 12px; border-radius:999px; font-size:12px; color:var(--text);
+  box-shadow:0 2px 8px rgba(0,0,0,0.08); font-weight:600;
 }
 
 .wide-grid { display:grid; grid-template-columns:1.6fr 1fr; gap:20px; align-items:start; max-width:100%; min-width:0; }
@@ -499,28 +446,10 @@ body {
   .cd-ring-label .val { font-size:15px; }
   .cd-ring-label .lbl { font-size:10px; }
   .trip-map {
-    min-height:420px;
-    padding-top:88px;
+    min-height:380px; height:380px;
   }
-  .trip-map::before { opacity:0.55; }
-  .trip-map-stage { inset:112px 8px 12px; }
-  .trip-map-river { display:none; }
   .trip-map-legend { flex-direction:column; align-items:flex-start; }
   .trip-map-chip { width:auto; max-width:100%; }
-  .trip-map-pin .pin-label { display:none; }
-  .trip-map-pin .pin-dot {
-    width:10px; height:10px;
-    box-shadow:0 2px 8px rgba(0,0,0,0.12);
-  }
-  .trip-map-popup {
-    left:8px; right:8px; bottom:8px; border-radius:14px;
-  }
-  .trip-map-popup .popup-photo { height:112px; }
-  .trip-map-popup .popup-body { padding:12px 12px 14px; }
-  .trip-map-popup .popup-top { flex-direction:column; }
-  .trip-map-popup .popup-close { align-self:flex-end; }
-  .trip-map-popup .popup-actions a,
-  .trip-map-popup .popup-actions button { flex-basis:100%; }
   .top-cards { gap:6px; margin-top:8px; }
   .top-card { padding:10px 6px; }
   .top-card .icon { font-size:22px; }
@@ -897,7 +826,6 @@ body {
       <tr><td>🎒 杂项（小费·零食·咖啡）</td><td>~¥200</td></tr>
       <tr class="total"><td>合计（不含酒店）</td><td>~¥3,329</td></tr>
     </table>
-    <p style="font-size:12px;color:var(--muted);margin-top:8px;">* 宽松估算，实际花销通常低于预算。酒店价格待 Capital One Travel 预订后更新。点击 ✏️ 编辑模式可修改金额。</p>
   </div>
 </div>
 
@@ -1034,33 +962,24 @@ loadItinerary();
 
 // ── PROXIED IMAGES (本地照片，国内可访问) ──
 const PHOTO_LOCAL = {
-  // 景点
-  'hanoi,old+quarter,street,cafe':         'old-quarter.jpg',
-  'hoan+kiem,lake,hanoi,vietnam':          'hoan-kiem-lake.jpg',
-  'halong,bay,limestone,islands,boat':     'halong-bay.jpg',
-  'halong,cave,kayak,boat,tour':           'halong-cave.jpg',
-  'halong,bay,aerial,view,sunset':          'halong-sunset.jpg',
   // 酒店
   'rey,hotel,hanoi,lobby,tropical,garden':   'hotel-lobby.jpg',
   'rey,hotel,hanoi,room,king,modern':        'hotel-room.jpg',
   'rey,hotel,hanoi,courtyard,garden,tropical':'hotel-garden.jpg',
-  // SPA
-  'vietnam,hair+wash,head+spa,massage':    'spa-hairwash.jpg',
-  'spa,massage,relaxation,wellness,aroma':  'spa-massage.jpg',
-  // 餐厅 — Alamy 真实店铺照片
-  'vietnam,pho,beef,noodle,soup,bowl':      'resto-pho-gia-truyen.jpg',
-  'stir+fried,pho,beef,hanoi,noodles':     'resto-pho-thin.jpg',
-  'bun+cha,vietnam,grilled,pork,vermicelli':'resto-bun-cha-obama.jpg',
-  'banh+mi,vietnam,sandwich,bread,crispy':  'resto-banh-mi-25.jpg',
-  'banh+mi,vietnam,grilled,pork,butter,sandwich':'resto-banh-mi-25.jpg',
-  'egg+coffee,vietnam,cafe,hanoi,drink':    'resto-giang-cafe.jpg',
-  'xoi,sticky,rice,vietnam,breakfast,shredded':'resto-xoi-yen.jpg',
-  'cha+ca,vietnam,turmeric,fish,dill,pan':  'resto-cha-ca.jpg',
+  // 餐厅
+  'vietnam,pho,beef,noodle,soup,bowl':      'pho-ga-truyen.jpg',
+  'stir+fried,pho,beef,hanoi,noodles':     'pho-thin.jpg',
+  'bun+cha,vietnam,grilled,pork,vermicelli':'bun-cha.jpg',
+  'banh+mi,vietnam,sandwich,bread,crispy':  'banh-mi.jpg',
+  'banh+mi,vietnam,grilled,pork,butter,sandwich':'banh-mi.jpg',
+  'egg+coffee,vietnam,cafe,hanoi,drink':    'egg-coffee.jpg',
+  'xoi,sticky,rice,vietnam,breakfast,shredded':'old-quarter.jpg',
+  'cha+ca,vietnam,turmeric,fish,dill,pan':  'cha-ca.jpg',
   // 伴手礼
-  'vietnam,coffee,beans,robusta,drip':      'resto-giang-cafe.jpg',
+  'vietnam,coffee,beans,robusta,drip':      'egg-coffee.jpg',
   'cashew,nuts,roasted,salted,vietnam':     'old-quarter.jpg',
   'chocolate,dark,artisan,vietnam,cocoa':   'old-quarter.jpg',
-  'vietnam,coffee,phin,filter,drip,brewing':'resto-giang-cafe.jpg',
+  'vietnam,coffee,phin,filter,drip,brewing':'resto-giang-cafe-2.jpg',
   'vietnam,silk,ao+dai,scarf,traditional':  'old-quarter.jpg',
   'tiger,baim,ointment,herbal,vietnam,medicine':'spa-massage.jpg',
 };
@@ -1287,81 +1206,34 @@ setInterval(loadChecklist, 10000);
 document.querySelectorAll('.fade-in').forEach(el=>new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')}),{threshold:0.08}).observe(el));
 </script>
 
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
 (function initMap(){
   if(!document.getElementById('hanoi-map')) return;
-  const map = document.getElementById('hanoi-map');
-  map.innerHTML = `
-    <div class="trip-map-river"></div>
-    <div class="trip-map-legend">
-      <div class="trip-map-chip">河内市区景点</div>
-      <div class="trip-map-chip">下龙湾一日游</div>
-      <div class="trip-map-chip">点击点位看详情</div>
-    </div>
-    <div class="trip-map-stage" id="trip-map-stage"></div>
-    <div class="trip-map-popup" id="trip-map-popup">
-      <div class="popup-photo"></div>
-      <div class="popup-body">
-        <div class="popup-top">
-          <div>
-            <div class="popup-name"></div>
-            <div class="popup-copy"></div>
-          </div>
-          <button class="popup-close" type="button" aria-label="关闭">×</button>
-        </div>
-        <div class="popup-actions"></div>
-      </div>
-    </div>`;
-  const stage = document.getElementById('trip-map-stage');
-  const popupEl = document.getElementById('trip-map-popup');
-
-  const PHOTO_BY_SPOT = {};
-
-  const spots=[
-    {lat:21.0305,lng:105.8485,label:'Rey Hotel',emoji:'🏨',color:'#1A6B4A',desc:'2024年新开4星精品酒店，108间客房，中央热带花园中庭被誉为老城区的绿色绿洲。步行5-15分钟到还剑湖、火车街、啤酒街。大堂 Mojo Café 是本地网红打卡点。',search:'rey,hotel,hanoi,lobby,tropical,garden'},
-    {lat:21.0288,lng:105.8525,label:'还剑湖',emoji:'🌊',color:'#E85D3A',desc:'河内第一地标，市中心天然淡水湖。传说黎利皇帝在此将神剑归还金龟，故名「还剑」。湖中有玉山祠，北岸有龟塔。夜景灯光璀璨，周末周边封路变步行街。',search:'hoan+kiem,lake,hanoi,vietnam,waterfront'},
-    {lat:21.0307,lng:105.8523,label:'玉山祠',emoji:'⛩️',color:'#E85D3A',desc:'坐落于还剑湖北部小岛上，通过红色栖旭桥（Thê Húc）连接岸边。供奉文昌帝君与关帝，是河内香火最旺的寺庙之一。',search:'vietnam,temple,pagoda,shrine,traditional'},
-    {lat:21.0273,lng:105.8519,label:'水上木偶剧院',emoji:'🎭',color:'#0D9488',desc:'升龙水上木偶剧院（Thăng Long Water Puppet），越南国粹——水上木偶剧的发源地。木偶在水面上演绎民间传说与农耕生活，乐队现场配乐。场场爆满，建议提前购票。',search:'water,puppet,theatre,performance,vietnam'},
-    {lat:21.0286,lng:105.8491,label:'圣约瑟夫大教堂',emoji:'⛪',color:'#C8974A',desc:'河内最古老的天主教堂，1886年法国殖民时期建造，哥特复兴风格，仿巴黎圣母院。外墙历经岁月沉淀呈深灰色，是还剑湖区域最显眼的欧式建筑。',search:'cathedral,church,gothic,hanoi,france'},
-    {lat:21.0318,lng:105.8465,label:'鸡蛋咖啡',emoji:'☕',color:'#C8974A',desc:'河内特色——鸡蛋咖啡（Cà Phê Trứng）诞生于1946年。蛋黄加炼乳打至蓬松，浇在黑咖啡上，口感像提拉米苏。最有名的 Giảng Cafe 由创始人之子经营。',search:'egg,coffee,vietnam,cafe,drink,foam'},
-    {lat:21.0338,lng:105.8509,label:'三十六古街',emoji:'🏮',color:'#F59E0B',desc:'河内千年古街，因36条以行业命名的小巷得名：Hàng Bạc（银器街）、Hàng Mã（祭品街）、Hàng Đào（丝绸街）……迷宫般交错，每走一步都是市井烟火气。',search:'hanoi,old+quarter,street,night,lantern'},
-    {lat:21.0389,lng:105.8498,label:'同春市场',emoji:'🛍️',color:'#F59E0B',desc:'河内最大的室内批发市场，法国殖民时期建造。从咖啡豆、腰果、奥黛到日用百货无所不卖。砍价对半起，「Đắt quá」（太贵了）是必备用语。',search:'market,bazaar,hanoi,shopping,stall'},
-    {lat:21.0253,lng:105.8465,label:'火炉监狱',emoji:'🏛️',color:'#64748B',desc:'又名「河内希尔顿」（Hanoi Hilton），法国殖民者1896年建造。越战期间关押美军飞行员，包括已故参议员麦凯恩。现为博物馆，展出殖民时期与越战历史。',search:'prison,museum,hanoi,historical,colonial'},
-    {lat:21.0432,lng:105.8392,label:'西湖',emoji:'🌿',color:'#2563EB',desc:'河内最大的湖泊，面积约500公顷，因形似一轮弯月而名。湖边有众多寺庙、咖啡馆和高档餐厅，是河内人散步、骑行、约会的最爱。',search:'lake,hanoi,scenic,sunset,park'},
-    {lat:21.0458,lng:105.8385,label:'竹帛湖',emoji:'🪷',color:'#2563EB',desc:'紧邻西湖的小湖，因湖中种满莲花而得名。湖畔有竹帛寺（Chùa Trấn Quốc），是河内最古老的佛寺，建于公元6世纪。',search:'lotus,lake,hanoi,temple,serene'},
-    {lat:21.0478,lng:105.8370,label:'镇国寺',emoji:'🛕',color:'#7C3AED',desc:'河内最古老的佛教寺庙，始建于公元541-548年。位于西湖东岸半岛上，11层高的红色莲花塔是标志。夕阳时分佛塔倒影湖中，被誉为河内最美夕照。',search:'buddhist,pagoda,temple,hanoi,ancient'},
-    {lat:21.0368,lng:105.8347,label:'胡志明陵',emoji:'🏛️',color:'#7C3AED',desc:'越南国父胡志明安息之地，位于巴亭广场西侧。陵墓由苏联援建，灰色花岗岩外观庄严肃穆。⚠️ 注意：不能穿短裤无袖，需排队入场，周六开放。',search:'mausoleum,hanoi,ho+chi+minh,monument'},
-    {lat:21.0362,lng:105.8333,label:'一柱寺',emoji:'🪷',color:'#7C3AED',desc:'越南最具标志性的佛寺之一，建于1049年李朝。整座寺庙矗立在一根石柱上，形如莲花出水，象征纯洁与佛性。被列入越南最独特建筑。',search:'one+pillar,pagoda,hanoi,lotus,unique'},
-    {lat:21.0383,lng:105.8327,label:'巴亭广场',emoji:'🏟️',color:'#E85D3A',desc:'越南的政治心脏，相当于中国的天安门广场。1945年胡志明在此宣读《独立宣言》。广场中央有国旗升旗台，每天清晨举行升旗仪式。',search:'ba+dinh,square,hanoi,flag,ceremony'},
-    {lat:21.0274,lng:105.8359,label:'文庙',emoji:'📜',color:'#7C3AED',desc:'越南第一所国立大学（1076年），供奉孔子与儒家先贤。院内82块进士碑刻于石龟背上，2010年被列为世界记忆遗产。越南学生考前必来祈福。',search:'temple+of+literature,hanoi,confucius,courtyard'},
-    {lat:21.0377,lng:105.8408,label:'升龙皇城',emoji:'🏯',color:'#7C3AED',desc:'世界文化遗产，11-19世纪越南历代王朝的政治中心。2010年入选联合国教科文组织，地下考古层展示了千年历史叠压的壮观景象。',search:'imperial,citadel,hanoi,unesco,archaeology'},
-    {lat:21.0325,lng:105.8392,label:'军事博物馆',emoji:'⚔️',color:'#64748B',desc:'越南军事历史博物馆，展示从古代到越战时期的军事文物。最震撼的是户外展区——击落的B-52轰炸机残骸、苏制坦克与米格战斗机。',search:'military,museum,hanoi,tank,aircraft'},
-    {lat:21.0310,lng:105.8370,label:'越南美术馆',emoji:'🎨',color:'#C8974A',desc:'法国殖民时期建筑内的国家级美术馆，收藏从古代占婆石雕到近现代漆画、绢画。是了解越南千年艺术史的最佳场所。',search:'art,gallery,museum,hanoi,painting,sculpture'},
-    {lat:21.0241,lng:105.8575,label:'河内歌剧院',emoji:'🎵',color:'#C8974A',desc:'1911年法国人仿巴黎歌剧院建造，新古典主义风格，是河内最具代表性的法式建筑之一。至今仍上演歌剧、芭蕾与交响乐，外立面是热门拍照点。',search:'opera,house,hanoi,france,architecture,theatre'},
-    {lat:21.0200,lng:105.8592,label:'统一公园',emoji:'🌳',color:'#2563EB',desc:'河内市中心最大的城市公园，前身为法国殖民时期的赛马场，后改名为列宁公园，统一后定名统一公园。湖中有岛、岛上有桥，是当地人晨练和周末休闲的好去处。',search:'park,hanoi,lake,green,walking,jogging'},
-    {lat:21.0406,lng:105.8566,label:'龙编桥',emoji:'🌉',color:'#64748B',desc:'河内地标性铁桥，由法国埃菲尔公司1899-1902年设计建造，横跨红河。虽经越战轰炸多次修复，至今仍在通行火车与摩托车，是河内最上镜的工业遗产。',search:'bridge,iron,hanoi,red+river,historical,eiffel'},
-    {lat:21.0415,lng:105.8565,label:'陶瓷路壁画',emoji:'🎨',color:'#F59E0B',desc:'世界最长的陶瓷壁画（约4公里），沿红河堤岸展开。由越南与国际艺术家共同创作，描绘越南历史与文化场景，被列入吉尼斯世界纪录。',search:'mosaic,mural,ceramic,hanoi,wall,colorful'},
-    {lat:21.0333,lng:105.8392,label:'河内旗塔',emoji:'🚩',color:'#E85D3A',desc:'河内升龙皇城的标志性建筑，建于1805-1812年阮朝。高33米，六角形底座三层平台，塔顶飘扬越南国旗，是河内古老的军事瞭望塔。',search:'flag,tower,hanoi,watchtower,citadel'},
-    {lat:20.91,lng:107.05,label:'下龙湾',emoji:'⛵',color:'#0D9488',desc:'世界自然遗产 + 世界新七大奇观，1600+座石灰岩岛屿耸立于碧绿海面，被誉为「海上桂林」。中国武侠片和007电影曾在此取景，是大自然最壮丽的雕塑群。',search:'halong,bay,limestone,island,karst,boat'},
-    {lat:20.843,lng:107.095,label:'惊讶洞',emoji:'🕳️',color:'#0D9488',desc:'下龙湾最大最美的溶洞，1901年法国人发现。洞内分三室，钟乳石千姿百态，彩色灯光下宛如地下宫殿。从洞口俯瞰海湾，视野绝佳。',search:'cave,stalactite,halong,underground,light'},
-    {lat:20.850,lng:107.080,label:'天堂岛',emoji:'🏝️',color:'#0D9488',desc:'下龙湾少数可登顶的岛屿（Titop Island），400级台阶上到山顶观景台，360°俯瞰下龙湾全貌。山脚有白色沙滩，可游泳戏水。',search:'titop,island,halong,beach,viewpoint,stairs'},
-    {lat:20.8517,lng:107.0694,label:'斗鸡石',emoji:'🐓',color:'#0D9488',desc:'下龙湾最具辨识度的地标——两块岩石像两只公鸡在海上对峙。被印在越南20万盾纸币背面，是下龙湾乃至越南旅游的象征符号。',search:'rock,formation,halong,iconic,sea,stack'},
-    {lat:20.9042,lng:107.0150,label:'天宫洞',emoji:'✨',color:'#0D9488',desc:'位于下龙湾木头岛上的钟乳石洞，以瑰丽的石笋和洞顶「天宫」壁画闻名。传说龙母在此为龙王诞下百颗龙蛋，是下龙湾最具神话色彩的溶洞。',search:'cave,halong,stalactite,colorful,chamber'},
-    {lat:20.9036,lng:107.0156,label:'木头洞',emoji:'🪨',color:'#0D9488',desc:'与天宫洞相邻，因古时渔民在此存放木料得名。洞内宽阔如大剧院，曾是陈朝抗击蒙古水军的秘密基地。钟乳石形态万变，有「海上迷宫」之称。',search:'cave,halong,limestone,grotto,boat'},
-    {lat:20.8642,lng:107.0731,label:'月亮湖',emoji:'🌙',color:'#0D9488',desc:'四面被峭壁环绕的圆形泻湖（Luon Cave），只能通过低矮洞口划小船或皮划艇进入。湖面平静如镜，常见野生猴子在崖壁上出没，是皮划艇爱好者的秘境。',search:'lagoon,kayak,halong,monkey,cliff,tunnel'},
-    {lat:20.9306,lng:106.9869,label:'巡洲岛码头',emoji:'🚢',color:'#0D9488',desc:'下龙湾最大的游船集散地，所有一日游和过夜游轮由此出发。岛上有度假村、水上乐园和海豚表演，是下龙湾旅游的门户。',search:'marina,cruise,port,halong,harbor,ship'},
-    {lat:20.9542,lng:107.0264,label:'太阳世界',emoji:'🎢',color:'#F59E0B',desc:'下龙湾大型综合娱乐区，拥有世界最高的缆车（Sun Wheel摩天轮+双层缆车），可俯瞰下龙湾全景。还有水上乐园、夜市和美食街。',search:'ferris+wheel,cable+car,amusement,park,halong'},
-    {lat:20.9611,lng:107.0417,label:'白斋海滩',emoji:'🏖️',color:'#2563EB',desc:'下龙市最受欢迎的人工沙滩，长约1公里。沙质细腻，设施齐全，是游船归来后游泳、看日落的绝佳去处。',search:'beach,sand,halong,swimming,sunset,coast'},
-    {lat:20.9622,lng:107.0489,label:'白斋桥',emoji:'🌉',color:'#64748B',desc:'连接下龙市两岸的斜拉桥，夜间LED彩灯璀璨。桥身优美的弧线倒映在海面，是下龙市最上镜的现代地标。',search:'cable+stayed,bridge,halong,night,lights'},
-    {lat:20.7278,lng:107.0481,label:'吉婆岛',emoji:'🏝️',color:'#2563EB',desc:'下龙湾最大的岛屿（Cat Ba），一半是国家公园原始森林，一半是沙滩渔村。可徒步、骑行、攀岩，是背包客的下龙湾秘境。',search:'cat+ba,island,national+park,jungle,beach'},
-    {lat:21.0167,lng:107.3667,label:'拜子龙湾',emoji:'⛰️',color:'#0D9488',desc:'下龙湾的「姐妹湾」，人少景美，保留了更原始的海上喀斯特地貌。是避开游客大军、独享「海上桂林」静谧之美的理想选择。',search:'bai+tu+long,bay,pristine,limestone,karst'},
-    {lat:21.217,lng:105.805,label:'河内内排机场',emoji:'✈️',color:'#64748B',desc:'河内内排国际机场（Nội Bài），距市区约30公里，车程40分钟。T1国内、T2国际航站楼。深圳航空从T2出发，机场有免税店和越南特产店。',search:'airport,terminal,hanoi,international,aviation'}
-  ];
-  const minLat = Math.min(...spots.map(s => s.lat));
-  const maxLat = Math.max(...spots.map(s => s.lat));
-  const minLng = Math.min(...spots.map(s => s.lng));
-  const maxLng = Math.max(...spots.map(s => s.lng));
-
+  const mapDiv = document.getElementById('hanoi-map');
+  
+  // Add legend chips as overlay
+  const legend = document.createElement('div');
+  legend.className = 'trip-map-legend';
+  legend.innerHTML = '<div class="trip-map-chip">河内市区景点</div><div class="trip-map-chip">下龙湾一日游</div><div class="trip-map-chip">点击点位看详情</div>';
+  mapDiv.appendChild(legend);
+  
+  // Init Leaflet map — center between Hanoi and Ha Long Bay
+  const map = L.map('hanoi-map', {
+    center: [20.98, 105.95],
+    zoom: 9,
+    zoomControl: true,
+    scrollWheelZoom: true,
+    attributionControl: false
+  });
+  
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 18,
+  }).addTo(map);
+  
+  L.control.attribution({position:'bottomright',prefix:false}).addTo(map);
+  
+  // Spot data (same coordinates and info)
   const SPOT_PHOTOS = {
     'Rey Hotel':'hotel-lobby.jpg','还剑湖':'hoan-kiem-lake.jpg','玉山祠':'hoan-kiem-lake.jpg',
     '水上木偶剧院':'old-quarter.jpg','圣约瑟夫大教堂':'old-quarter.jpg',
@@ -1381,51 +1253,85 @@ document.querySelectorAll('.fade-in').forEach(el=>new IntersectionObserver(es=>e
     '吉婆岛':'halong-bay.jpg','拜子龙湾':'halong-bay.jpg',
     '河内内排机场':'halong-bay.jpg',
   };
-  function openSpot(s){
+  
+  const spots=[
+    {lat:21.0305,lng:105.8485,label:'Rey Hotel',emoji:'🏨',color:'#1A6B4A',desc:'2024年新开4星精品酒店，108间客房，中央热带花园中庭被誉为老城区的绿色绿洲。'},
+    {lat:21.0288,lng:105.8525,label:'还剑湖',emoji:'🌊',color:'#E85D3A',desc:'河内第一地标。湖中有玉山祠，北岸有龟塔。夜景灯光璀璨，周末封路变步行街。'},
+    {lat:21.0307,lng:105.8523,label:'玉山祠',emoji:'⛩️',color:'#E85D3A',desc:'坐落于还剑湖北部小岛上，通过红色栖旭桥连接岸边。'},
+    {lat:21.0273,lng:105.8519,label:'水上木偶剧院',emoji:'🎭',color:'#0D9488',desc:'升龙水上木偶剧院，越南国粹。木偶在水面上演绎民间传说。'},
+    {lat:21.0286,lng:105.8491,label:'圣约瑟夫大教堂',emoji:'⛪',color:'#C8974A',desc:'河内最古老的天主教堂，1886年建造，哥特复兴风格。'},
+    {lat:21.0318,lng:105.8465,label:'鸡蛋咖啡',emoji:'☕',color:'#C8974A',desc:'河内特色——鸡蛋咖啡，1946年诞生。蛋黄加炼乳打至蓬松。'},
+    {lat:21.0338,lng:105.8509,label:'三十六古街',emoji:'🏮',color:'#F59E0B',desc:'河内千年古街，36条以行业命名的小巷迷宫般交错。'},
+    {lat:21.0389,lng:105.8498,label:'同春市场',emoji:'🛍️',color:'#F59E0B',desc:'河内最大的室内批发市场。砍价对半起！'},
+    {lat:21.0253,lng:105.8465,label:'火炉监狱',emoji:'🏛️',color:'#64748B',desc:'又名河内希尔顿。现为博物馆，展出殖民与越战历史。'},
+    {lat:21.0432,lng:105.8392,label:'西湖',emoji:'🌿',color:'#2563EB',desc:'河内最大的湖泊，是散步骑行约会的最爱。'},
+    {lat:21.0458,lng:105.8385,label:'竹帛湖',emoji:'🪷',color:'#2563EB',desc:'紧邻西湖，湖畔有河内最古老的佛寺——镇国寺。'},
+    {lat:21.0478,lng:105.8370,label:'镇国寺',emoji:'🛕',color:'#7C3AED',desc:'始建于公元6世纪，11层红色莲花塔是标志。'},
+    {lat:21.0368,lng:105.8347,label:'胡志明陵',emoji:'🏛️',color:'#7C3AED',desc:'越南国父安息之地。不能穿短裤无袖，周六开放。'},
+    {lat:21.0362,lng:105.8333,label:'一柱寺',emoji:'🪷',color:'#7C3AED',desc:'建于1049年。整座寺庙矗立在一根石柱上，形如莲花。'},
+    {lat:21.0383,lng:105.8327,label:'巴亭广场',emoji:'🏟️',color:'#E85D3A',desc:'越南政治心脏，1945年胡志明在此宣读独立宣言。'},
+    {lat:21.0274,lng:105.8359,label:'文庙',emoji:'📜',color:'#7C3AED',desc:'越南第一所国立大学（1076年）。82块进士碑刻于石龟背上。'},
+    {lat:21.0377,lng:105.8408,label:'升龙皇城',emoji:'🏯',color:'#7C3AED',desc:'世界文化遗产，11-19世纪越南历代王朝的政治中心。'},
+    {lat:21.0325,lng:105.8392,label:'军事博物馆',emoji:'⚔️',color:'#64748B',desc:'展示越战时期军事文物，B-52残骸非常震撼。'},
+    {lat:21.0310,lng:105.8370,label:'越南美术馆',emoji:'🎨',color:'#C8974A',desc:'法国殖民时期建筑内的国家级美术馆。'},
+    {lat:21.0241,lng:105.8575,label:'河内歌剧院',emoji:'🎵',color:'#C8974A',desc:'1911年法式新古典主义建筑，河内最上镜的地标之一。'},
+    {lat:21.0200,lng:105.8592,label:'统一公园',emoji:'🌳',color:'#2563EB',desc:'河内最大的城市公园，当地人晨练和周末休闲的好去处。'},
+    {lat:21.0406,lng:105.8566,label:'龙编桥',emoji:'🌉',color:'#64748B',desc:'埃菲尔公司1902年设计建造，横跨红河，仍然通行火车。'},
+    {lat:21.0415,lng:105.8565,label:'陶瓷路壁画',emoji:'🎨',color:'#F59E0B',desc:'世界最长陶瓷壁画（约4km），吉尼斯世界纪录。'},
+    {lat:21.0333,lng:105.8392,label:'河内旗塔',emoji:'🚩',color:'#E85D3A',desc:'建于1805年阮朝，高33米，塔顶飘扬越南国旗。'},
+    {lat:20.91,lng:107.05,label:'下龙湾',emoji:'⛵',color:'#0D9488',desc:'世界自然遗产，1600+石灰岩岛屿，被誉为海上桂林。'},
+    {lat:20.843,lng:107.095,label:'惊讶洞',emoji:'🕳️',color:'#0D9488',desc:'下龙湾最大最美的溶洞，钟乳石千姿百态。'},
+    {lat:20.850,lng:107.080,label:'天堂岛',emoji:'🏝️',color:'#0D9488',desc:'400级台阶登顶，360°俯瞰下龙湾全貌。'},
+    {lat:20.8517,lng:107.0694,label:'斗鸡石',emoji:'🐓',color:'#0D9488',desc:'下龙湾标志——两块岩石像公鸡对峙，印在20万盾纸币背面。'},
+    {lat:20.9042,lng:107.0150,label:'天宫洞',emoji:'✨',color:'#0D9488',desc:'以瑰丽石笋和天宫壁画闻名。'},
+    {lat:20.9036,lng:107.0156,label:'木头洞',emoji:'🪨',color:'#0D9488',desc:'曾是陈朝抗击蒙古水军的秘密基地。'},
+    {lat:20.8642,lng:107.0731,label:'月亮湖',emoji:'🌙',color:'#0D9488',desc:'四面峭壁环绕的泻湖，只能划小船进入，皮划艇秘境。'},
+    {lat:20.9306,lng:106.9869,label:'巡洲岛码头',emoji:'🚢',color:'#0D9488',desc:'下龙湾最大游船集散地，一日游和过夜游轮出发港。'},
+    {lat:20.9542,lng:107.0264,label:'太阳世界',emoji:'🎢',color:'#F59E0B',desc:'世界最高缆车+摩天轮，俯瞰下龙湾全景。'},
+    {lat:20.9611,lng:107.0417,label:'白斋海滩',emoji:'🏖️',color:'#2563EB',desc:'下龙市最受欢迎的人工沙滩，长约1公里。'},
+    {lat:20.9622,lng:107.0489,label:'白斋桥',emoji:'🌉',color:'#64748B',desc:'连接下龙市两岸的斜拉桥，夜间LED璀璨。'},
+    {lat:20.7278,lng:107.0481,label:'吉婆岛',emoji:'🏝️',color:'#2563EB',desc:'下龙湾最大岛屿，国家公园+沙滩渔村，背包客秘境。'},
+    {lat:21.0167,lng:107.3667,label:'拜子龙湾',emoji:'⛰️',color:'#0D9488',desc:'下龙湾姐妹湾，人少景美，原始喀斯特地貌。'},
+    {lat:21.217,lng:105.805,label:'河内内排机场',emoji:'✈️',color:'#64748B',desc:'距市区30km，车程40分钟。T2国际航站楼出发。'}
+  ];
+  
+  // Create bounds to fit all markers
+  const bounds = L.latLngBounds(spots.map(s => [s.lat, s.lng]));
+  
+  spots.forEach(s => {
     const file = SPOT_PHOTOS[s.label] || 'halong-bay.jpg';
     const photoUrl = `./assets/photos/${file}`;
-    popupEl.querySelector('.popup-photo').style.backgroundImage = `url('${photoUrl}')`;
-    popupEl.querySelector('.popup-name').textContent = `${s.emoji} ${s.label}`;
-    popupEl.querySelector('.popup-copy').textContent = s.desc;
-    popupEl.querySelector('.popup-actions').innerHTML = `
-      <a href="https://www.openstreetmap.org/?mlat=${s.lat}&mlon=${s.lng}#map=15/${s.lat}/${s.lng}" target="_blank" rel="noreferrer">OSM</a>
-      <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${s.lat},${s.lng}`)}" target="_blank" rel="noreferrer">Google Maps</a>
-      <button type="button" data-copy="${s.lat}, ${s.lng}">复制坐标</button>`;
-    popupEl.classList.add('show');
-  }
-
-  spots.forEach(s=>{
-    const top = 18 + ((maxLat - s.lat) / (maxLat - minLat || 1)) * 66;
-    const left = 12 + ((s.lng - minLng) / (maxLng - minLng || 1)) * 76;
-    const pin = document.createElement('div');
-    pin.className = 'trip-map-pin';
-    pin.style.top = `${top}%`;
-    pin.style.left = `${left}%`;
-    pin.innerHTML = `
-      <button type="button" aria-label="${s.label}">
-        <span class="pin-label">${s.label}</span>
-        <span class="pin-dot" style="background:${s.color}"></span>
-      </button>`;
-    pin.querySelector('button').addEventListener('click', (event) => {
-      event.stopPropagation();
-      openSpot(s);
+    const popupHTML = `
+      <div style="border-radius:12px;overflow:hidden;max-width:280px;font-family:-apple-system,sans-serif;">
+        <div style="height:130px;background:url('${photoUrl}') center/cover;background-color:#E8ECDF;"></div>
+        <div style="padding:12px 14px 14px;">
+          <div style="font-size:16px;font-weight:800;margin-bottom:6px;">${s.emoji} ${s.label}</div>
+          <div style="font-size:12px;color:#64748B;line-height:1.7;margin-bottom:10px;">${s.desc}</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;">
+            <a href="https://www.openstreetmap.org/?mlat=${s.lat}&mlon=${s.lng}#map=15/${s.lat}/${s.lng}" target="_blank" style="text-decoration:none;background:#EFF6FF;color:#2563EB;padding:5px 10px;border-radius:8px;font-size:11px;">OSM</a>
+            <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(s.lat+','+s.lng)}" target="_blank" style="text-decoration:none;background:#EFF6FF;color:#2563EB;padding:5px 10px;border-radius:8px;font-size:11px;">Google Maps</a>
+            <button onclick="navigator.clipboard.writeText('${s.lat}, ${s.lng}');this.textContent='已复制'" style="border:none;background:#EFF6FF;color:#2563EB;padding:5px 10px;border-radius:8px;font-size:11px;cursor:pointer;">复制坐标</button>
+          </div>
+        </div>
+      </div>`;
+    
+    const icon = L.divIcon({
+      html: `<div style="
+        width:14px;height:14px;border-radius:50%;background:${s.color};
+        border:2.5px solid #FFF;box-shadow:0 2px 8px rgba(0,0,0,0.2);
+        cursor:pointer;"></div>`,
+      className: '',
+      iconSize: [14, 14],
+      iconAnchor: [7, 7]
     });
-    stage.appendChild(pin);
+    
+    const marker = L.marker([s.lat, s.lng], {icon}).addTo(map);
+    marker.bindPopup(popupHTML, {maxWidth:300,className:'custom-popup'});
   });
-
-  popupEl.querySelector('.popup-close').addEventListener('click', () => popupEl.classList.remove('show'));
-  popupEl.addEventListener('click', (event) => event.stopPropagation());
-  popupEl.addEventListener('click', async (event) => {
-    const copyBtn = event.target.closest('button[data-copy]');
-    if(!copyBtn) return;
-    try{
-      await navigator.clipboard.writeText(copyBtn.dataset.copy);
-      copyBtn.textContent = '已复制';
-    }catch(e){
-      copyBtn.textContent = copyBtn.dataset.copy;
-    }
-  });
-  map.addEventListener('click', () => popupEl.classList.remove('show'));
+  
+  map.fitBounds(bounds, {padding:[30,30]});
+  map.setMinZoom(7);
+  map.setMaxZoom(17);
 })();
 </script>
 
