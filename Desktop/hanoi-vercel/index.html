@@ -611,15 +611,15 @@ body {
 <div class="weather-row"><div class="weather-box" id="weather-box"><span>加载天气…</span></div></div>
 
 <div class="top-cards fade-in">
-  <div class="top-card"><div class="icon">🏨</div><div class="label">酒店</div><div class="value">Rey Hotel</div></div>
+  <div class="top-card"><div class="icon">🚶</div><div class="label">河内市区</div><div class="value">City Walk</div></div>
   <div class="top-card"><div class="icon">🚢</div><div class="label">一日游</div><div class="value">下龙湾 Klook</div></div>
   <div class="top-card"><div class="icon">👥</div><div class="label">出行人</div><div class="value">子豪 & 小轰轰</div></div>
-  <div class="top-card"><div class="icon">💳</div><div class="label">支付</div><div class="value">Visa + ATM</div></div>
+  <div class="top-card"><div class="icon">💳</div><div class="label">支付</div><div class="value">Visa + ATM取现 + 支付宝</div></div>
 </div>
 
 <!-- map -->
 <div class="section">
-  <div class="sec-head"><div class="dot" style="background:var(--emerald)"></div><div class="title">🗺️ 河内地图 · 可交互缩放</div></div>
+  <div class="sec-head"><div class="dot" style="background:var(--emerald)"></div><div class="title">🗺️ 河内地图 · 可交互缩放 · <span style="color:var(--gold);font-weight:700;">点击标签查看地点详情</span></div></div>
   <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;padding:0 4px;align-items:center;">
     <span style="font-size:11px;color:var(--muted);margin-right:4px;font-weight:600;">分类▸</span>
     <span style="background:#1A6B4A;color:#fff;font-size:10px;padding:3px 8px;border-radius:10px;font-weight:600;">🏨 酒店</span>
@@ -1352,7 +1352,7 @@ document.querySelectorAll('.fade-in').forEach(el=>new IntersectionObserver(es=>e
           </div>
         </div>
       </div>`;
-    
+
     const icon = L.divIcon({
       html: `<div style="display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;">
         <span style="
@@ -1367,7 +1367,7 @@ document.querySelectorAll('.fade-in').forEach(el=>new IntersectionObserver(es=>e
       iconSize: [120, 36],
       iconAnchor: [60, 18]
     });
-    
+
     const marker = L.marker([s.lat, s.lng], {icon}).addTo(map);
     marker.bindPopup(popupHTML, {maxWidth:300,className:'custom-popup'});
   });
