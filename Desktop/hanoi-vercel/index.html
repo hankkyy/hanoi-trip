@@ -307,15 +307,6 @@ body {
   border:1px solid rgba(26,107,74,0.1);
   z-index:1;
 }
-.trip-map-legend {
-  position:absolute; left:14px; top:14px; z-index:1000; display:flex; gap:8px; flex-wrap:wrap; max-width:78%;
-}
-.trip-map-chip {
-  background:rgba(255,255,255,0.92); border:1px solid rgba(26,107,74,0.12);
-  padding:6px 12px; border-radius:999px; font-size:12px; color:var(--text);
-  box-shadow:0 2px 8px rgba(0,0,0,0.08); font-weight:600;
-}
-
 .wide-grid { display:grid; grid-template-columns:1.6fr 1fr; gap:20px; align-items:start; max-width:100%; min-width:0; }
 .wide-grid > * { min-width:0; max-width:100%; overflow:hidden; }
 @media(max-width:860px){ .wide-grid { grid-template-columns:1fr; } }
@@ -448,8 +439,6 @@ body {
   .trip-map {
     min-height:380px; height:380px;
   }
-  .trip-map-legend { flex-direction:column; align-items:flex-start; }
-  .trip-map-chip { width:auto; max-width:100%; }
   .top-cards { gap:6px; margin-top:8px; }
   .top-card { padding:10px 6px; }
   .top-card .icon { font-size:22px; }
@@ -1208,12 +1197,7 @@ document.querySelectorAll('.fade-in').forEach(el=>new IntersectionObserver(es=>e
   if(!document.getElementById('hanoi-map')) return;
   const mapDiv = document.getElementById('hanoi-map');
   
-  // Add legend chips as overlay
-  const legend = document.createElement('div');
-  legend.className = 'trip-map-legend';
-  legend.innerHTML = '<div class="trip-map-chip">河内市区景点</div><div class="trip-map-chip">下龙湾一日游</div><div class="trip-map-chip">点击点位看详情</div>';
-  mapDiv.appendChild(legend);
-  
+
   // Init Leaflet map — center between Hanoi and Ha Long Bay
   const map = L.map('hanoi-map', {
     center: [20.98, 105.95],
@@ -1248,6 +1232,7 @@ document.querySelectorAll('.fade-in').forEach(el=>new IntersectionObserver(es=>e
     '白斋海滩':'halong-bay.jpg','白斋桥':'halong-bay.jpg',
     '吉婆岛':'halong-bay.jpg','拜子龙湾':'halong-bay.jpg',
     '河内内排机场':'halong-bay.jpg',
+    '深圳宝安机场':'halong-bay.jpg',
   };
   
   const spots=[
@@ -1288,18 +1273,16 @@ document.querySelectorAll('.fade-in').forEach(el=>new IntersectionObserver(es=>e
     {lat:20.9622,lng:107.0489,label:'白斋桥',emoji:'🌉',color:'#64748B',desc:'连接下龙市两岸的斜拉桥，夜间LED璀璨。'},
     {lat:20.7278,lng:107.0481,label:'吉婆岛',emoji:'🏝️',color:'#2563EB',desc:'下龙湾最大岛屿，国家公园+沙滩渔村，背包客秘境。'},
     {lat:21.0167,lng:107.3667,label:'拜子龙湾',emoji:'⛰️',color:'#0D9488',desc:'下龙湾姐妹湾，人少景美，原始喀斯特地貌。'},
-    {lat:21.217,lng:105.805,label:'河内内排机场',emoji:'✈️',color:'#64748B',desc:'距市区30km，车程40分钟。T2国际航站楼出发。'}
+    {lat:21.217,lng:105.805,label:'河内内排机场',emoji:'✈️',color:'#64748B',desc:'距市区30km，车程40分钟。T2国际航站楼出发。'},
+    {lat:22.6394,lng:113.8110,label:'深圳宝安机场',emoji:'🛫',color:'#DC2626',desc:'出发地。深圳直飞河内约2小时，深航ZH107/106往返。'}
   ];
   
   // Create bounds to fit all markers
   const bounds = L.latLngBounds(spots.map(s => [s.lat, s.lng]));
   
   spots.forEach(s => {
-    const file = SPOT_PHOTOS[s.label] || 'halong-bay.jpg';
-    const photoUrl = `./assets/photos/${file}`;
     const popupHTML = `
       <div style="border-radius:12px;overflow:hidden;max-width:280px;font-family:-apple-system,sans-serif;">
-        <div style="height:130px;background:url('${photoUrl}') center/cover;background-color:#E8ECDF;"></div>
         <div style="padding:12px 14px 14px;">
           <div style="font-size:16px;font-weight:800;margin-bottom:6px;">${s.emoji} ${s.label}</div>
           <div style="font-size:12px;color:#64748B;line-height:1.7;margin-bottom:10px;">${s.desc}</div>
@@ -1316,10 +1299,10 @@ document.querySelectorAll('.fade-in').forEach(el=>new IntersectionObserver(es=>e
         <span style="
           font-size:11px;font-weight:700;color:#FFF;background:${s.color};
           padding:3px 10px;border-radius:999px;box-shadow:0 2px 8px rgba(0,0,0,0.15);
-          white-space:nowrap;">${s.label}</span>
+          white-space:nowrap;opacity:0.90;">${s.label}</span>
         <div style="
           width:12px;height:12px;border-radius:50%;background:${s.color};
-          border:2.5px solid #FFF;box-shadow:0 2px 8px rgba(0,0,0,0.2);"></div>
+          border:2.5px solid #FFF;box-shadow:0 2px 8px rgba(0,0,0,0.2);opacity:0.90;"></div>
       </div>`,
       className: '',
       iconSize: [120, 36],
