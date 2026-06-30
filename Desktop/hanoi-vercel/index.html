@@ -1316,10 +1316,10 @@ document.querySelectorAll('.fade-in').forEach(el=>new IntersectionObserver(es=>e
       </div>`;
     
     const icon = L.divIcon({
-      html: `<div style="display:flex;flex-direction:column;align-items:center;gap:3px;">
+      html: `<div style="display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;">
         <span style="
-          font-size:11px;font-weight:700;color:var(--text);background:rgba(255,255,255,0.92);
-          padding:2px 8px;border-radius:999px;box-shadow:0 2px 6px rgba(0,0,0,0.12);
+          font-size:11px;font-weight:700;color:#FFF;background:${s.color};
+          padding:3px 10px;border-radius:999px;box-shadow:0 2px 8px rgba(0,0,0,0.15);
           white-space:nowrap;">${s.label}</span>
         <div style="
           width:12px;height:12px;border-radius:50%;background:${s.color};
