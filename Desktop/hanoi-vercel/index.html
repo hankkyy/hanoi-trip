@@ -370,6 +370,9 @@ body {
 .info-item .i-title { font-size:11px; color:var(--muted); letter-spacing:2px; }
 .info-item .i-value { font-size:13px; font-weight:700; margin-top:4px; }
 .info-item .i-sub { font-size:11px; color:var(--muted); margin-top:2px; }
+.tips-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:10px; }
+.tip-title { font-weight:800; font-size:13px; color:var(--text); letter-spacing:0; margin-bottom:8px; }
+.tip-body { font-size:11px; color:var(--muted); line-height:1.75; }
 
 /* budget */
 .budget-section { background:#FFF; border-radius:var(--radius); padding:18px; box-shadow:0 1px 8px rgba(0,0,0,0.03); }
@@ -474,6 +477,9 @@ body {
   .info-item .i-title { font-size:10px; letter-spacing:1px; }
   .info-item .i-value { font-size:12px; }
   .info-item .i-sub { font-size:10px; }
+  .tips-grid { grid-template-columns:1fr; gap:8px; }
+  .tip-title { font-size:11px; margin-bottom:4px; }
+  .tip-body { font-size:10px; }
   .budget-section { padding:14px; }
   .budget-table { font-size:12px; }
   .budget-table td { padding:6px 8px; }
@@ -808,39 +814,15 @@ body {
 <!-- ═══ 旅行贴士 ═══ -->
 <div class="section">
   <div class="sec-head"><div class="dot" style="background:#DC2626"></div><div class="title">📌 旅行贴士 · Tips & 避雷</div></div>
-  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px;">
-    <div class="info-item" style="line-height:1.75;">
-      <div class="i-title" style="font-weight:800;font-size:13px;color:var(--text);letter-spacing:0;margin-bottom:8px;">🌦️ 7月天气（32-38°C）</div>
-      <div class="i-sub" style="color:var(--muted);">上午晴好下午暴雨，湿度80-90%。集中上午出行，午后咖啡馆避暑。穿搭：速干T恤+防晒衣+雨衣/折叠伞。下龙湾水温28-30°C适合游泳。</div>
-    </div>
-    <div class="info-item" style="line-height:1.75;">
-      <div class="i-title" style="font-weight:800;font-size:13px;color:var(--text);letter-spacing:0;margin-bottom:8px;">🏛️ 景点避雷 · 别跑空！</div>
-      <div class="i-sub" style="color:var(--muted);">🔴 <b>胡志明陵6-8月关闭</b>（防腐维护）· 文庙周一休 · 胡志明故居周一休+午休 · 火車街官方已关闭 · 圣约瑟夫正门常闭走侧门 · 禁短裤/无袖/拍照入内</div>
-    </div>
-    <div class="info-item" style="line-height:1.75;">
-      <div class="i-title" style="font-weight:800;font-size:13px;color:var(--text);letter-spacing:0;margin-bottom:8px;">🚗 交通防坑</div>
-      <div class="i-sub" style="color:var(--muted);"><b>只认Grab</b> · 机场→老城300-400k盾（¥90-120）· 拒绝搭讪司机/"好心"带路人 · 过马路保持匀速走别停 · 备Grab/Google Maps/Google Translate</div>
-    </div>
-    <div class="info-item" style="line-height:1.75;">
-      <div class="i-title" style="font-weight:800;font-size:13px;color:var(--text);letter-spacing:0;margin-bottom:8px;">💰 消费避坑</div>
-      <div class="i-sub" style="color:var(--muted);">20k/500k盾同蓝色易混当面数清 · 备小额现金 · 砍价从半价起 · 海鲜去码头明码标价 · Spa去Google 4.5+ · 换汇去市区金店汇率比机场好10-15%</div>
-    </div>
-    <div class="info-item" style="line-height:1.75;">
-      <div class="i-title" style="font-weight:800;font-size:13px;color:var(--text);letter-spacing:0;margin-bottom:8px;">🍜 美食参考价</div>
-      <div class="i-sub" style="color:var(--muted);">鸡蛋咖啡~35k · Pho~40-60k · Bún Chả~50k · Bánh Mì~15-25k · Bia Hơi生啤~5-10k · 选人潮多翻桌率高的店 · 避免生水/不明冰块 · 咖啡排序：鸡蛋>椰子>酸奶</div>
-    </div>
-    <div class="info-item" style="line-height:1.75;">
-      <div class="i-title" style="font-weight:800;font-size:13px;color:var(--text);letter-spacing:0;margin-bottom:8px;">⛵ 下龙湾Tips</div>
-      <div class="i-sub" style="color:var(--muted);">防滑鞋必备洞内陡滑 · 海上UV是岸上2倍 · 防水手机套+防水包 · 晕船药提前30min吃 · 饮料另付40-80k/杯 · 部分游轮禁塑料瓶 · 日落派对仅茶+饼干别期待 · 7月台风季看退款政策</div>
-    </div>
-    <div class="info-item" style="line-height:1.75;">
-      <div class="i-title" style="font-weight:800;font-size:13px;color:var(--text);letter-spacing:0;margin-bottom:8px;">👔 文化礼仪</div>
-      <div class="i-sub" style="color:var(--muted);">进寺庙遮肩膝脱鞋安静 · 不公开批越战/胡志明 · 用名字（非姓）称呼对方 · 双手递物 · 拍当地人先征同意 · 不摸小孩头 · 小费$1/天·10-20k行李 · 右边尊位让长辈</div>
-    </div>
-    <div class="info-item" style="line-height:1.75;">
-      <div class="i-title" style="font-weight:800;font-size:13px;color:var(--text);letter-spacing:0;margin-bottom:8px;">🛡️ 安全防骗</div>
-      <div class="i-sub" style="color:var(--muted);">别边走边看手机 · 夜市包背前面 · 啤酒街手机不放桌上 · 拒绝水果贩拍照搭讪 · 拒绝街头擦鞋 · Spa提前Klook订 · 越南整体安全暴力犯罪极少 · 骗局多为非暴力高价宰客</div>
-    </div>
+  <div class="tips-grid">
+    <div class="info-item"><div class="tip-title">🌦️ 7月天气 · 32-38°C</div><div class="tip-body">上午晴好下午暴雨，湿度80-90%。集中上午出行，午后咖啡馆避暑。穿搭：速干T恤+防晒衣+雨衣。下龙湾水温28-30°C适合游泳。</div></div>
+    <div class="info-item"><div class="tip-title">🏛️ 景点避雷 · 别跑空</div><div class="tip-body">🔴<b>胡志明陵6-8月关闭</b>（防腐维护）· 文庙周一休 · 胡志明故居周一休+午休 · 火車街官方关闭 · 圣约瑟夫正门常闭走侧门 · 禁短裤/无袖/拍照入内</div></div>
+    <div class="info-item"><div class="tip-title">🚗 交通防坑</div><div class="tip-body"><b>只认Grab</b> · 机场→老城300-400k盾（¥90-120）· 拒绝搭讪司机/好心带路人 · 过马路保持匀速别停 · 备Grab/Google Maps/Google Translate</div></div>
+    <div class="info-item"><div class="tip-title">💰 消费避坑</div><div class="tip-body">20k/500k盾同蓝色易混当面数清 · 备小额现金 · 砍价从半价起 · 海鲜去码头明码标价 · Spa去Google 4.5+ · 换汇去市区金店汇率比机场好10-15%</div></div>
+    <div class="info-item"><div class="tip-title">🍜 美食参考价</div><div class="tip-body">鸡蛋咖啡~35k · Pho~40-60k · Bún Chả~50k · Bánh Mì~15-25k · Bia Hơi生啤~5-10k · 选人潮多翻桌率高店 · 避免生水/不明冰块 · 咖啡排序：鸡蛋>椰子>酸奶</div></div>
+    <div class="info-item"><div class="tip-title">⛵ 下龙湾Tips</div><div class="tip-body">防滑鞋必备洞内陡滑 · 海上UV岸上2倍 · 防水手机套+防水包 · 晕船药提前30min吃 · 饮料另付40-80k/杯 · 部分游轮禁塑料瓶 · 日落派对仅茶+饼干别期待 · 7月台风季看退款政策</div></div>
+    <div class="info-item"><div class="tip-title">👔 文化礼仪</div><div class="tip-body">进寺庙遮肩膝脱鞋安静 · 不批越战/胡志明 · 用名字（非姓）称呼对方 · 双手递物 · 拍当地人先征同意 · 不摸小孩头 · 小费$1/天·10-20k行李 · 右边尊位让长辈</div></div>
+    <div class="info-item"><div class="tip-title">🛡️ 安全防骗</div><div class="tip-body">别边走边看手机 · 夜市包背前面 · 啤酒街手机不放桌上 · 拒绝水果贩拍照搭讪 · 拒绝街头擦鞋 · Spa提前Klook订 · 越南整体安全暴力犯罪极少 · 骗局多为高价宰客</div></div>
   </div>
 </div>
 
