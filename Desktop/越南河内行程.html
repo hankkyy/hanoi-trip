@@ -19,8 +19,10 @@ body {
   font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
   background:var(--bg); color:var(--text); line-height:1.55;
   -webkit-font-smoothing:antialiased; -webkit-tap-highlight-color:transparent;
-  font-size:16px; touch-action:manipulation;
+  font-size:16px; touch-action:manipulation; overflow-x:hidden; overflow-x:clip; width:100%; max-width:100vw;
 }
+#now-bar { min-width:0; }
+#now-text { min-width:0; overflow-wrap:anywhere; }
 
 #now-bar {
   position:sticky; top:0; z-index:1000;
@@ -31,13 +33,11 @@ body {
 .pulse { width:8px; height:8px; border-radius:50%; background:#4ADE80; animation:pulse 1.5s ease-in-out infinite; }
 @keyframes pulse { 0%,100%{opacity:1;transform:scale(1);} 50%{opacity:0.4;transform:scale(2);} }
 
-.wx-tip { background:#07C160; color:#FFF; text-align:center; padding:6px 16px; font-size:13px; }
-
 /* hero */
 .hero {
   color:#FFF; padding:32px 24px 28px; text-align:center; position:relative; overflow:hidden;
   background:linear-gradient(160deg,rgba(15,55,35,0.25) 0%,rgba(10,40,25,0.4) 100%),
-             url('https://images.weserv.nl/?url=images.unsplash.com/photo-1528127269322-539801943592&w=1200&h=600&fit=cover') center/cover;
+             url('https://images.unsplash.com/photo-1528127269322-539801943592?w=1200&h=600&fit=crop') center/cover;
 }
 .hero::before { content:''; position:absolute; inset:0; pointer-events:none; background:radial-gradient(ellipse at 15% 85%,rgba(200,151,74,0.25) 0%,transparent 45%),radial-gradient(ellipse at 85% 15%,rgba(13,148,136,0.15) 0%,transparent 45%); }
 .hero-content { position:relative; z-index:2; max-width:700px; margin:0 auto; }
@@ -396,6 +396,15 @@ body {
 .fade-in { opacity:0; transform:translateY(16px); transition:opacity 0.6s,transform 0.6s; }
 .fade-in.visible { opacity:1; transform:translateY(0); }
 
+/* ── Weather: 全宽 + 预报自适应 + 分时换行（手机/平板/横屏无需横向滑动）── */
+@media(max-width:860px){
+  .weather-box, .weather-fc, .hourly-panel, #hourly-container { max-width:100%; }
+  .weather-fc { overflow-x:visible; scroll-snap-type:none; }
+  .weather-fc .fc-day { flex:1 1 0; min-width:0; }
+  .hourly-panel { flex-wrap:wrap; overflow-x:visible; scroll-snap-type:none; }
+  .hourly-panel .hr-card { flex:1 1 64px; min-width:0; }
+}
+
 /* ── Mobile optimizations ── */
 @media(max-width:480px){
   body { font-size:15px; }
@@ -484,7 +493,7 @@ body {
   .weather-box .w-desc { font-size:13px; }
   .weather-box .w-hum { font-size:12px; }
   .weather-box .w-hint { font-size:11px; }
-  .weather-fc .fc-day { min-width:72px; padding:12px 8px 10px; }
+  .weather-fc .fc-day { min-width:0; padding:12px 6px 10px; }
   .weather-fc .fc-day .fc-icon { font-size:28px; }
   .weather-fc .fc-day .fc-temp { font-size:13px; }
   .weather-fc .fc-day .fc-dow { font-size:12px; }
@@ -506,10 +515,6 @@ body {
 <body>
 
 <div id="now-bar"><span id="now-text">加载中…</span></div>
-
-<div class="wx-tip">
-  <span>💡 微信打开？右上角 <b>···</b> → <b>浮窗</b> 随时查看</span>
-</div>
 
 <!-- ═══ HERO ═══ -->
 <div class="hero">
@@ -716,7 +721,7 @@ body {
       </div>
       <div class="resto-item fade-in" onclick="this.classList.toggle('tapped')">
         <div class="resto-preview"><div class="resto-emoji">🐟</div><div class="resto-info"><h4>Chả Cá Thăng Long</h4><div class="rd">Đường Thành · 古法煎鱼</div><span class="r-tag tag-mich">Michelin</span></div></div>
-        <div class="resto-expand"><div class="resto-photo proxied-img" data-src="vietnam,pho,beef,noodle,soup,bowl"></div><div class="resto-more">姜黄煎鱼配莳萝，桌上现煎，河内独有！<br><a class="map-link" href="https://maps.google.com/?q=Cha+Ca+Thang+Long+Hanoi">🗺️ 地图</a></div></div>
+        <div class="resto-expand"><div class="resto-photo proxied-img" data-src="cha+ca,vietnam,turmeric,fish,dill,pan"></div><div class="resto-more">姜黄煎鱼配莳萝，桌上现煎，河内独有！<br><a class="map-link" href="https://maps.google.com/?q=Cha+Ca+Thang+Long+Hanoi">🗺️ 地图</a></div></div>
       </div>
     </div>
   </div>
@@ -947,16 +952,59 @@ async function loadItinerary() {
 loadItinerary();
 
 // ── PROXIED IMAGES ──
+// 使用真实的 Unsplash 图片，彻底修复灰图问题
+const VIETNAM_PHOTOS = {
+  'hanoi,old+quarter,street,cafe':        'photo-1558618666-fcd25c85f82e',
+  'hoan+kiem,lake,hanoi,vietnam':         'photo-1610441122127-1a0f0977f9af',
+  'halong,bay,limestone,islands,boat':    'photo-1528127269322-539801943592',
+  'halong,cave,kayak,boat,tour':           'photo-1583417319070-4a69db38a482',
+  'halong,bay,aerial,view,sunset':         'photo-1574153930657-9d1a6b4b07b8',
+  'hanoi,boutique,hotel,lobby,design':     'photo-1566073771259-6a8506099945',
+  'hotel,room,bed,modern,interior':        'photo-1618773928121-c32242e63f39',
+  'hotel,breakfast,buffet,vietnam':        'photo-1536392701798-d627ea4e6cf7',
+  'vietnam,hair+wash,head+spa,massage':   'photo-1600334089648-b0d9d3028eb2',
+  'spa,massage,relaxation,wellness,aroma': 'photo-1544161515-4ab6ce6db874',
+  'vietnam,pho,beef,noodle,soup,bowl':     'photo-1582878826629-29b7ad1cdc43',
+  'stir+fried,pho,beef,hanoi,noodles':    'photo-1555126634-323283e090fa',
+  'bun+cha,vietnam,grilled,pork,vermicelli':'photo-1514934570006-36b1cd0b1e49',
+  'banh+mi,vietnam,sandwich,bread,crispy': 'photo-1509722747041-616f39b57569',
+  'egg+coffee,vietnam,cafe,hanoi,drink':   'photo-1501339847305-253e8d86ee76',
+  'vietnam,coffee,beans,robusta,drip':     'photo-1611854777869-62e3b570b0e1',
+  'cashew,nuts,roasted,salted,vietnam':    'photo-1601493700812-947635424a88',
+  'chocolate,dark,artisan,vietnam,cocoa':  'photo-1549009493-f9516f9f1e1f',
+  'vietnam,coffee,phin,filter,drip,brewing':'photo-1495474472287-4d71bcdd2080',
+  // 丝绸/奥黛 — 通过 source.unsplash.com 关键词精准匹配
+  'tiger,baim,ointment,herbal,vietnam,medicine':'photo-1618588507085-c79565432917',
+  'cha+ca,vietnam,turmeric,fish,dill,pan': 'photo-1559847844-5315695dadae',
+};
+const FALLBACK_GRADIENTS = [
+  'linear-gradient(135deg, #1A6B4A, #0D9488)',
+  'linear-gradient(135deg, #C8974A, #E85D3A)',
+  'linear-gradient(135deg, #7C3AED, #0D9488)',
+  'linear-gradient(135deg, #F59E0B, #E85D3A)',
+  'linear-gradient(135deg, #1E293B, #1A6B4A)',
+  'linear-gradient(135deg, #C2410C, #C8974A)',
+];
+
 function loadProxiedImages() {
-  document.querySelectorAll('.proxied-img').forEach(el => {
+  document.querySelectorAll('.proxied-img').forEach((el, idx) => {
     const q = el.dataset.src;
     if (!q) return;
-    const url = `https://wsrv.nl/?url=https://source.unsplash.com/400x160/?${encodeURIComponent(q)}&output=jpg`;
-    el.style.backgroundImage = `url('${url}')`;
-    el.onerror = function() {
-      el.style.backgroundImage = 'none';
-      el.style.background = 'linear-gradient(135deg, #E8ECDF, #D4D8C8)';
+    const photoId = VIETNAM_PHOTOS[q] || null;
+    let url;
+    if (photoId) {
+      url = `https://images.unsplash.com/${photoId}?w=400&h=200&fit=crop&auto=format`;
+    } else {
+      url = `https://source.unsplash.com/400x200/?${encodeURIComponent(q)}`;
+    }
+    const img = new Image();
+    img.onload = function() {
+      el.style.backgroundImage = `url('${url}')`;
     };
+    img.onerror = function() {
+      el.style.backgroundImage = FALLBACK_GRADIENTS[idx % FALLBACK_GRADIENTS.length];
+    };
+    img.src = url;
   });
 }
 loadProxiedImages();
@@ -1259,7 +1307,7 @@ document.querySelectorAll('.fade-in').forEach(el=>new IntersectionObserver(es=>e
     const m=L.marker([s.lat,s.lng],{icon}).addTo(map);
     m.on('click', function(e){
       L.DomEvent.stopPropagation(e);
-      const photoUrl = `https://wsrv.nl/?url=https://source.unsplash.com/500x220/?${encodeURIComponent(s.search)}&output=jpg`;
+      const photoUrl = `https://source.unsplash.com/500x220/?${encodeURIComponent(s.search)}`;
       popupEl.querySelector('.popup-photo').style.backgroundImage = `url('${photoUrl}')`;
       popupEl.querySelector('.popup-emoji').textContent = s.emoji;
       popupEl.querySelector('.popup-title').textContent = s.label;
@@ -1276,7 +1324,18 @@ document.querySelectorAll('.fade-in').forEach(el=>new IntersectionObserver(es=>e
     const group=new L.featureGroup(markers);
     map.fitBounds(group.getBounds().pad(0.15),{maxZoom:13});
   }
-  setTimeout(()=>map.invalidateSize(),500);
+  // 修复首屏灰色块：容器尺寸在初始化后仍可能变化（字体回流 / 移动端地址栏伸缩 / fitBounds 缩放动画），
+  // 多次 + load + resize + ResizeObserver 调用 invalidateSize，强制 Leaflet 重新计算尺寸并补齐瓦片
+  const fixMapSize = ()=>map.invalidateSize();
+  fixMapSize();
+  setTimeout(fixMapSize, 200);
+  setTimeout(fixMapSize, 600);
+  setTimeout(fixMapSize, 1500);
+  window.addEventListener('load', fixMapSize);
+  window.addEventListener('resize', fixMapSize);
+  if(window.ResizeObserver && document.getElementById('hanoi-map')){
+    new ResizeObserver(()=>map.invalidateSize()).observe(document.getElementById('hanoi-map'));
+  }
 })();
 </script>
 
