@@ -428,6 +428,12 @@ body {
 .tips-grid .info-item:nth-child(8) { border-left-color:#DC2626; }
 .tips-grid .info-item:nth-child(8)::before { background:linear-gradient(90deg,#DC2626,#F87171); }
 .tips-grid .info-item:nth-child(8):hover { box-shadow:0 12px 36px rgba(220,38,38,0.15); }
+.tips-grid .info-item:nth-child(9) { border-left-color:#0EA5E9; }
+.tips-grid .info-item:nth-child(9)::before { background:linear-gradient(90deg,#0EA5E9,#38BDF8); }
+.tips-grid .info-item:nth-child(9):hover { box-shadow:0 12px 36px rgba(14,165,233,0.15); }
+.tips-grid .info-item:nth-child(10) { border-left-color:#F97316; }
+.tips-grid .info-item:nth-child(10)::before { background:linear-gradient(90deg,#F97316,#FB923C); }
+.tips-grid .info-item:nth-child(10):hover { box-shadow:0 12px 36px rgba(249,115,22,0.15); }
 
 /* ── Enhanced tip titles ── */
 .tip-title {
@@ -473,6 +479,8 @@ body {
 .tips-grid .info-item:nth-child(6) .tip-list li::before { color:#0D9488; }
 .tips-grid .info-item:nth-child(7) .tip-list li::before { color:#7C3AED; }
 .tips-grid .info-item:nth-child(8) .tip-list li::before { color:#DC2626; }
+.tips-grid .info-item:nth-child(9) .tip-list li::before { color:#0EA5E9; }
+.tips-grid .info-item:nth-child(10) .tip-list li::before { color:#F97316; }
 
 /* budget */
 .budget-section { background:#FFF; border-radius:var(--radius); padding:18px; box-shadow:0 1px 8px rgba(0,0,0,0.03); }
@@ -698,6 +706,10 @@ body {
   .hl-tag { padding:8px 6px; font-size:11px; }
   .hl-tag .big { font-size:18px; }
   .cl-item { font-size:14px; padding:8px 2px; }
+  .immigration-hint { padding:10px 8px !important; margin:0 4px 8px !important; }
+  .immigration-hint .cl-box { min-width:24px; height:24px; font-size:10px; }
+  .immigration-hint .cl-text { font-size:13px; line-height:1.5; }
+  .immigration-hint .cl-text a { font-size:11px; display:inline-block; padding:6px 0; min-height:32px; }
   .bucket-item .cl-desc { display:none; }
   .bucket-cat { font-size:12px; }
   .bl-card-inner { padding:14px 16px; }
@@ -725,6 +737,11 @@ body {
   .expense-form .currency-select { width:100%; }
   .expense-item { flex-direction:column; align-items:flex-start; gap:4px; }
   .expense-item .exp-rmb { text-align:left; }
+  .immigration-hint { padding:8px 6px !important; }
+  .immigration-hint .cl-text { font-size:12px; }
+  .immigration-hint .cl-text a { font-size:10px; }
+  .tips-grid .info-item { padding:12px 10px; }
+  .tip-list li { padding:3px 0 3px 16px; }
 }
 
 /* ── Global mobile touch targets ── */
@@ -996,18 +1013,38 @@ body {
         <div class="s-icon">💊</div><h4>白虎活络膏</h4><div class="s-price">万能药膏</div><div class="s-where">📍 超市/药房</div>
         <div class="souv-expand"><div class="souv-photo"></div><div class="souv-desc">越南国民神药（Cao Bạch Hổ），含薄荷脑、樟脑等草本成分。对蚊虫叮咬、肌肉酸痛、晕车头痛都有奇效。超市和药房都有，一罐约20k-40k VND，买几罐送长辈超实用。</div></div>
       </div>
+      <div class="souv-card" onclick="this.classList.toggle('tapped')">
+        <div class="s-icon">🥭</div><h4>综合蔬果干</h4><div class="s-price">芒果/菠萝蜜/香蕉</div><div class="s-where">📍 Vinamit / Langfarm</div>
+        <div class="souv-expand"><div class="souv-photo"></div><div class="souv-desc">小红书人手一包的越南果干！芒果干厚实不腻、菠萝蜜干脆甜、香蕉干薄脆、紫薯干香酥。Vinamit 是越南最大品牌，超市和 Langfarm 都有。轻便好带，一大包约30k-80k VND，办公室分享首选。</div></div>
+      </div>
+      <div class="souv-card" onclick="this.classList.toggle('tapped')">
+        <div class="s-icon">🍜</div><h4>河粉泡面</h4><div class="s-price">VIFON / Acecook</div><div class="s-where">📍 BRG / Aeon 超市</div>
+        <div class="souv-expand"><div class="souv-photo"></div><div class="souv-desc">越南泡面塞爆行李箱是近年TikTok热门趋势！VIFON 河粉泡面还原度最高，汤底浓郁。还有虾面、蟹粉口味。一包约5k-12k VND，超市整排货架随便挑。轻便便宜，送朋友同事超受欢迎。</div></div>
+      </div>
+      <div class="souv-card" onclick="this.classList.toggle('tapped')">
+        <div class="s-icon">🍬</div><h4>椰子糖/脆饼</h4><div class="s-price">STAR KITCHEN</div><div class="s-where">📍 老城区直营店</div>
+        <div class="souv-expand"><div class="souv-photo"></div><div class="souv-desc">STAR KITCHEN 法式面包脆饼是河内老城区网红伴手礼店，椰子脆饼香酥不甜腻，包装超有质感。还有椰子糖、椰子软糕等传统越南糖果。老城区有直营店，礼盒装送人体面，约50k-150k VND/盒。</div></div>
+      </div>
+      <div class="souv-card" onclick="this.classList.toggle('tapped')">
+        <div class="s-icon">🍰</div><h4>绿豆糕</h4><div class="s-price">金龙 · 入口即化</div><div class="s-where">📍 同春市场 / 超市</div>
+        <div class="souv-expand"><div class="souv-photo"></div><div class="souv-desc">越南传统糕点 Bánh đậu xanh，金龙品牌最出名。绿豆磨粉加糖和椰子油压制成小块，入口即化，甜而不腻。独立小包装适合分送，一大盒约30k-60k VND。长辈最爱，配茶绝佳。</div></div>
+      </div>
+      <div class="souv-card" onclick="this.classList.toggle('tapped')">
+        <div class="s-icon">🍵</div><h4>莲花茶/朝鲜蓟茶</h4><div class="s-price">养生伴手礼</div><div class="s-where">📍 Langfarm / 超市</div>
+        <div class="souv-expand"><div class="souv-photo"></div><div class="souv-desc">越南莲花茶（Trà Sen）用真莲花窨制，1500朵莲花才出1kg，清香高雅。朝鲜蓟茶（Atiso）是大叻特产，降火护肝，长辈养生首选。超市和 Langfarm 都有茶包礼盒，一盒约40k-80k VND。</div></div>
+      </div>
     </div>
   </div>
-  <!-- info -->
+  <!-- vietnamese phrases -->
   <div class="section">
-    <div class="sec-head"><div class="dot" style="background:var(--gold)"></div><div class="title">实用信息</div></div>
+    <div class="sec-head"><div class="dot" style="background:var(--gold)"></div><div class="title">🇻🇳 越南语速成 · 谐音救急（北音）</div></div>
     <div class="info-grid">
-      <div class="info-item"><div class="i-title">💳 支付</div><div class="i-value">Fidelity ATM</div><div class="i-sub">机场取现无手续费</div></div>
-      <div class="info-item"><div class="i-title">📱 子豪</div><div class="i-value">eSIM</div><div class="i-sub">Airalo/Nomad</div></div>
-      <div class="info-item"><div class="i-title">📱 小轰轰</div><div class="i-value">实体SIM</div><div class="i-sub">淘宝提前买</div></div>
-      <div class="info-item"><div class="i-title">🛂 签证</div><div class="i-value">另纸签</div><div class="i-sub">提前1-2周办</div></div>
-      <div class="info-item"><div class="i-title">🚗 停车</div><div class="i-value">小轰轰车位 🆓</div><div class="i-sub">宝安机场</div></div>
-      <div class="info-item"><div class="i-title">📲 App</div><div class="i-value">Grab + Maps</div><div class="i-sub">打车+导航</div></div>
+      <div class="info-item"><div class="i-title">👋 问候</div><div class="i-value">Xin chào <span style="font-weight:400;font-size:11px;">(新早)</span></div><div class="i-sub">Cảm ơn <span style="font-size:11px;">(感恩)</span> = 谢谢<br>Tạm biệt <span style="font-size:11px;">(担别)</span> = 再见</div></div>
+      <div class="info-item"><div class="i-title">🛒 购物砍价</div><div class="i-value">Bao nhiêu tiền? <span style="font-weight:400;font-size:11px;">(包妞典)</span></div><div class="i-sub">Đắt quá <span style="font-size:11px;">(搭瓜)</span> = 太贵了<br>Rẻ một chút <span style="font-size:11px;">(也莫煮)</span> = 便宜点</div></div>
+      <div class="info-item"><div class="i-title">🍜 餐饮</div><div class="i-value">Ngon <span style="font-weight:400;font-size:11px;">(翁)</span> = 好吃！</div><div class="i-sub">Tính tiền <span style="font-size:11px;">(丁典)</span> = 买单<br>Cà phê <span style="font-size:11px;">(卡啡)</span> = 咖啡</div></div>
+      <div class="info-item"><div class="i-title">🚗 出行问路</div><div class="i-value">Ở đâu? <span style="font-weight:400;font-size:11px;">(鹅捞)</span> = 在哪？</div><div class="i-sub">Nhà vệ sinh <span style="font-size:11px;">(雅野星)</span> = 厕所<br>Khách sạn <span style="font-size:11px;">(卡散)</span> = 酒店</div></div>
+      <div class="info-item"><div class="i-title">🔢 数字1-10</div><div class="i-value">Một Hai Ba Bốn Năm</div><div class="i-sub"><span style="font-size:11px;">(木害八门难)</span><br>Sáu Bảy Tám Chín Mười <span style="font-size:11px;">(扫百当斤美)</span></div></div>
+      <div class="info-item"><div class="i-title">💡 沟通贴士</div><div class="i-value">😊 Cảm ơn 挂嘴边</div><div class="i-sub">听不懂？微笑+手机打字<br>拒绝推销：Không, cảm ơn <span style="font-size:11px;">(空感恩)</span></div></div>
     </div>
   </div>
 </div>
@@ -1029,23 +1066,13 @@ body {
   </div>
 </div>
 
-<!-- checklist (CloudBase 同步版) -->
-<div class="section">
-  <div class="sec-head"><div class="dot" style="background:#E85D3A"></div><div class="title">出发前清单（点击勾选，多端实时同步）</div></div>
-  <div class="day-preview fade-in" style="cursor:default;">
-    <div class="day-body" style="max-height:none;padding:16px 20px;background:#FFF;" id="checklist-container">
-      <div style="text-align:center;color:var(--muted);font-size:13px;padding:8px;">加载清单中…</div>
-    </div>
-  </div>
-</div>
-
 <!-- ═══ CURRENCY ═══ -->
 <div class="section">
-  <div class="sec-head"><div class="dot" style="background:var(--gold)"></div><div class="title">💱 汇率参考</div></div>
-  <div style="display:flex;gap:10px;flex-wrap:wrap;">
-    <div class="info-item fade-in" style="flex:1;min-width:140px;"><div class="i-title">🇨🇳 人民币 → 越南盾</div><div class="i-value" style="font-size:16px;">1 RMB ≈ 3,400 VND</div><div class="i-sub">10元 ≈ 34k · 100元 ≈ 340k</div></div>
-    <div class="info-item fade-in" style="flex:1;min-width:140px;"><div class="i-title">🇺🇸 美元 → 越南盾</div><div class="i-value" style="font-size:16px;">1 USD ≈ 25,000 VND</div><div class="i-sub">ATM取现直接出越南盾</div></div>
-    <div class="info-item fade-in" style="flex:1;min-width:140px;"><div class="i-title">🧠 心算技巧</div><div class="i-value" style="font-size:16px;">VND ÷ 3,400 ≈ RMB</div><div class="i-sub">去掉3个零÷3.4 = 人民币</div></div>
+  <div class="sec-head"><div class="dot" style="background:var(--gold)"></div><div class="title">💱 汇率参考（2026.7.1 实时）</div></div>
+  <div class="currency-cards" style="display:flex;gap:10px;flex-wrap:wrap;">
+    <div class="info-item fade-in" style="flex:1;min-width:140px;"><div class="i-title">🇨🇳 人民币 → 越南盾</div><div class="i-value" style="font-size:16px;">1 RMB ≈ 3,880 VND</div><div class="i-sub">10元 ≈ 39k · 100元 ≈ 390k</div></div>
+    <div class="info-item fade-in" style="flex:1;min-width:140px;"><div class="i-title">🇺🇸 美元 → 越南盾</div><div class="i-value" style="font-size:16px;">1 USD ≈ 25,200 VND</div><div class="i-sub">ATM取现直接出越南盾，接近央行牌价</div></div>
+    <div class="info-item fade-in" style="flex:1;min-width:140px;"><div class="i-title">🧠 心算技巧</div><div class="i-value" style="font-size:16px;">VND ÷ 3,880 ≈ RMB</div><div class="i-sub">去掉3个零÷3.9 ≈ 人民币（≈ ÷4）</div></div>
   </div>
 </div>
 
@@ -1084,6 +1111,53 @@ body {
     <div class="info-item">
       <div class="tip-title">🛡️ 安全防骗</div>
       <ul class="tip-list"><li>别边走边看手机（飞车抢夺虽少但仍有）</li><li>夜市/步行街包背前面，钱包贴身放</li><li>啤酒街（Tạ Hiện）手机不要放桌上</li><li>拒绝水果贩把担子放你肩上拍照→会要钱</li><li>拒绝街头擦鞋/修鞋搭讪</li><li>Spa/按摩提前在 Klook 订好，避开街头拉客</li></ul>
+    </div>
+    <div class="info-item">
+      <div class="tip-title">🛃 免税购物 · 机场必读</div>
+      <ul class="tip-list">
+        <li><b>🇻🇳 河内出境（内排机场 T2）</b>：Lotte Duty Free 6:00-凌晨3:00</li>
+        <li>🚬 出境可带：香烟 200支（1条）· 雪茄 20支</li>
+        <li>🍷 酒水出境：高度酒(≥20%) 1.5L + 低度酒 2L + 啤酒 3L</li>
+        <li>💄 化妆品/香水：合理自用量无明确限制，随身液体每瓶≤100ml</li>
+        <li>💰 现金：≤$5,000 USD 或 ≤1,500万越盾无需申报</li>
+        <li style="padding-top:6px;"><b>🇨🇳 深圳入境（宝安机场）</b>：海关2024.12.1新规</li>
+        <li>🚬 入境免税：香烟 400支（2条）· 雪茄 20支 · 烟丝 500g</li>
+        <li>🍷 酒水入境：12度以上酒精饮料 1.5升（约2瓶）</li>
+        <li>🛍️ 免税总额：境外 ¥5,000 + 进境免税店 ¥3,000 = 共 ¥8,000</li>
+        <li>⚠️ 烟酒<b>也计入总额度</b>，超额需走红色通道申报</li>
+        <li>⚠️ 未满16岁禁带酒 · 未满18岁禁带烟</li>
+        <li style="padding-top:6px;"><b>🛒 推荐买什么</b></li>
+        <li>☕ 越南咖啡 G7/Legend + 滴漏壶套装（机场比市内贵20%）</li>
+        <li>🍫 MAROU 精品巧克力 Bean-to-Bar（机场免税有售）</li>
+        <li>💊 白虎活络膏（超市买更便宜，机场应急补货）</li>
+        <li>🥜 盐焗腰果 Langfarm（市内买好托运，机场贵）</li>
+        <li>🚫 烟酒在机场买即可，市内买了也要托运+申报</li>
+      </ul>
+    </div>
+    <div class="info-item">
+      <div class="tip-title">📋 越南预抵达入境申报 · PAI</div>
+      <ul class="tip-list">
+        <li>🔗 官网：<b>prearrival.immigration.gov.vn</b>（完全免费！）</li>
+        <li>⏰ 出发前<b>72小时内</b>填写，建议提前1-2天操作</li>
+        <li>📋 需准备：护照首页照片、航班号、酒店地址、邮箱</li>
+        <li>✉️ 提交后邮箱收验证码 → 生成通关二维码 → 截图保存</li>
+        <li>🛃 入境时出示：护照 + 签证 + 二维码，快速通关</li>
+        <li style="padding-top:6px;">💡 河内虽未强制，但全国推广中，<b>建议提前填好有备无患</b></li>
+        <li style="padding-top:6px;"><b>🚨 防骗提醒</b></li>
+        <li>🚫 仿冒网站会收信用卡费！认准 <b>gov.vn</b> 域名</li>
+        <li>🚫 此系统不办签证，签证仍需提前另办</li>
+        <li>⚠️ 信息填错（尤其航班号）会导致通关失败</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- checklist (CloudBase 同步版) -->
+<div class="section">
+  <div class="sec-head"><div class="dot" style="background:#E85D3A"></div><div class="title">出发前清单（点击勾选，多端实时同步）</div></div>
+  <div class="day-preview fade-in" style="cursor:default;">
+    <div class="day-body" style="max-height:none;padding:16px 20px;background:#FFF;" id="checklist-container">
+      <div style="text-align:center;color:var(--muted);font-size:13px;padding:8px;">加载清单中…</div>
     </div>
   </div>
 </div>
@@ -1467,6 +1541,27 @@ setInterval(function(){if(new Date()<TRIP_START)updateCountdownDisplay(TRIP_STAR
 // ── BUCKET LIST (打卡清单 · CloudBase 多端同步版) ──
 let _bucketData = [];
 
+function renderBucketList() {
+  const container = document.getElementById('bucket-body');
+  if (!container || _bucketData.length === 0) return;
+
+  let lastCat = '';
+  let html = '';
+  _bucketData.forEach((item) => {
+    if (item.cat !== lastCat) {
+      html += `<div class="bucket-cat">${item.cat}</div>`;
+      lastCat = item.cat;
+    }
+    const doneClass = item.done ? ' done' : '';
+    html += `<div class="cl-item bucket-item${doneClass}" data-bid="${item.id}" data-docid="${item._id}" onclick="event.stopPropagation();toggleBucketItem(this)">
+      <div class="cl-box">✓</div>
+      <span class="cl-text">${item.text}</span><span class="cl-desc">${item.desc}</span>
+    </div>`;
+  });
+  container.innerHTML = html;
+  updateBucketProgress();
+}
+
 async function loadBucketList() {
   const container = document.getElementById('bucket-body');
   if (!container) return;
@@ -1474,27 +1569,17 @@ async function loadBucketList() {
     const json = await fetch(API_BASE + '/bucket-list').then(r => r.json());
     if (!json.success || !json.data) throw new Error('Bucket list load failed');
     _bucketData = json.data;
-
-    let lastCat = '';
-    let html = '';
-    _bucketData.forEach((item) => {
-      if (item.cat !== lastCat) {
-        html += `<div class="bucket-cat">${item.cat}</div>`;
-        lastCat = item.cat;
-      }
-      const doneClass = item.done ? ' done' : '';
-      html += `<div class="cl-item bucket-item${doneClass}" data-bid="${item.id}" data-docid="${item._id}" onclick="event.stopPropagation();toggleBucketItem(this)">
-        <div class="cl-box">✓</div>
-        <span class="cl-text">${item.text}</span><span class="cl-desc">${item.desc}</span>
-      </div>`;
-    });
-    container.innerHTML = html;
-    updateBucketProgress();
+    renderBucketList();
   } catch (err) {
     console.error('加载打卡清单失败:', err);
     container.innerHTML = '<div style="text-align:center;color:#E85D3A;font-size:13px;padding:8px;">打卡清单加载失败，请刷新重试</div>';
   }
 }
+
+// 页面加载时预加载打卡数据（避免展开时卡顿）
+loadBucketList();
+
+let _bucketPollInterval = null;
 
 function toggleBucketList() {
   const card = document.getElementById('bl-card');
@@ -1502,9 +1587,15 @@ function toggleBucketList() {
   const isOpening = !card.classList.contains('open');
   if (isOpening) {
     card.classList.add('open');
-    if (_bucketData.length === 0) loadBucketList();
+    // 数据已在页面加载时预加载，直接渲染即可
+    renderBucketList();
+    // 展开时每10秒同步云端打卡状态
+    _bucketPollInterval = setInterval(async () => {
+      await loadBucketList();
+    }, 10000);
   } else {
     card.classList.remove('open');
+    if (_bucketPollInterval) { clearInterval(_bucketPollInterval); _bucketPollInterval = null; }
   }
 }
 
@@ -1549,25 +1640,57 @@ updateBucketProgress(); // init on page load
 async function loadChecklist() {
   const container = document.getElementById('checklist-container');
   if (!container) return;
+
+  // 静态项：越南预抵达入境申报（纯提示，不可勾选）
+  const immigrationItem = `<div class="cl-item immigration-hint" style="cursor:default;background:#FFFDF5;border-radius:8px;margin-bottom:8px;border:1px dashed #F59E0B;">
+    <div class="cl-box" style="border-color:#F59E0B;color:#F59E0B;font-weight:700;">📋</div>
+    <span class="cl-text">填报<b>越南预抵达入境卡</b>（出发前72h内）<br><a href="https://prearrival.immigration.gov.vn/" target="_blank" style="color:#3B82F6;font-size:12px;">→ 打开 prearrival.immigration.gov.vn</a></span>
+  </div>`;
+
+  // 静态可勾选项（localStorage 持久化）
+  function staticCheckItem(key, icon, html) {
+    const done = localStorage.getItem(key) === 'true';
+    return `<div class="cl-item${done ? ' done' : ''}" data-sk="${key}" onclick="toggleStaticCheck(this)">
+      <div class="cl-box">✓</div>
+      <span class="cl-text">${icon} ${html}</span>
+    </div>`;
+  }
+
+  const staticItems = [
+    staticCheckItem('cl-apps', '📲', '<b>下载注册必备 App</b>：Grab（打车）、Klook（订票）、Google Maps（导航）、翻译软件'),
+    staticCheckItem('cl-maps', '🗺️', '<b>下载离线地图</b>：Google Maps 提前下载河内老城区 + 下龙湾离线地图')
+  ].join('');
+
   try {
     const json = await fetch(API_BASE + '/checklist').then(r => r.json());
     if (!json.success) throw new Error(json.error || 'Checklist load failed');
     const result = { data: json.data };
-    if (!result.data || result.data.length === 0) {
-      container.innerHTML = '<div style="text-align:center;color:var(--muted);font-size:13px;padding:8px;">暂无清单数据</div>';
-      return;
-    }
-    container.innerHTML = result.data.map(item => {
-      const doneClass = item.done ? ' done' : '';
-      return `<div class="cl-item${doneClass}" data-id="${item.id}" data-docid="${item._id}" onclick="toggleChecklistItem(this)">
-        <div class="cl-box">✓</div>
-        <span class="cl-text">${item.text}</span>
-      </div>`;
-    }).join('');
+
+    const dbItems = (result.data && result.data.length > 0)
+      ? result.data.map(item => {
+          const doneClass = item.done ? ' done' : '';
+          return `<div class="cl-item${doneClass}" data-id="${item.id}" data-docid="${item._id}" onclick="toggleChecklistItem(this)">
+            <div class="cl-box">✓</div>
+            <span class="cl-text">${item.text}</span>
+          </div>`;
+        }).join('')
+      : '';
+
+    container.innerHTML = immigrationItem + staticItems + dbItems;
   } catch (err) {
     console.error('加载清单失败:', err);
-    container.innerHTML = '<div style="text-align:center;color:#E85D3A;font-size:13px;padding:8px;">清单加载失败，请刷新重试</div>';
+    container.innerHTML = immigrationItem + staticItems + '<div style="text-align:center;color:#E85D3A;font-size:13px;padding:8px;">部分清单加载失败，请刷新重试</div>';
   }
+}
+
+// 静态项勾选切换（localStorage）
+function toggleStaticCheck(el) {
+  const key = el.dataset.sk;
+  if (!key) return;
+  const current = localStorage.getItem(key) === 'true';
+  const next = !current;
+  localStorage.setItem(key, String(next));
+  if (next) el.classList.add('done'); else el.classList.remove('done');
 }
 
 async function toggleChecklistItem(el) {
@@ -1947,6 +2070,13 @@ function onCurrencyChange() {
 (async function initExpenses() {
   await loadExpenses();
   renderExpenses();
+  // 每15秒从云端同步一次花费（仅在非编辑状态下）
+  setInterval(async () => {
+    const formOpen = document.getElementById('expense-form').style.display === 'flex';
+    if (formOpen || saving) return;
+    await loadExpenses();
+    renderExpenses();
+  }, 15000);
 })();
 </script>
 
