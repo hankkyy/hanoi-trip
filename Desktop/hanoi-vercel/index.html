@@ -565,6 +565,12 @@ body {
 .cl-item.done .cl-box { background:var(--emerald); border-color:var(--emerald); color:#FFF; }
 .cl-item.done .cl-text { text-decoration:line-through; color:var(--muted); }
 
+/* bucket list (打卡清单) */
+.bucket-cat { font-size:13px; font-weight:700; color:var(--gold); padding:10px 4px 4px; margin-top:8px; border-top:1px dashed #EDEAE2; letter-spacing:0.5px; }
+.bucket-cat:first-child { border-top:none; margin-top:0; }
+.bucket-item { padding:6px 4px 6px 12px; font-size:14px; }
+.bucket-item .cl-desc { font-size:11px; color:var(--muted); margin-left:4px; }
+
 /* loading spinner */
 .loading-placeholder {
   grid-column:1/-1; text-align:center; padding:40px 20px;
@@ -680,6 +686,8 @@ body {
   .hl-tag { padding:8px 6px; font-size:11px; }
   .hl-tag .big { font-size:18px; }
   .cl-item { font-size:14px; padding:8px 2px; }
+  .bucket-item .cl-desc { display:none; }
+  .bucket-cat { font-size:12px; }
   .flight-row { gap:12px; }
   .weather-box { padding:14px 18px; gap:12px; }
   .weather-box .w-icon { font-size:36px; }
@@ -988,6 +996,20 @@ body {
     </div>
   </div>
 </div>
+</div>
+
+<!-- ═══ BUCKET LIST (打卡清单) ═══ -->
+<div class="section">
+  <div class="sec-head"><div class="dot" style="background:#F59E0B"></div><div class="title">✅ 打卡清单 · 点击展开（去过就勾）</div></div>
+  <div class="day-preview fade-in" onclick="toggleBucketList()" style="cursor:pointer;">
+    <div class="day-summary">
+      <span class="day-num">📍</span>
+      <span class="day-bar" style="background:#F59E0B;"></span>
+      <span class="day-date">点击展开</span>
+      <span class="day-theme" id="bucket-progress">已打卡 0/50</span>
+    </div>
+  </div>
+  <div class="day-body" id="bucket-body" style="display:none;max-height:none;padding:16px 20px;background:#FFF;"></div>
 </div>
 
 <!-- checklist (CloudBase 同步版) -->
@@ -1424,6 +1446,120 @@ setInterval(function(){if(new Date()<TRIP_START)updateCountdownDisplay(TRIP_STAR
     document.getElementById('weather-box').innerHTML=`<span class="w-icon">🌡️</span><div class="w-main"><div class="w-temp">28-35°C</div><div class="w-desc">河内 7月 · 雨季</div></div><div class="w-extra"><div class="w-hum">记得带伞</div><div class="w-hint">天气加载失败</div></div>`;
   }
 })();
+
+// ── BUCKET LIST (打卡清单 · localStorage 版) ──
+const BUCKET_ITEMS = [
+  // 🍜 必吃美食
+  { cat:'🍜 必吃美食', id:'pho-gia-truyen', text:'Phở Gia Truyền', desc:'牛肉河粉排队王 · 49 Bát Đàn · Bib Gourmand' },
+  { cat:'🍜 必吃美食', id:'pho-thin', text:'Phở Thìn', desc:'炒牛肉河粉 · 13 Lò Đúc · 全天营业' },
+  { cat:'🍜 必吃美食', id:'bun-cha-huong-lien', text:'Bún Chả Hương Liên', desc:'奥巴马同款烤肉米粉 · 24 Lê Văn Hưu · Michelin' },
+  { cat:'🍜 必吃美食', id:'banh-mi-butter', text:'Bánh Mì 黄油烤肉法棍', desc:'炭火烤肉+黄油 · Ta Hiện啤酒街 · 灵魂小吃' },
+  { cat:'🍜 必吃美食', id:'xoi-yen', text:'Xôi Yến 糯米饭', desc:'绿豆泥+叉烧 · 35B Nguyễn Hữu Huân · 早餐名店' },
+  { cat:'🍜 必吃美食', id:'banh-mi-25', text:'Bánh Mì 25', desc:'法棍天花板 · 25 Hàng Cá · 外酥里软' },
+  { cat:'🍜 必吃美食', id:'cha-ca-thang-long', text:'Chả Cá Thăng Long', desc:'姜黄煎鱼配莳萝 · Đường Thành · Michelin' },
+  { cat:'🍜 必吃美食', id:'bun-dau-mam-tom', text:'Bún Đậu Mắm Tôm', desc:'豆腐米粉配虾酱 · 老城深巷 · 35-55k' },
+  { cat:'🍜 必吃美食', id:'bun-rieu', text:'Bún Riêu 蟹粉汤粉', desc:'番茄蟹汤底 · 老城早餐 · 30-55k' },
+  // ☕ 咖啡饮品
+  { cat:'☕ 咖啡饮品', id:'giang-cafe', text:'Giảng Cafe 鸡蛋咖啡', desc:'发源地！1946年创店 · 39 Nguyễn Hữu Huân · 35k' },
+  { cat:'☕ 咖啡饮品', id:'coconut-coffee', text:'椰子咖啡', desc:'Cà Phê Cốt Dừa · 老城咖啡馆均有 · 40-55k' },
+  { cat:'☕ 咖啡饮品', id:'yogurt-coffee', text:'酸奶咖啡', desc:'Sữa Chua Cà Phê · 酸甜清爽 · 35-45k' },
+  { cat:'☕ 咖啡饮品', id:'bia-hoi', text:'Bia Hơi 生啤', desc:'街头塑料凳喝 · Ta Hiện啤酒街 · 5-10k/杯' },
+  { cat:'☕ 咖啡饮品', id:'sugarcane-juice', text:'甘蔗汁', desc:'Nước Mía · 随处可见 · 10-20k · 超解暑' },
+  { cat:'☕ 咖啡饮品', id:'che-dessert', text:'Chè 越南糖水', desc:'各种甜汤 · 15-40k · 老城深巷找' },
+  { cat:'☕ 咖啡饮品', id:'coconut-icecream', text:'椰子冰淇淋', desc:'Kem Dừa · 还剑湖周边 · 25-40k' },
+  // ⛵ 下龙湾 Klook 团
+  { cat:'⛵ 下龙湾 Klook 一日游', id:'halong-bay', text:'下龙湾', desc:'UNESCO世界自然遗产 · 海上桂林 · 1,600座岛屿' },
+  { cat:'⛵ 下龙湾 Klook 一日游', id:'sung-sot-cave', text:'惊讶洞', desc:'Hang Sửng Sốt · 下龙湾最大溶洞 · 钟乳石壮观' },
+  { cat:'⛵ 下龙湾 Klook 一日游', id:'ti-top-island', text:'天堂岛', desc:'Đảo Ti Top · 登400级台阶 · 360°俯瞰下龙湾' },
+  { cat:'⛵ 下龙湾 Klook 一日游', id:'ga-choi-rock', text:'斗鸡石', desc:'Hòn Gà Chọi · 下龙湾标志 · 20万盾纸币背面' },
+  { cat:'⛵ 下龙湾 Klook 一日游', id:'thien-cung-cave', text:'天宫洞', desc:'Hang Thiên Cung · 瑰丽钟乳石 · 天宫传说壁画' },
+  { cat:'⛵ 下龙湾 Klook 一日游', id:'dau-go-cave', text:'木头洞', desc:'Hang Đầu Gỗ · 13世纪藏木桩破蒙古水军' },
+  { cat:'⛵ 下龙湾 Klook 一日游', id:'moon-lake', text:'月亮湖', desc:'Hang Luồn · 皮划艇穿洞入泻湖 · 猴子出没' },
+  // 🏛️ 河内必去景点
+  { cat:'🏛️ 河内必去景点', id:'hoan-kiem-lake', text:'还剑湖', desc:'河内第一地标 · 周末封路变步行街 · 夜景璀璨' },
+  { cat:'🏛️ 河内必去景点', id:'ngoc-son-temple', text:'玉山祠', desc:'栖旭桥+巨龟标本 · 还剑湖北岛 · 门票30k' },
+  { cat:'🏛️ 河内必去景点', id:'water-puppet', text:'水上木偶剧院', desc:'越南国粹 · 57B Đinh Tiên Hoàng · 100k-200k' },
+  { cat:'🏛️ 河内必去景点', id:'st-joseph', text:'圣约瑟夫大教堂', desc:'1886年哥特复兴 · 仿巴黎圣母院 · 网红咖啡街区' },
+  { cat:'🏛️ 河内必去景点', id:'old-quarter', text:'三十六古街', desc:'千年商业区 · 36条行业街 · 迷宫般交错' },
+  { cat:'🏛️ 河内必去景点', id:'dong-xuan', text:'同春市场', desc:'河内最大批发市场 · 1889年始建 · 砍价半价起' },
+  { cat:'🏛️ 河内必去景点', id:'hoa-lo-prison', text:'火炉监狱', desc:'河内希尔顿 · 法国殖民+越战 · 门票50k' },
+  { cat:'🏛️ 河内必去景点', id:'west-lake', text:'西湖', desc:'河内最大湖泊 · 环湖17km · 湖边高端餐厅' },
+  { cat:'🏛️ 河内必去景点', id:'tran-quoc', text:'镇国寺', desc:'河内最古老佛寺 · 6世纪 · 11层莲花塔' },
+  { cat:'🏛️ 河内必去景点', id:'ho-chi-minh-mausoleum', text:'巴亭广场+胡志明陵', desc:'⚠️ 7月陵关闭 · 可看广场外观 · 免费' },
+  { cat:'🏛️ 河内必去景点', id:'one-pillar', text:'一柱寺', desc:'1049年莲花形古寺 · 李太宗时期 · 独特建筑' },
+  { cat:'🏛️ 河内必去景点', id:'temple-of-literature', text:'文庙', desc:'越南第一所大学 · 1076年 · 82块进士碑 · 70k' },
+  { cat:'🏛️ 河内必去景点', id:'thang-long', text:'升龙皇城', desc:'UNESCO世界遗产 · 11-19世纪 · 门票70k' },
+  { cat:'🏛️ 河内必去景点', id:'long-bien-bridge', text:'龙编桥', desc:'埃菲尔公司设计 · 1902年 · 日出日落最佳拍摄点' },
+  { cat:'🏛️ 河内必去景点', id:'train-street', text:'火车街', desc:'铁轨穿街而过 · 需店家带入 · 拍照圣地' },
+  { cat:'🏛️ 河内必去景点', id:'ceramic-wall', text:'陶瓷路壁画', desc:'世界最长陶瓷壁画 · 约4km · 吉尼斯纪录' },
+  { cat:'🏛️ 河内必去景点', id:'opera-house', text:'河内歌剧院', desc:'1911年新古典主义 · 仿巴黎歌剧院 · 外立面拍照' },
+  // 🛍️ 购物
+  { cat:'🛍️ 购物', id:'big-c', text:'Big C 超市', desc:'咖啡+腰果+特产一站式 · 本地人常去' },
+  { cat:'🛍️ 购物', id:'langfarm', text:'Langfarm', desc:'腰果+特产连锁品牌 · 品质稳定 · 送礼首选' },
+  { cat:'🛍️ 购物', id:'marou', text:'MAROU 巧克力', desc:'越南精品可可 · Bean-to-Bar · 机场/专卖店' },
+  { cat:'🛍️ 购物', id:'dong-xuan-night', text:'同春市场夜市', desc:'每晚18:00-24:00 · 小吃+纪念品' },
+  { cat:'🛍️ 购物', id:'hang-dao-silk', text:'Hàng Đào 丝绸街', desc:'奥黛+丝巾定制 · 36古街之一 · 记得砍价' },
+  { cat:'🛍️ 购物', id:'phin-coffee', text:'滴漏咖啡壶', desc:'Phin cà phê · 铝制/不锈钢 · ~50k · 咖啡店有售' },
+  // 💆 按摩
+  { cat:'💆 按摩', id:'nha-spa', text:'Nhà Spa ⭐首推', desc:'75 Hàng Mã · 150k/35min · 天然产品' },
+  { cat:'💆 按摩', id:'kadupul-spa', text:'Kadupul Spa', desc:'42A Hàng Giầy · 250k起 · 60min养护洗头450k' },
+  { cat:'💆 按摩', id:'la-flora-spa', text:'La Flora Spa', desc:'22 Ấu Triệu · 24小时！· 大教堂旁' },
+  { cat:'💆 按摩', id:'foot-massage', text:'足部按摩', desc:'老城区随处可见 · 30-60min · 250k-300k' },
+];
+
+function loadBucketList() {
+  const saved = JSON.parse(localStorage.getItem('bucket_done') || '{}');
+  const container = document.getElementById('bucket-body');
+  if (!container) return;
+
+  let lastCat = '';
+  let html = '';
+  BUCKET_ITEMS.forEach((item, i) => {
+    if (item.cat !== lastCat) {
+      html += `<div class="bucket-cat">${item.cat}</div>`;
+      lastCat = item.cat;
+    }
+    const done = saved[item.id] ? ' done' : '';
+    html += `<div class="cl-item bucket-item${done}" data-bid="${item.id}" onclick="event.stopPropagation();toggleBucketItem(this)">
+      <div class="cl-box">✓</div>
+      <span class="cl-text">${item.text}</span><span class="cl-desc">${item.desc}</span>
+    </div>`;
+  });
+  container.innerHTML = html;
+  updateBucketProgress();
+}
+
+function toggleBucketList() {
+  const body = document.getElementById('bucket-body');
+  if (!body) return;
+  const isHidden = body.style.display === 'none';
+  body.style.display = isHidden ? 'block' : 'none';
+  // lazy init
+  if (isHidden && !body.innerHTML) loadBucketList();
+}
+
+function toggleBucketItem(el) {
+  const id = el.dataset.bid;
+  const saved = JSON.parse(localStorage.getItem('bucket_done') || '{}');
+  if (el.classList.contains('done')) {
+    el.classList.remove('done');
+    delete saved[id];
+  } else {
+    el.classList.add('done');
+    saved[id] = true;
+  }
+  localStorage.setItem('bucket_done', JSON.stringify(saved));
+  updateBucketProgress();
+}
+
+function updateBucketProgress() {
+  const saved = JSON.parse(localStorage.getItem('bucket_done') || '{}');
+  const done = Object.keys(saved).length;
+  const total = BUCKET_ITEMS.length;
+  const el = document.getElementById('bucket-progress');
+  if (el) el.textContent = `已打卡 ${done}/${total}`;
+}
+updateBucketProgress(); // init on page load
 
 // ── CHECKLIST (CloudBase 多端同步版) ──
 async function loadChecklist() {
