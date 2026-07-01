@@ -1722,9 +1722,15 @@ async function loadChecklist() {
 
     let dbHtml = '';
     if (result.data && result.data.length > 0) {
+      // 过滤掉已被静态合并项覆盖的独立条目
+      const filteredData = result.data.filter(item => {
+        const t = (item.text || '').trim();
+        if (t === '下载 Grab' || t === '下载 Google Maps') return false;
+        return true;
+      });
       // 找到"另纸签"的位置，把静态 App/地图 插入其后
-      const visaIdx = result.data.findIndex(item => item.text && item.text.includes('另纸签'));
-      const items = result.data.map(item => {
+      const visaIdx = filteredData.findIndex(item => item.text && item.text.includes('另纸签'));
+      const items = filteredData.map(item => {
         const doneClass = item.done ? ' done' : '';
         return `<div class="cl-item${doneClass}" data-id="${item.id}" data-docid="${item._id}" onclick="toggleChecklistItem(this)">
           <div class="cl-box">✓</div>
