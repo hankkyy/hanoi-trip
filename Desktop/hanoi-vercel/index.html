@@ -566,6 +566,18 @@ body {
 .cl-item.done .cl-text { text-decoration:line-through; color:var(--muted); }
 
 /* bucket list (打卡清单) */
+.bl-card { background:#FFF; border-radius:16px; box-shadow:0 1px 8px rgba(0,0,0,0.04); cursor:pointer; transition:all 0.3s; border:1.5px solid transparent; overflow:hidden; }
+.bl-card:hover { box-shadow:0 4px 20px rgba(0,0,0,0.07); border-color:#EDEAE2; }
+.bl-card-inner { display:flex; align-items:center; gap:14px; padding:16px 20px; }
+.bl-icon { font-size:28px; flex-shrink:0; }
+.bl-info { flex:1; min-width:0; }
+.bl-info .bl-title { font-size:15px; font-weight:700; color:var(--text); line-height:1.3; }
+.bl-info .bl-sub { font-size:13px; color:var(--muted); margin-top:2px; }
+.bl-arrow { font-size:14px; color:var(--muted); transition:transform 0.3s; flex-shrink:0; }
+.bl-card.open .bl-arrow { transform:rotate(180deg); }
+.bl-body { display:none; padding:0 20px 16px; background:#FAFAF8; }
+.bl-card.open .bl-body { display:block; }
+
 .bucket-cat { font-size:13px; font-weight:700; color:var(--gold); padding:10px 4px 4px; margin-top:8px; border-top:1px dashed #EDEAE2; letter-spacing:0.5px; }
 .bucket-cat:first-child { border-top:none; margin-top:0; }
 .bucket-item { padding:6px 4px 6px 12px; font-size:14px; }
@@ -688,6 +700,9 @@ body {
   .cl-item { font-size:14px; padding:8px 2px; }
   .bucket-item .cl-desc { display:none; }
   .bucket-cat { font-size:12px; }
+  .bl-card-inner { padding:14px 16px; }
+  .bl-icon { font-size:24px; }
+  .bl-info .bl-title { font-size:14px; }
   .flight-row { gap:12px; }
   .weather-box { padding:14px 18px; gap:12px; }
   .weather-box .w-icon { font-size:36px; }
@@ -1000,16 +1015,18 @@ body {
 
 <!-- ═══ BUCKET LIST (打卡清单) ═══ -->
 <div class="section">
-  <div class="sec-head"><div class="dot" style="background:#F59E0B"></div><div class="title">✅ 打卡清单 · 点击展开（去过就勾）</div></div>
-  <div class="day-preview fade-in" onclick="toggleBucketList()" style="cursor:pointer;">
-    <div class="day-summary">
-      <span class="day-num">📍</span>
-      <span class="day-bar" style="background:#F59E0B;"></span>
-      <span class="day-date">点击展开</span>
-      <span class="day-theme" id="bucket-progress">已打卡 0/50</span>
+  <div class="sec-head"><div class="dot" style="background:#F59E0B"></div><div class="title">✅ 打卡清单（去过就勾，多端实时同步）</div></div>
+  <div class="bl-card fade-in" id="bl-card" onclick="toggleBucketList()">
+    <div class="bl-card-inner">
+      <span class="bl-icon">☑️</span>
+      <div class="bl-info">
+        <div class="bl-title">美食 · 景点 · 购物 · 按摩</div>
+        <div class="bl-sub" id="bucket-progress">已打卡 0/50</div>
+      </div>
+      <span class="bl-arrow">▼</span>
     </div>
+    <div class="bl-body" id="bucket-body"></div>
   </div>
-  <div class="day-body" id="bucket-body" style="display:none;max-height:none;padding:16px 20px;background:#FFF;"></div>
 </div>
 
 <!-- checklist (CloudBase 同步版) -->
@@ -1480,11 +1497,15 @@ async function loadBucketList() {
 }
 
 function toggleBucketList() {
-  const body = document.getElementById('bucket-body');
-  if (!body) return;
-  const isHidden = body.style.display === 'none';
-  body.style.display = isHidden ? 'block' : 'none';
-  if (isHidden && _bucketData.length === 0) loadBucketList();
+  const card = document.getElementById('bl-card');
+  if (!card) return;
+  const isOpening = !card.classList.contains('open');
+  if (isOpening) {
+    card.classList.add('open');
+    if (_bucketData.length === 0) loadBucketList();
+  } else {
+    card.classList.remove('open');
+  }
 }
 
 async function toggleBucketItem(el) {
