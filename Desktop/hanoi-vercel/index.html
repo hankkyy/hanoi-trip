@@ -444,12 +444,9 @@ body {
 .tips-grid .info-item:nth-child(8) { border-left-color:#DC2626; }
 .tips-grid .info-item:nth-child(8)::before { background:linear-gradient(90deg,#DC2626,#F87171); }
 .tips-grid .info-item:nth-child(8):hover { box-shadow:0 12px 36px rgba(220,38,38,0.15); }
-.tips-grid .info-item:nth-child(9) { border-left-color:#0EA5E9; }
-.tips-grid .info-item:nth-child(9)::before { background:linear-gradient(90deg,#0EA5E9,#38BDF8); }
-.tips-grid .info-item:nth-child(9):hover { box-shadow:0 12px 36px rgba(14,165,233,0.15); }
-.tips-grid .info-item:nth-child(10) { border-left-color:#F97316; }
-.tips-grid .info-item:nth-child(10)::before { background:linear-gradient(90deg,#F97316,#FB923C); }
-.tips-grid .info-item:nth-child(10):hover { box-shadow:0 12px 36px rgba(249,115,22,0.15); }
+.tips-grid .info-item:nth-child(9) { border-left-color:#F97316; }
+.tips-grid .info-item:nth-child(9)::before { background:linear-gradient(90deg,#F97316,#FB923C); }
+.tips-grid .info-item:nth-child(9):hover { box-shadow:0 12px 36px rgba(249,115,22,0.15); }
 
 /* ── Enhanced tip titles ── */
 .tip-title {
@@ -495,8 +492,7 @@ body {
 .tips-grid .info-item:nth-child(6) .tip-list li::before { color:#0D9488; }
 .tips-grid .info-item:nth-child(7) .tip-list li::before { color:#7C3AED; }
 .tips-grid .info-item:nth-child(8) .tip-list li::before { color:#DC2626; }
-.tips-grid .info-item:nth-child(9) .tip-list li::before { color:#0EA5E9; }
-.tips-grid .info-item:nth-child(10) .tip-list li::before { color:#F97316; }
+.tips-grid .info-item:nth-child(9) .tip-list li::before { color:#F97316; }
 
 /* budget */
 .budget-section { background:#FFF; border-radius:var(--radius); padding:18px; box-shadow:0 1px 8px rgba(0,0,0,0.03); }
@@ -962,40 +958,45 @@ body {
 
   <!-- restaurants -->
   <div class="section">
-    <div class="sec-head"><div class="dot" style="background:#E11D48"></div><div class="title">🍜 必吃餐厅 · 点击展开</div></div>
+    <div class="sec-head"><div class="dot" style="background:#E11D48"></div><div class="title">🍜 必吃餐厅 · 点击展开（含参考价）</div></div>
     <div class="resto-grid">
       <div class="resto-item fade-in" onclick="this.classList.toggle('tapped')">
-        <div class="resto-preview"><div class="resto-emoji">🥇</div><div class="resto-info"><h4>Phở Gia Truyền</h4><div class="rd">49 Bát Đàn · 50k-80k</div><span class="r-tag tag-bib">Bib Gourmand</span></div></div>
-        <div class="resto-expand"><div class="resto-more">河内牛肉河粉排队王。汤底熬 12 小时，只开 6-10am！<br><a class="map-link" href="https://maps.google.com/?q=Pho+Gia+Truyen+49+Bat+Dan+Hanoi">🗺️ 地图</a></div></div>
+        <div class="resto-preview"><div class="resto-emoji">🥇</div><div class="resto-info"><h4>Phở Gia Truyền</h4><div class="rd">49 Bát Đàn · Phở Bò 50k-80k</div><span class="r-tag tag-bib">Bib Gourmand</span></div></div>
+        <div class="resto-expand"><div class="resto-more">河内牛肉河粉排队王。汤底熬 12 小时，只开 6-10am！必点：<b>Phở Bò Tái Chín</b>（半熟+全熟牛肉）。<br><a class="map-link" href="https://maps.google.com/?q=Pho+Gia+Truyen+49+Bat+Dan+Hanoi">🗺️ 地图</a></div></div>
       </div>
       <div class="resto-item fade-in" onclick="this.classList.toggle('tapped')">
         <div class="resto-preview"><div class="resto-emoji">🍜</div><div class="resto-info"><h4>Phở Thìn</h4><div class="rd">13 Lò Đúc · 50k-80k</div><span class="r-tag tag-local">全天营业</span></div></div>
-        <div class="resto-expand"><div class="resto-more">炒牛肉放在汤河粉上，不同于传统。<br><a class="map-link" href="https://maps.google.com/?q=Pho+Thin+13+Lo+Duc+Hanoi">🗺️ 地图</a></div></div>
+        <div class="resto-expand"><div class="resto-more">炒牛肉放在汤河粉上，不同于传统。必点：<b>Phở Tái Lăn</b>（爆炒半熟牛肉河粉），蒜香十足。<br><a class="map-link" href="https://maps.google.com/?q=Pho+Thin+13+Lo+Duc+Hanoi">🗺️ 地图</a></div></div>
       </div>
       <div class="resto-item fade-in" onclick="this.classList.toggle('tapped')">
         <div class="resto-preview"><div class="resto-emoji">🥩</div><div class="resto-info"><h4>Bún Chả Hương Liên</h4><div class="rd">24 Lê Văn Hưu · 40k-90k</div><span class="r-tag tag-mich">Michelin</span></div></div>
-        <div class="resto-expand"><div class="resto-more">烤肉蘸鱼露甜汤配米粉。奥巴马 2016 年同款！<br><a class="map-link" href="https://maps.google.com/?q=Bun+Cha+Huong+Lien+Hanoi">🗺️ 地图</a></div></div>
+        <div class="resto-expand"><div class="resto-more">烤肉蘸鱼露甜汤配米粉。奥巴马 2016 年同款套餐约50k！必点：<b>Bún Chả + Nem Hải Sản</b>（烤肉米粉+海鲜春卷）。<br><a class="map-link" href="https://maps.google.com/?q=Bun+Cha+Huong+Lien+Hanoi">🗺️ 地图</a></div></div>
       </div>
       <div class="resto-item fade-in" onclick="this.classList.toggle('tapped')">
         <div class="resto-preview"><div class="resto-emoji">🥖</div><div class="resto-info"><h4>Bánh Mì 黄油烤肉法棍</h4><div class="rd">Ta Hiện 啤酒街 · 20k-40k</div><span class="r-tag tag-local">街头必吃</span></div></div>
-        <div class="resto-expand"><div class="resto-more">Bánh Mì Bơ Thịt Nướng：炭火烤肉+黄油+腌菜夹入外酥里软的法棍，河内夜市的灵魂小吃！<br><a class="map-link" href="https://maps.google.com/?q=Ta+Hien+Street+Hanoi">🗺️ 地图</a></div></div>
+        <div class="resto-expand"><div class="resto-more">Bánh Mì Bơ Thịt Nướng：炭火烤肉+黄油+腌菜夹入外酥里软的法棍，河内夜市的灵魂小吃！配一杯 <b>Bia Hơi 生啤 5k-10k/杯</b> 绝了。<br><a class="map-link" href="https://maps.google.com/?q=Ta+Hien+Street+Hanoi">🗺️ 地图</a></div></div>
       </div>
       <div class="resto-item fade-in" onclick="this.classList.toggle('tapped')">
         <div class="resto-preview"><div class="resto-emoji">🍚</div><div class="resto-info"><h4>Xôi Yến 糯米饭</h4><div class="rd">35B Nguyễn Hữu Huân · 25k-50k</div><span class="r-tag tag-bib">河内早餐名店</span></div></div>
-        <div class="resto-expand"><div class="resto-more">Xôi Xéo：糯米饭+绿豆泥+猪油+炸洋葱干+叉烧，河内人的灵魂早餐！<br><a class="map-link" href="https://maps.google.com/?q=Xoi+Yen+35B+Nguyen+Huu+Huan+Hanoi">🗺️ 地图</a></div></div>
+        <div class="resto-expand"><div class="resto-more">Xôi Xéo：糯米饭+绿豆泥+猪油+炸洋葱干+叉烧，河内人的灵魂早餐！推荐加个 <b>Trứng Gà</b>（溏心蛋）。<br><a class="map-link" href="https://maps.google.com/?q=Xoi+Yen+35B+Nguyen+Huu+Huan+Hanoi">🗺️ 地图</a></div></div>
       </div>
       <div class="resto-item fade-in" onclick="this.classList.toggle('tapped')">
         <div class="resto-preview"><div class="resto-emoji">🥖</div><div class="resto-info"><h4>Bánh Mì 25</h4><div class="rd">25 Hàng Cá · 25k-40k</div><span class="r-tag tag-local">法棍天花板</span></div></div>
-        <div class="resto-expand"><div class="resto-more">外酥里软，夹烤肉/火腿/腌菜。<br><a class="map-link" href="https://maps.google.com/?q=Banh+Mi+25+25+Hang+Ca+Hanoi">🗺️ 地图</a></div></div>
+        <div class="resto-expand"><div class="resto-more">外酥里软，夹烤肉/火腿/腌菜。TripAdvisor 河内排名第一。推荐：<b>Bánh Mì Pate + Thịt Nướng</b>（肝酱+烤肉）。<br><a class="map-link" href="https://maps.google.com/?q=Banh+Mi+25+25+Hang+Ca+Hanoi">🗺️ 地图</a></div></div>
       </div>
       <div class="resto-item fade-in" onclick="this.classList.toggle('tapped')">
-        <div class="resto-preview"><div class="resto-emoji">☕</div><div class="resto-info"><h4>Giảng Cafe</h4><div class="rd">39 Nguyễn Hữu Huân · 35k</div><span class="r-tag tag-local">1946年创店</span></div></div>
-        <div class="resto-expand"><div class="resto-more">鸡蛋咖啡发源地！蛋黄+炼乳+咖啡。<br><a class="map-link" href="https://maps.google.com/?q=Giang+Cafe+39+Nguyen+Huu+Huan+Hanoi">🗺️ 地图</a></div></div>
+        <div class="resto-preview"><div class="resto-emoji">☕</div><div class="resto-info"><h4>Giảng Cafe</h4><div class="rd">39 Nguyễn Hữu Huân · 35k-55k</div><span class="r-tag tag-local">1946年创店</span></div></div>
+        <div class="resto-expand"><div class="resto-more">鸡蛋咖啡发源地！必点：<b>Cà Phê Trứng 鸡蛋咖啡 35k</b> · 椰子咖啡 40k · 酸奶咖啡 35k。蛋黄+炼乳打至蓬松盖在咖啡上，像喝甜点。<br><a class="map-link" href="https://maps.google.com/?q=Giang+Cafe+39+Nguyen+Huu+Huan+Hanoi">🗺️ 地图</a></div></div>
       </div>
       <div class="resto-item fade-in" onclick="this.classList.toggle('tapped')">
-        <div class="resto-preview"><div class="resto-emoji">🐟</div><div class="resto-info"><h4>Chả Cá Thăng Long</h4><div class="rd">Đường Thành · 古法煎鱼</div><span class="r-tag tag-mich">Michelin</span></div></div>
-        <div class="resto-expand"><div class="resto-more">姜黄煎鱼配莳萝，桌上现煎，河内独有！<br><a class="map-link" href="https://maps.google.com/?q=Cha+Ca+Thang+Long+Hanoi">🗺️ 地图</a></div></div>
+        <div class="resto-preview"><div class="resto-emoji">🐟</div><div class="resto-info"><h4>Chả Cá Thăng Long</h4><div class="rd">Đường Thành · 120k-200k</div><span class="r-tag tag-mich">Michelin</span></div></div>
+        <div class="resto-expand"><div class="resto-more">姜黄煎鱼配莳萝，桌上现煎，河内独有古法！正餐硬菜，适合2人分享。配 <b>Bún + Mắm Tôm</b>（米粉+虾酱）。<br><a class="map-link" href="https://maps.google.com/?q=Cha+Ca+Thang+Long+Hanoi">🗺️ 地图</a></div></div>
       </div>
+    </div>
+    <div style="background:linear-gradient(170deg,#FFFBF5,#FFF8EB);border-radius:12px;padding:12px 16px;margin-top:10px;font-size:12px;color:var(--muted);line-height:1.8;border:1px solid rgba(200,151,74,0.12);">
+      💡 <b>更多美食参考</b>：Phở Gà 鸡肉粉 35-55k · Bún Riêu 蟹粉 30-55k · Bún Đậu Mắm Tôm 豆腐米粉 35-55k<br>
+      🥤 甘蔗汁 10-20k · Chè 甜品 15-40k · 椰子冰淇淋 25-40k · Bia Hơi 生啤 5-10k/杯<br>
+      🧠 <b>避雷</b>：选人潮多翻桌率高的店 · 避免生水不明冰块 · 还剑湖周边贵 20-30%，老城深巷更实惠
     </div>
   </div>
   <!-- souvenirs -->
@@ -1164,10 +1165,6 @@ body {
         <li>🛍️ 免税总额：境外 ¥5,000 + 进境免税店 ¥3,000 = 共 ¥8,000</li>
         <li>⚠️ 烟酒<b>也计入总额度</b>，超额需走红色通道申报</li>
       </ul>
-    </div>
-    <div class="info-item">
-      <div class="tip-title">🍜 美食参考价 · 人均/份</div>
-      <ul class="tip-list"><li>Phở Bò 牛肉粉 40-70k · Phở Gà 鸡肉粉 35-55k</li><li>Bún Chả 烤肉米粉 40-70k（奥巴马同款约50k）</li><li>Bánh Mì 越式法包 15-35k · Bún Riêu 蟹粉 30-55k</li><li>Bún Đậu Mắm Tôm 豆腐米粉 35-55k</li><li>Chả Cá 古法鱼锅 120-200k（正餐硬菜）</li><li>鸡蛋咖啡 35-50k · 椰子咖啡 40-55k · 酸奶咖啡 35-45k</li><li>Bia Hơi 生啤 5-10k/杯 · 甘蔗汁 10-20k</li><li>Chè 甜品 15-40k · 椰子冰淇淋 25-40k</li><li>选人潮多翻桌率高的店 · 避免生水不明冰块</li><li>还剑湖周边贵 20-30%，老城深巷更实惠</li></ul>
     </div>
     <div class="info-item">
       <div class="tip-title">📋 越南预抵达入境申报 · PAI</div>
@@ -1692,7 +1689,6 @@ async function loadChecklist() {
   }
 
   const staticItems = [
-    staticCheckItem('cl-apps', '📲', '<b>下载注册必备 App</b>：Grab（打车）、Klook（订票）、Google Maps（导航）、翻译软件'),
     staticCheckItem('cl-maps', '🗺️', '<b>下载离线地图</b>：Google Maps 提前下载河内老城区 + 下龙湾离线地图')
   ].join('');
 
