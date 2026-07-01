@@ -1828,33 +1828,32 @@ document.querySelectorAll('.fade-in').forEach(el=>new IntersectionObserver(es=>e
   if(!document.getElementById('hanoi-map')) return;
   const mapDiv = document.getElementById('hanoi-map');
 
-  // WGS-84 → GCJ-02 坐标转换（适配高德地图火星坐标系）
-  function wgs84ToGcj02(lat, lng) {
-    const a=6378245.0, ee=0.00669342162296594323, PI=Math.PI;
-    function tLng(x,y){let r=300+x+2*y+0.1*x*x+0.1*x*y+0.1*Math.sqrt(Math.abs(x));r+=(20*Math.sin(6*x*PI)+20*Math.sin(2*x*PI))*2/3;r+=(20*Math.sin(x*PI)+40*Math.sin(x/3*PI))*2/3;r+=(150*Math.sin(x/12*PI)+300*Math.sin(x/30*PI))*2/3;return r}
-    function tLat(x,y){let r=-100+2*x+3*y+0.2*y*y+0.1*x*y+0.2*Math.sqrt(Math.abs(x));r+=(20*Math.sin(6*x*PI)+20*Math.sin(2*x*PI))*2/3;r+=(20*Math.sin(y*PI)+40*Math.sin(y/3*PI))*2/3;r+=(160*Math.sin(y/12*PI)+320*Math.sin(y*PI/30))*2/3;return r}
-    const dLat=tLat(lng-105,lat-35),dLng=tLng(lng-105,lat-35);
-    const r=lat/180*PI,m=1-ee*Math.sin(r)*Math.sin(r),s=Math.sqrt(m);
-    return [lat+dLat*180/(a*(1-ee)/(m*s)*PI),lng+dLng*180/(a/s*Math.cos(r)*PI)];
-  }
-
-  // Init Leaflet map — center between Hanoi and Ha Long Bay
+  // Init Leaflet map — center between Hanoi and Ha Long Bay (WGS-84)
   const map = L.map('hanoi-map', {
-    center: wgs84ToGcj02(20.98, 105.95),
+    center: [20.98, 105.95],
     zoom: 9,
     zoomControl: true,
     scrollWheelZoom: true,
     attributionControl: false
   });
-  
-  // 高德地图瓦片（国内无需VPN，秒开）
-  // 使用 wprd CDN（比 webrd 更稳定，高缩放级别瓦片不会消失）
-  L.tileLayer('https://wprd0{s}.is.autonavi.com/appmaptile?x={x}&y={y}&z={z}&lang=zh_cn&size=1&scl=1&style=8', {
-    subdomains: '1234',
-    maxNativeZoom: 18,
+
+  // OpenStreetMap 瓦片（全球覆盖，越南街道级细节完整，无需VPN）
+  // 同时注册 CartoDB 轻量版作为备选底图
+  const osmLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxNativeZoom: 19,
     maxZoom: 20,
-    attribution: '© 高德地图',
+    attribution: '© OpenStreetMap contributors',
   }).addTo(map);
+
+  const cartoLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+    subdomains: 'abcd',
+    maxNativeZoom: 19,
+    maxZoom: 20,
+    attribution: '© CartoDB',
+  });
+
+  // 底图切换控件：OSM（默认）/ CartoDB 轻量版
+  L.control.layers({ 'OSM 标准': osmLayer, 'CartoDB 轻量': cartoLayer }, null, { position: 'topright', collapsed: true }).addTo(map);
   
   L.control.attribution({position:'bottomright',prefix:false}).addTo(map);
   
@@ -1937,8 +1936,8 @@ document.querySelectorAll('.fade-in').forEach(el=>new IntersectionObserver(es=>e
     {lat:22.6394,lng:113.8110,label:'深圳宝安机场',emoji:'🛫',color:'#DC2626',desc:'Sân bay Shenzhen Bao\'an (SZX)。深航ZH107（深圳→河内 13:10-14:30）/ ZH106（河内→深圳 15:30-18:30），飞行约2小时。'}
   ];
   
-  // Create bounds to fit all markers
-  const bounds = L.latLngBounds(spots.map(s => wgs84ToGcj02(s.lat, s.lng)));
+  // Create bounds to fit all markers (WGS-84, no conversion needed)
+  const bounds = L.latLngBounds(spots.map(s => [s.lat, s.lng]));
   
   spots.forEach(s => {
     const popupHTML = `
@@ -1969,8 +1968,7 @@ document.querySelectorAll('.fade-in').forEach(el=>new IntersectionObserver(es=>e
       iconAnchor: [60, 18]
     });
 
-    const gcj = wgs84ToGcj02(s.lat, s.lng);
-    const marker = L.marker(gcj, {icon}).addTo(map);
+    const marker = L.marker([s.lat, s.lng], {icon}).addTo(map);
     marker.bindPopup(popupHTML, {maxWidth:300,className:'custom-popup'});
   });
   
