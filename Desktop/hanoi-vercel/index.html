@@ -386,6 +386,22 @@ body {
 .info-item .i-sub { font-size:11px; color:var(--muted); margin-top:2px; }
 .tips-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:14px; }
 
+/* ── Phrase table ── */
+.phrase-table { width:100%; border-collapse:collapse; background:#FFF; border-radius:14px; overflow:hidden; box-shadow:0 2px 12px rgba(0,0,0,0.04); }
+.phrase-table thead th { background:linear-gradient(135deg,#1A6B4A,#0D9488); color:#FFF; padding:12px 14px; font-size:13px; font-weight:700; letter-spacing:1px; text-align:left; }
+.phrase-table thead th:first-child { width:30%; }
+.phrase-table thead th:last-child { width:30%; }
+.phrase-table .phr-cat td { background:#F0F9F4; font-weight:700; font-size:13px; color:var(--emerald); padding:10px 14px; letter-spacing:0.5px; border-bottom:1px solid #D1E8DB; }
+.phrase-table .phr-row td { padding:10px 14px; font-size:14px; border-bottom:1px solid #F3EFE5; }
+.phrase-table .phr-row td:first-child { font-weight:600; color:var(--text); }
+.phrase-table .phr-row td:nth-child(2) { color:var(--text); }
+.phrase-table .phr-row td:last-child { color:var(--muted); font-size:12px; font-style:italic; }
+.phrase-table tbody tr.phr-row:hover { background:#FFFDF7; }
+@media(max-width:480px){
+  .phrase-table thead th, .phrase-table .phr-row td, .phrase-table .phr-cat td { padding:8px 10px; font-size:12px; }
+  .phrase-table .phr-row td:last-child { font-size:11px; }
+}
+
 /* ── Enhanced tip cards ── */
 .tips-grid .info-item {
   position:relative; overflow:hidden;
@@ -1038,14 +1054,40 @@ body {
   <!-- vietnamese phrases -->
   <div class="section">
     <div class="sec-head"><div class="dot" style="background:var(--gold)"></div><div class="title">🇻🇳 越南语速成 · 谐音救急（北音）</div></div>
-    <div class="info-grid">
-      <div class="info-item"><div class="i-title">👋 问候</div><div class="i-value">Xin chào <span style="font-weight:400;font-size:11px;">(新早)</span></div><div class="i-sub">Cảm ơn <span style="font-size:11px;">(感恩)</span> = 谢谢<br>Tạm biệt <span style="font-size:11px;">(担别)</span> = 再见</div></div>
-      <div class="info-item"><div class="i-title">🛒 购物砍价</div><div class="i-value">Bao nhiêu tiền? <span style="font-weight:400;font-size:11px;">(包妞典)</span></div><div class="i-sub">Đắt quá <span style="font-size:11px;">(搭瓜)</span> = 太贵了<br>Rẻ một chút <span style="font-size:11px;">(也莫煮)</span> = 便宜点</div></div>
-      <div class="info-item"><div class="i-title">🍜 餐饮</div><div class="i-value">Ngon <span style="font-weight:400;font-size:11px;">(翁)</span> = 好吃！</div><div class="i-sub">Tính tiền <span style="font-size:11px;">(丁典)</span> = 买单<br>Cà phê <span style="font-size:11px;">(卡啡)</span> = 咖啡</div></div>
-      <div class="info-item"><div class="i-title">🚗 出行问路</div><div class="i-value">Ở đâu? <span style="font-weight:400;font-size:11px;">(鹅捞)</span> = 在哪？</div><div class="i-sub">Nhà vệ sinh <span style="font-size:11px;">(雅野星)</span> = 厕所<br>Khách sạn <span style="font-size:11px;">(卡散)</span> = 酒店</div></div>
-      <div class="info-item"><div class="i-title">🔢 数字1-10</div><div class="i-value">Một Hai Ba Bốn Năm</div><div class="i-sub"><span style="font-size:11px;">(木害八门难)</span><br>Sáu Bảy Tám Chín Mười <span style="font-size:11px;">(扫百当斤美)</span></div></div>
-      <div class="info-item"><div class="i-title">💡 沟通贴士</div><div class="i-value">😊 Cảm ơn 挂嘴边</div><div class="i-sub">听不懂？微笑+手机打字<br>拒绝推销：Không, cảm ơn <span style="font-size:11px;">(空感恩)</span></div></div>
-    </div>
+    <table class="phrase-table">
+      <thead><tr><th>中文</th><th>越南语</th><th>谐音</th></tr></thead>
+      <tbody>
+        <tr class="phr-cat"><td colspan="3">👋 问候</td></tr>
+        <tr class="phr-row"><td>你好</td><td>Xin chào</td><td>新早</td></tr>
+        <tr class="phr-row"><td>谢谢</td><td>Cảm ơn</td><td>感恩</td></tr>
+        <tr class="phr-row"><td>再见</td><td>Tạm biệt</td><td>担别</td></tr>
+        <tr class="phr-row"><td>对不起</td><td>Xin lỗi</td><td>新罗伊</td></tr>
+        <tr class="phr-cat"><td colspan="3">🛒 购物砍价</td></tr>
+        <tr class="phr-row"><td>多少钱？</td><td>Bao nhiêu tiền?</td><td>包妞典</td></tr>
+        <tr class="phr-row"><td>太贵了</td><td>Đắt quá</td><td>搭瓜</td></tr>
+        <tr class="phr-row"><td>便宜点</td><td>Rẻ một chút</td><td>也莫煮</td></tr>
+        <tr class="phr-row"><td>我买了 / 要这个</td><td>Tôi lấy cái này</td><td>堆来盖奶</td></tr>
+        <tr class="phr-cat"><td colspan="3">🍜 餐饮</td></tr>
+        <tr class="phr-row"><td>好吃！</td><td>Ngon!</td><td>翁</td></tr>
+        <tr class="phr-row"><td>买单</td><td>Tính tiền</td><td>丁典</td></tr>
+        <tr class="phr-row"><td>咖啡 / 茶</td><td>Cà phê / Trà</td><td>卡啡 / 眨</td></tr>
+        <tr class="phr-row"><td>瓶装水</td><td>Nước suối</td><td>努虽</td></tr>
+        <tr class="phr-cat"><td colspan="3">🚗 出行问路</td></tr>
+        <tr class="phr-row"><td>在哪？</td><td>Ở đâu?</td><td>鹅捞</td></tr>
+        <tr class="phr-row"><td>厕所</td><td>Nhà vệ sinh</td><td>雅野星</td></tr>
+        <tr class="phr-row"><td>酒店</td><td>Khách sạn</td><td>卡散</td></tr>
+        <tr class="phr-row"><td>去机场</td><td>Đi sân bay</td><td>低生掰</td></tr>
+        <tr class="phr-cat"><td colspan="3">🔢 数字</td></tr>
+        <tr class="phr-row"><td>一 / 二 / 三 / 四 / 五</td><td>Một / Hai / Ba / Bốn / Năm</td><td>木 / 害 / 八 / 门 / 难</td></tr>
+        <tr class="phr-row"><td>六 / 七 / 八 / 九 / 十</td><td>Sáu / Bảy / Tám / Chín / Mười</td><td>扫 / 百 / 当 / 斤 / 美</td></tr>
+        <tr class="phr-row"><td>千</td><td>Nghìn</td><td>银</td></tr>
+        <tr class="phr-cat"><td colspan="3">💬 应急万能句</td></tr>
+        <tr class="phr-row"><td>是 / 有</td><td>Có</td><td>锅</td></tr>
+        <tr class="phr-row"><td>不 / 没有</td><td>Không</td><td>空</td></tr>
+        <tr class="phr-row"><td>不要，谢谢</td><td>Không, cảm ơn</td><td>空，感恩</td></tr>
+        <tr class="phr-row"><td>听不懂，请打字</td><td>Không hiểu, gõ máy</td><td>空喝油，高买</td></tr>
+      </tbody>
+    </table>
   </div>
 </div>
 </div>
@@ -1125,13 +1167,6 @@ body {
         <li>🍷 酒水入境：12度以上酒精饮料 1.5升（约2瓶）</li>
         <li>🛍️ 免税总额：境外 ¥5,000 + 进境免税店 ¥3,000 = 共 ¥8,000</li>
         <li>⚠️ 烟酒<b>也计入总额度</b>，超额需走红色通道申报</li>
-        <li>⚠️ 未满16岁禁带酒 · 未满18岁禁带烟</li>
-        <li style="padding-top:6px;"><b>🛒 推荐买什么</b></li>
-        <li>☕ 越南咖啡 G7/Legend + 滴漏壶套装（机场比市内贵20%）</li>
-        <li>🍫 MAROU 精品巧克力 Bean-to-Bar（机场免税有售）</li>
-        <li>💊 白虎活络膏（超市买更便宜，机场应急补货）</li>
-        <li>🥜 盐焗腰果 Langfarm（市内买好托运，机场贵）</li>
-        <li>🚫 烟酒在机场买即可，市内买了也要托运+申报</li>
       </ul>
     </div>
     <div class="info-item">
@@ -1666,20 +1701,32 @@ async function loadChecklist() {
     if (!json.success) throw new Error(json.error || 'Checklist load failed');
     const result = { data: json.data };
 
-    const dbItems = (result.data && result.data.length > 0)
-      ? result.data.map(item => {
-          const doneClass = item.done ? ' done' : '';
-          return `<div class="cl-item${doneClass}" data-id="${item.id}" data-docid="${item._id}" onclick="toggleChecklistItem(this)">
-            <div class="cl-box">✓</div>
-            <span class="cl-text">${item.text}</span>
-          </div>`;
-        }).join('')
-      : '';
+    let dbHtml = '';
+    if (result.data && result.data.length > 0) {
+      // 找到"另纸签"的位置，把静态 App/地图 插入其后
+      const visaIdx = result.data.findIndex(item => item.text && item.text.includes('另纸签'));
+      const items = result.data.map(item => {
+        const doneClass = item.done ? ' done' : '';
+        return `<div class="cl-item${doneClass}" data-id="${item.id}" data-docid="${item._id}" onclick="toggleChecklistItem(this)">
+          <div class="cl-box">✓</div>
+          <span class="cl-text">${item.text}</span>
+        </div>`;
+      });
+      if (visaIdx >= 0) {
+        const before = items.slice(0, visaIdx + 1).join('');
+        const after = items.slice(visaIdx + 1).join('');
+        dbHtml = before + staticItems + after;
+      } else {
+        dbHtml = items.join('') + staticItems;
+      }
+    } else {
+      dbHtml = staticItems;
+    }
 
-    container.innerHTML = immigrationItem + staticItems + dbItems;
+    container.innerHTML = dbHtml + immigrationItem;
   } catch (err) {
     console.error('加载清单失败:', err);
-    container.innerHTML = immigrationItem + staticItems + '<div style="text-align:center;color:#E85D3A;font-size:13px;padding:8px;">部分清单加载失败，请刷新重试</div>';
+    container.innerHTML = staticItems + immigrationItem + '<div style="text-align:center;color:#E85D3A;font-size:13px;padding:8px;">部分清单加载失败，请刷新重试</div>';
   }
 }
 
