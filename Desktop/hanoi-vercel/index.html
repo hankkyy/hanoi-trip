@@ -19,8 +19,9 @@ body {
   font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
   background:var(--bg); color:var(--text); line-height:1.55;
   -webkit-font-smoothing:antialiased; -webkit-tap-highlight-color:transparent;
-  font-size:16px; touch-action:manipulation; overflow-x:hidden; width:100%; max-width:100vw;
+  font-size:16px; overscroll-behavior-y:contain; overflow-x:hidden; width:100%; max-width:100vw;
   word-break:break-word; overflow-wrap:break-word;
+  -webkit-overflow-scrolling:touch;
 }
 
 #now-bar {
@@ -131,14 +132,14 @@ body {
 
 /* expandable extra */
 .flight-card .fextra {
-  max-height:0; overflow:hidden; transition:all 0.4s;
+  max-height:0; overflow:hidden; transition:max-height 0.35s ease, opacity 0.25s ease, padding 0.35s ease;
   font-size:11px; color:var(--muted); text-align:center;
   padding:0 18px; opacity:0;
 }
 .flight-card.tapped .fextra { max-height:32px; opacity:1; padding:2px 18px 10px; }
 .flight-card.tapped .bp-perf { margin-bottom:0; }
 
-.page { max-width:var(--max-w); margin:0 auto; padding:0 20px; width:100%; overflow-x:hidden; }
+.page { max-width:var(--max-w); margin:0 auto; padding:0 20px; width:100%; }
 
 /* weather */
 .weather-row { display:flex; flex-direction:column; align-items:center; padding:14px 0 0; }
@@ -160,9 +161,11 @@ body {
 /* forecast panel */
 .weather-fc {
   display:flex; gap:10px; background:transparent; padding:4px 10px;
-  margin-top:10px; overflow-x:auto; width:100%; max-width:500px;
-  -webkit-overflow-scrolling:touch; scroll-snap-type:x mandatory;
+  margin-top:10px; overflow-x:auto; overflow-y:hidden; width:100%; max-width:500px;
+  scroll-snap-type:x mandatory;
   scroll-padding:0 10px;
+  -webkit-overflow-scrolling:touch;
+  overscroll-behavior:contain;
 }
 .weather-fc .fc-day {
   flex:0 0 auto; min-width:88px; text-align:center;
@@ -188,9 +191,11 @@ body {
 /* hourly panel */
 .hourly-panel {
   display:flex; gap:6px; background:transparent; padding:4px 10px;
-  margin-top:6px; overflow-x:auto; width:100%; max-width:500px;
-  -webkit-overflow-scrolling:touch; scroll-snap-type:x mandatory;
+  margin-top:6px; overflow-x:auto; overflow-y:hidden; width:100%; max-width:500px;
+  scroll-snap-type:x mandatory;
   scroll-padding:0 10px;
+  -webkit-overflow-scrolling:touch;
+  overscroll-behavior:contain;
 }
 .hourly-panel .hr-card {
   flex:0 0 auto; min-width:62px; text-align:center;
@@ -261,7 +266,7 @@ body {
 .day-peek span { background:#F8F6F0; padding:3px 10px; border-radius:50px; font-size:12px; }
 .day-hint { text-align:center; padding:6px 20px 10px; font-size:12px; color:var(--muted); opacity:0.5; }
 
-.day-body { max-height:0; overflow:hidden; transition:max-height 0.6s cubic-bezier(0.25,0.8,0.25,1); padding:0 20px; background:#FAFAF8; }
+.day-body { max-height:0; overflow:hidden; transition:max-height 0.45s ease; padding:0 20px; background:#FAFAF8; }
 .day-preview.expanded .day-body { max-height:4000px; }
 .day-preview.expanded .day-hint { display:none; }
 .day-preview.expanded .day-peek { display:none; }
@@ -286,7 +291,7 @@ body {
 .hl-tag .big { font-size:20px; display:block; margin-bottom:2px; }
 
 /* photo strip */
-.photo-strip { display:flex; gap:8px; margin:10px 0 12px; overflow-x:auto; scroll-snap-type:x mandatory; padding-bottom:4px; }
+.photo-strip { display:flex; gap:8px; margin:10px 0 12px; overflow-x:auto; overflow-y:hidden; scroll-snap-type:x mandatory; padding-bottom:4px; -webkit-overflow-scrolling:touch; overscroll-behavior:contain; }
 .photo-strip::-webkit-scrollbar { display:none; }
 .ps-img { min-width:110px; height:75px; border-radius:10px; background-size:cover; background-position:center; scroll-snap-align:start; flex-shrink:0; background-color:#E8ECDF; }
 
@@ -333,7 +338,7 @@ body {
 .hotel-card .addr { font-size:13px; color:var(--muted); margin-top:2px; }
 .htags { margin-top:6px; display:flex; gap:6px; flex-wrap:wrap; }
 .htag { background:#F0F9F4; color:var(--emerald); font-size:12px; padding:3px 10px; border-radius:50px; font-weight:500; }
-.hotel-detail { max-height:0; overflow:hidden; transition:all 0.5s; background:#F8FAFB; border-radius:12px; margin-top:12px; font-size:13px; opacity:0; padding:0 14px; max-width:100%; overflow-x:hidden; }
+.hotel-detail { max-height:0; overflow:hidden; transition:max-height 0.4s ease, opacity 0.3s ease, padding 0.4s ease; background:#F8FAFB; border-radius:12px; margin-top:12px; font-size:13px; opacity:0; padding:0 14px; max-width:100%; overflow-x:hidden; }
 .hotel-detail.open { max-height:500px; opacity:1; padding:12px 14px; }
 .drow { display:flex; gap:10px; padding:5px 0; align-items:flex-start; min-width:0; max-width:100%; }
 .drow .dl { min-width:75px; font-weight:600; color:var(--muted); font-size:12px; flex-shrink:0; }
@@ -351,8 +356,8 @@ body {
 .resto-info .rd { font-size:12px; color:var(--muted); margin-top:2px; }
 .r-tag { display:inline-block; font-size:11px; padding:3px 8px; border-radius:50px; margin-top:4px; font-weight:600; }
 .tag-mich { background:#FFF7ED; color:#C2410C; } .tag-bib { background:#FFF1F2; color:#E11D48; } .tag-local { background:#F0FDF4; color:#15803D; }
-.resto-expand { max-height:0; overflow:hidden; transition:all 0.5s; }
-.resto-item.tapped .resto-expand { max-height:300px; }
+.resto-expand { max-height:0; overflow:hidden; transition:max-height 0.4s ease, opacity 0.3s ease; opacity:0; }
+.resto-item.tapped .resto-expand { max-height:500px; opacity:1; }
 .resto-photo { height:100px; background-size:cover; background-position:center; }
 .resto-more { padding:10px 14px 14px; font-size:12px; color:var(--muted); line-height:1.5; word-break:break-word; overflow-wrap:break-word; }
 
@@ -373,8 +378,8 @@ body {
 .souv-card h4 { font-size:13px; margin-top:6px; font-weight:700; }
 .souv-card .s-price { font-size:12px; color:var(--muted); margin-top:2px; }
 .souv-card .s-where { font-size:11px; color:var(--emerald); margin-top:4px; font-weight:500; }
-.souv-card .souv-expand { max-height:0; overflow:hidden; transition:all 0.5s; }
-.souv-card.tapped .souv-expand { max-height:400px; }
+.souv-card .souv-expand { max-height:0; overflow:hidden; transition:max-height 0.4s ease, opacity 0.3s ease; opacity:0; }
+.souv-card.tapped .souv-expand { max-height:500px; opacity:1; }
 .souv-card .souv-photo { height:6px; border-radius:3px; margin-top:8px; background:linear-gradient(90deg, #1A6B4A, #4ADE80, #C8974A); }
 .souv-card .souv-desc { font-size:12px; color:var(--muted); line-height:1.6; padding-top:8px; word-break:break-word; }
 
@@ -387,7 +392,7 @@ body {
 .tips-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:14px; }
 
 /* ── Phrase table ── */
-.phrase-table { width:100%; border-collapse:collapse; background:#FFF; border-radius:14px; overflow:hidden; box-shadow:0 2px 12px rgba(0,0,0,0.04); display:block; overflow-x:auto; -webkit-overflow-scrolling:touch; }
+.phrase-table { width:100%; border-collapse:collapse; background:#FFF; border-radius:14px; overflow:hidden; box-shadow:0 2px 12px rgba(0,0,0,0.04); display:block; overflow-x:auto; overflow-y:hidden; -webkit-overflow-scrolling:touch; overscroll-behavior:contain; }
 .phrase-table thead th { background:linear-gradient(135deg,#1A6B4A,#0D9488); color:#FFF; padding:12px 14px; font-size:13px; font-weight:700; letter-spacing:1px; text-align:left; }
 .phrase-table thead th:first-child { width:30%; }
 .phrase-table thead th:last-child { width:30%; }
@@ -622,6 +627,7 @@ body {
 .fade-in.visible { opacity:1; transform:translateY(0); }
 
 /* ── Mobile optimizations ── */
+.fold-arrow { display:none; }
 @media(max-width:480px){
   body { font-size:15px; }
   .hero { padding:24px 16px 20px; }
@@ -722,11 +728,17 @@ body {
   .immigration-hint .cl-box { min-width:24px; height:24px; font-size:10px; }
   .immigration-hint .cl-text { font-size:13px; line-height:1.5; }
   .immigration-hint .cl-text a { font-size:11px; display:inline-block; padding:6px 0; min-height:32px; }
-  .bucket-item .cl-desc { display:none; }
+  .bucket-item .cl-desc { font-size:11px; display:block; margin-top:3px; color:var(--muted); line-height:1.5; }
+  .bucket-item { padding:8px 4px 8px 14px !important; }
   .bucket-cat { font-size:12px; }
   .bl-card-inner { padding:14px 16px; }
   .bl-icon { font-size:24px; }
   .bl-info .bl-title { font-size:14px; }
+  .fold-arrow { display:inline-block; font-size:13px; color:var(--muted); transition:transform 0.3s; flex-shrink:0; margin-left:auto; }
+  .mobile-fold-header { cursor:pointer; }
+  .mobile-fold-body { display:none; }
+  .mobile-fold-section.open .mobile-fold-body { display:block; }
+  .mobile-fold-section.open .fold-arrow { transform:rotate(180deg); }
   .flight-row { gap:12px; }
   .weather-box { padding:14px 18px; gap:12px; }
   .weather-box .w-icon { font-size:36px; }
@@ -1075,8 +1087,9 @@ body {
 
 <div class="sticky-col">
   <!-- vietnamese phrases -->
-  <div class="section">
-    <div class="sec-head"><div class="dot" style="background:var(--gold)"></div><div class="title">🇻🇳 越南语速成 · 谐音救急（北音）</div></div>
+  <div class="section mobile-fold-section" id="phrase-section">
+    <div class="sec-head mobile-fold-header" onclick="toggleMobileFold('phrase-section')"><div class="dot" style="background:var(--gold)"></div><div class="title">🇻🇳 越南语速成 · 谐音救急（北音）</div><span class="fold-arrow">▼</span></div>
+    <div class="mobile-fold-body">
     <table class="phrase-table">
       <thead><tr><th>中文</th><th>越南语</th><th>谐音</th></tr></thead>
       <tbody>
@@ -1142,8 +1155,9 @@ body {
 </div>
 
 <!-- ═══ 旅行贴士 ═══ -->
-<div class="section">
-  <div class="sec-head"><div class="dot" style="background:#DC2626"></div><div class="title">📌 旅行贴士 · Tips & 避雷</div></div>
+<div class="section mobile-fold-section" id="tips-section">
+  <div class="sec-head mobile-fold-header" onclick="toggleMobileFold('tips-section')"><div class="dot" style="background:#DC2626"></div><div class="title">📌 旅行贴士 · Tips & 避雷</div><span class="fold-arrow">▼</span></div>
+  <div class="mobile-fold-body">
   <div class="tips-grid">
     <div class="info-item">
       <div class="tip-title">🌦️ 7月天气 · 32-38°C</div>
@@ -1203,6 +1217,7 @@ body {
         <li>⚠️ 信息填错（尤其航班号）会导致通关失败</li>
       </ul>
     </div>
+  </div>
   </div>
 </div>
 
@@ -1798,6 +1813,12 @@ loadChecklist();
 
 // 每 10 秒自动刷新清单（实现多端同步）
 setInterval(loadChecklist, 10000);
+
+// ── MOBILE FOLD ──
+function toggleMobileFold(id) {
+  if (window.innerWidth > 480) return;
+  document.getElementById(id).classList.toggle('open');
+}
 
 // ── SCROLL ANIMATION ──
 document.querySelectorAll('.fade-in').forEach(el=>new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')}),{threshold:0.08}).observe(el));
