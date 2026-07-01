@@ -993,10 +993,22 @@ body {
         <div class="resto-expand"><div class="resto-more">姜黄煎鱼配莳萝，桌上现煎，河内独有古法！正餐硬菜，适合2人分享。配 <b>Bún + Mắm Tôm</b>（米粉+虾酱）。<br><a class="map-link" href="https://maps.google.com/?q=Cha+Ca+Thang+Long+Hanoi">🗺️ 地图</a></div></div>
       </div>
     </div>
-    <div style="background:linear-gradient(170deg,#FFFBF5,#FFF8EB);border-radius:12px;padding:12px 16px;margin-top:10px;font-size:12px;color:var(--muted);line-height:1.8;border:1px solid rgba(200,151,74,0.12);">
-      💡 <b>更多美食参考</b>：Phở Gà 鸡肉粉 35-55k · Bún Riêu 蟹粉 30-55k · Bún Đậu Mắm Tôm 豆腐米粉 35-55k<br>
-      🥤 甘蔗汁 10-20k · Chè 甜品 15-40k · 椰子冰淇淋 25-40k · Bia Hơi 生啤 5-10k/杯<br>
-      🧠 <b>避雷</b>：选人潮多翻桌率高的店 · 避免生水不明冰块 · 还剑湖周边贵 20-30%，老城深巷更实惠
+      <div class="resto-item fade-in" onclick="this.classList.toggle('tapped')">
+        <div class="resto-preview"><div class="resto-emoji">🍗</div><div class="resto-info"><h4>Phở Gà Hà</h4><div class="rd">15 Hàng Hòm · 45k-55k</div><span class="r-tag tag-bib">Bib Gourmand</span></div></div>
+        <div class="resto-expand"><div class="resto-more">Michelin 推荐的鸡肉河粉！汤底鲜甜不靠味精，鸡肉嫩滑。可点干拌版（汤另上）。推荐：<b>Phở Gà Trộn</b>（干拌鸡粉）+ Quẩy（油条）。<br><a class="map-link" href="https://maps.google.com/?q=Pho+Ga+Ha+15+Hang+Hom+Hanoi">🗺️ 地图</a></div></div>
+      </div>
+      <div class="resto-item fade-in" onclick="this.classList.toggle('tapped')">
+        <div class="resto-preview"><div class="resto-emoji">🦀</div><div class="resto-info"><h4>Bún Riêu Cua</h4><div class="rd">11 Hàng Bạc · 30k-55k</div><span class="r-tag tag-local">老店50年</span></div></div>
+        <div class="resto-expand"><div class="resto-more">蟹粉汤粉，老城区50年老店。番茄蟹膏汤底配豆腐、猪蹄、蜗牛。加 mắm tôm（虾酱）和辣椒才是正确打开方式。清晨开卖，午前售罄。<br><a class="map-link" href="https://maps.google.com/?q=Bun+Rieu+11+Hang+Bac+Hanoi">🗺️ 地图</a></div></div>
+      </div>
+      <div class="resto-item fade-in" onclick="this.classList.toggle('tapped')">
+        <div class="resto-preview"><div class="resto-emoji">🫘</div><div class="resto-info"><h4>Bún Đậu Mắm Tôm</h4><div class="rd">5 Mã Mây · 35k-55k</div><span class="r-tag tag-local">河内特色</span></div></div>
+        <div class="resto-expand"><div class="resto-more">河内灵魂小吃！现炸豆腐+米粉+猪蹄+春卷，蘸虾酱（mắm tôm）吃。虾酱气味浓烈但越吃越上瘾。不敢试可换鱼露。午餐最佳，多数店下午4点前关。<br><a class="map-link" href="https://maps.google.com/?q=Bun+Dau+5+Ma+May+Hanoi">🗺️ 地图</a></div></div>
+      </div>
+      <div class="resto-item fade-in" onclick="this.classList.toggle('tapped')">
+        <div class="resto-preview"><div class="resto-emoji">🥤</div><div class="resto-info"><h4>街头饮品甜品</h4><div class="rd">老城区随处可见</div><span class="r-tag tag-local">消暑必喝</span></div></div>
+        <div class="resto-expand"><div class="resto-more">🍺 <b>Bia Hơi 生啤</b> 5k-10k/杯 — Tạ Hiện 啤酒街人手一杯，现打现喝<br>🥤 <b>Nước Mía 甘蔗汁</b> 10k-20k — 街头推车现榨，加金桔更清爽<br>🍨 <b>Chè 甜品</b> 15k-40k · <b>Kem Dừa 椰子冰淇淋</b> 25k-40k — 还剑湖周边随处可见<br>🧠 选人潮多翻桌率高的店 · 避免生水不明冰块 · 还剑湖周边贵 20-30%</div></div>
+      </div>
     </div>
   </div>
   <!-- souvenirs -->
@@ -1837,6 +1849,9 @@ document.querySelectorAll('.fade-in').forEach(el=>new IntersectionObserver(es=>e
     {lat:21.0285,lng:105.8486,label:'La Flora Spa',emoji:'💆',color:'#E85D3A',desc:'22 Ấu Triệu（大教堂旁）· 24小时营业！泰式按摩+越式洗头。'},
     {lat:21.0230,lng:105.8433,label:'火车街',emoji:'🚂',color:'#E85D3A',desc:'Hanoi Train Street · 铁轨穿居民区而过，两侧咖啡馆紧贴铁轨。官方已关闭，需由店家带进。火车经过时（约15:00/19:00）近距离震撼。'},
     {lat:21.0318,lng:105.8457,label:'Maison MAROU',emoji:'🍫',color:'#F59E0B',desc:'91A Thợ Nhuộm · MAROU巧克力旗舰店。Bean-to-Bar工艺，透过玻璃墙可看巧克力师制作。80k-150k盾/块。'},
+    {lat:21.0340,lng:105.8490,label:'Phở Gà Hà',emoji:'🍗',color:'#E11D48',desc:'15 Hàng Hòm · Michelin Bib Gourmand 鸡肉河粉。汤底鲜甜，鸡肉嫩滑。可点干拌版。45k-55k盾。'},
+    {lat:21.0345,lng:105.8510,label:'Bún Riêu Cua',emoji:'🦀',color:'#E11D48',desc:'11 Hàng Bạc · 蟹粉汤粉。老城区50年老店。番茄蟹膏汤底配豆腐猪蹄蜗牛。清晨开卖，午前售罄。30k-55k盾。'},
+    {lat:21.0350,lng:105.8530,label:'Bún Đậu Mắm Tôm',emoji:'🫘',color:'#E11D48',desc:'5 Mã Mây · 河内灵魂小吃。现炸豆腐+米粉+猪蹄+春卷，蘸虾酱吃。多数店下午4点前关。35k-55k盾。'},
     {lat:21.0338,lng:105.8509,label:'三十六古街',emoji:'🏮',color:'#F59E0B',desc:'河内千年商业区，36条以行业命名的小巷——Hàng Bạc银器街、Hàng Mã祭祀用品街、Hàng Đào丝绸街。迷宫般交错，摩托车穿梭，最适合迷路。'},
     {lat:21.0389,lng:105.8498,label:'同春市场',emoji:'🛍️',color:'#F59E0B',desc:'河内最大室内批发市场（1889年始建），三层楼。一楼食品干货，二楼布料服饰，三楼童装。砍价从半价起！周边夜市每晚18:00-24:00。'},
     {lat:21.0253,lng:105.8465,label:'火炉监狱',emoji:'🏛️',color:'#7C3AED',desc:'法语名Maison Centrale，又名"河内希尔顿"（越战美军飞行员戏称）。现为博物馆，展出法国殖民时期牢房、断头台及越战展区。门票50k盾。'},
