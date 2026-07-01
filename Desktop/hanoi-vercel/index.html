@@ -34,10 +34,23 @@ body {
 /* hero */
 .hero {
   color:#FFF; padding:32px 24px 28px; text-align:center; position:relative; overflow:hidden;
-  background:linear-gradient(160deg,rgba(15,55,35,0.25) 0%,rgba(10,40,25,0.4) 100%),
-             url('./assets/photos/halong-bay.jpg') center/cover;
+  background:#0A2819;
 }
-.hero::before { content:''; position:absolute; inset:0; pointer-events:none; background:radial-gradient(ellipse at 15% 85%,rgba(200,151,74,0.25) 0%,transparent 45%),radial-gradient(ellipse at 85% 15%,rgba(13,148,136,0.15) 0%,transparent 45%); }
+.hero::before { content:''; position:absolute; inset:0; pointer-events:none; z-index:1; background:radial-gradient(ellipse at 15% 85%,rgba(200,151,74,0.25) 0%,transparent 45%),radial-gradient(ellipse at 85% 15%,rgba(13,148,136,0.15) 0%,transparent 45%); }
+
+/* hero background slideshow layers */
+.hero-bg-layer {
+  position:absolute; inset:0; z-index:0;
+  background-size:cover; background-position:center;
+  transition:opacity 1.5s ease-in-out;
+  opacity:0;
+}
+.hero-bg-layer.active { opacity:1; }
+.hero-bg-overlay {
+  position:absolute; inset:0; z-index:0;
+  background:linear-gradient(160deg,rgba(15,55,35,0.25) 0%,rgba(10,40,25,0.4) 100%);
+  pointer-events:none;
+}
 .hero-content { position:relative; z-index:2; max-width:700px; margin:0 auto; }
 .hero-badge { display:inline-block; border:1px solid rgba(255,255,255,0.5); border-radius:50px; padding:5px 16px; font-size:12px; letter-spacing:4px; margin-bottom:12px; background:rgba(0,0,0,0.15); }
 .hero h1 { font-size:clamp(34px,5vw,52px); font-weight:900; letter-spacing:2px; }
@@ -370,11 +383,95 @@ body {
 .info-item .i-title { font-size:11px; color:var(--muted); letter-spacing:2px; }
 .info-item .i-value { font-size:13px; font-weight:700; margin-top:4px; }
 .info-item .i-sub { font-size:11px; color:var(--muted); margin-top:2px; }
-.tips-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:10px; }
-.tip-title { font-weight:800; font-size:13px; color:var(--text); letter-spacing:0; margin-bottom:8px; }
-.tip-body { font-size:11px; color:var(--muted); line-height:1.75; }
-.tip-list { margin:0; padding-left:16px; font-size:12px; color:var(--muted); line-height:1.8; }
-.tip-list li { margin-bottom:3px; }
+.tips-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:14px; }
+
+/* ── Enhanced tip cards ── */
+.tips-grid .info-item {
+  position:relative; overflow:hidden;
+  background:linear-gradient(170deg,#FFF 0%,#FDFAF5 100%);
+  border-radius:14px; padding:18px 16px;
+  box-shadow:0 2px 12px rgba(0,0,0,0.05);
+  transition:all 0.35s cubic-bezier(0.25,0.8,0.25,1);
+  border-left:4px solid transparent;
+}
+.tips-grid .info-item::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:3px;
+  opacity:0.7; border-radius:14px 14px 0 0;
+}
+.tips-grid .info-item:hover {
+  transform:translateY(-5px);
+  box-shadow:0 12px 36px rgba(0,0,0,0.12);
+}
+/* color accents per card */
+.tips-grid .info-item:nth-child(1) { border-left-color:#3B82F6; }
+.tips-grid .info-item:nth-child(1)::before { background:linear-gradient(90deg,#3B82F6,#60A5FA); }
+.tips-grid .info-item:nth-child(1):hover { box-shadow:0 12px 36px rgba(59,130,246,0.15); }
+.tips-grid .info-item:nth-child(2) { border-left-color:#DC2626; }
+.tips-grid .info-item:nth-child(2)::before { background:linear-gradient(90deg,#DC2626,#F87171); }
+.tips-grid .info-item:nth-child(2):hover { box-shadow:0 12px 36px rgba(220,38,38,0.15); }
+.tips-grid .info-item:nth-child(3) { border-left-color:#F59E0B; }
+.tips-grid .info-item:nth-child(3)::before { background:linear-gradient(90deg,#F59E0B,#FBBF24); }
+.tips-grid .info-item:nth-child(3):hover { box-shadow:0 12px 36px rgba(245,158,11,0.15); }
+.tips-grid .info-item:nth-child(4) { border-left-color:#10B981; }
+.tips-grid .info-item:nth-child(4)::before { background:linear-gradient(90deg,#10B981,#34D399); }
+.tips-grid .info-item:nth-child(4):hover { box-shadow:0 12px 36px rgba(16,185,129,0.15); }
+.tips-grid .info-item:nth-child(5) { border-left-color:#EC4899; }
+.tips-grid .info-item:nth-child(5)::before { background:linear-gradient(90deg,#EC4899,#F472B6); }
+.tips-grid .info-item:nth-child(5):hover { box-shadow:0 12px 36px rgba(236,72,153,0.15); }
+.tips-grid .info-item:nth-child(6) { border-left-color:#0D9488; }
+.tips-grid .info-item:nth-child(6)::before { background:linear-gradient(90deg,#0D9488,#2DD4BF); }
+.tips-grid .info-item:nth-child(6):hover { box-shadow:0 12px 36px rgba(13,148,136,0.15); }
+.tips-grid .info-item:nth-child(7) { border-left-color:#7C3AED; }
+.tips-grid .info-item:nth-child(7)::before { background:linear-gradient(90deg,#7C3AED,#A78BFA); }
+.tips-grid .info-item:nth-child(7):hover { box-shadow:0 12px 36px rgba(124,58,237,0.15); }
+.tips-grid .info-item:nth-child(8) { border-left-color:#DC2626; }
+.tips-grid .info-item:nth-child(8)::before { background:linear-gradient(90deg,#DC2626,#F87171); }
+.tips-grid .info-item:nth-child(8):hover { box-shadow:0 12px 36px rgba(220,38,38,0.15); }
+
+/* ── Enhanced tip titles ── */
+.tip-title {
+  font-weight:800; font-size:14px; color:var(--text);
+  letter-spacing:0; margin-bottom:10px;
+  display:flex; align-items:center; gap:8px;
+}
+.tip-title::after {
+  content:''; flex:1; height:1px;
+  background:linear-gradient(90deg,#E5E0D5,transparent);
+  border-radius:1px;
+}
+
+.tip-body { font-size:13px; color:var(--muted); line-height:1.85; }
+
+/* ── Enhanced tip list ── */
+.tip-list {
+  margin:0; padding-left:0; font-size:13px;
+  color:var(--muted); line-height:1.9;
+  list-style:none;
+}
+.tip-list li {
+  margin-bottom:5px; padding:4px 0 4px 22px;
+  position:relative;
+  border-radius:6px;
+  transition:all 0.2s;
+}
+.tip-list li::before {
+  content:'›';
+  position:absolute; left:6px; top:3px;
+  font-weight:900; font-size:15px; line-height:1;
+}
+.tip-list li:hover {
+  background:rgba(200,151,74,0.06);
+  padding-left:26px;
+}
+/* colored bullets per card */
+.tips-grid .info-item:nth-child(1) .tip-list li::before { color:#3B82F6; }
+.tips-grid .info-item:nth-child(2) .tip-list li::before { color:#DC2626; }
+.tips-grid .info-item:nth-child(3) .tip-list li::before { color:#F59E0B; }
+.tips-grid .info-item:nth-child(4) .tip-list li::before { color:#10B981; }
+.tips-grid .info-item:nth-child(5) .tip-list li::before { color:#EC4899; }
+.tips-grid .info-item:nth-child(6) .tip-list li::before { color:#0D9488; }
+.tips-grid .info-item:nth-child(7) .tip-list li::before { color:#7C3AED; }
+.tips-grid .info-item:nth-child(8) .tip-list li::before { color:#DC2626; }
 
 /* budget */
 .budget-section { background:#FFF; border-radius:var(--radius); padding:18px; box-shadow:0 1px 8px rgba(0,0,0,0.03); }
@@ -382,6 +479,83 @@ body {
 .budget-table td { padding:8px 12px; border-bottom:1px solid #F3EFE5; }
 .budget-table td:last-child { text-align:right; font-weight:600; }
 .budget-table tr.total td { border-top:2px solid var(--gold); font-size:16px; font-weight:800; color:var(--emerald); border-bottom:none; padding-top:12px; }
+
+/* ── Expense Tracker ── */
+.expense-tracker { margin-top:14px; }
+.expense-form {
+  background:linear-gradient(170deg,#FFFBF5,#FFF8EB);
+  border-radius:14px; padding:16px; margin-bottom:12px;
+  border:1px solid rgba(200,151,74,0.15);
+  display:flex; flex-direction:column; gap:10px;
+}
+.expense-form-row {
+  display:flex; gap:8px; align-items:center; flex-wrap:wrap;
+}
+.expense-form input, .expense-form select {
+  border:1px solid #E5E0D5; border-radius:8px;
+  padding:8px 10px; font-size:14px; font-family:inherit;
+  background:#FFF; color:var(--text);
+  -webkit-appearance:none;
+}
+.expense-form input:focus, .expense-form select:focus {
+  outline:none; border-color:var(--gold); box-shadow:0 0 0 3px rgba(200,151,74,0.1);
+}
+.expense-form .desc-input { flex:2; min-width:120px; }
+.expense-form .amount-input { flex:1; min-width:80px; }
+.expense-form .currency-select { width:80px; flex-shrink:0; }
+.btn-sm {
+  padding:8px 16px; border-radius:8px; border:none;
+  font-size:13px; font-weight:600; cursor:pointer; transition:all 0.2s;
+}
+.btn-sm-save { background:var(--emerald); color:#FFF; }
+.btn-sm-save:hover { background:#145A38; }
+.btn-sm-cancel { background:#F1F0EB; color:var(--muted); }
+.btn-sm-cancel:hover { background:#E5E0D5; }
+.btn-sm-del { background:none; color:#DC2626; padding:4px 8px; font-size:11px; }
+
+/* split type toggle */
+.split-toggle { display:flex; border-radius:8px; overflow:hidden; border:1px solid #E5E0D5; flex-shrink:0; }
+.split-toggle button {
+  padding:7px 12px; border:none; font-size:12px; font-weight:600;
+  cursor:pointer; transition:all 0.2s; background:#FFF; color:var(--muted);
+}
+.split-toggle button.active { background:var(--gold); color:#FFF; }
+
+/* expense list */
+.expense-item {
+  display:flex; align-items:center; gap:10px; padding:10px 12px;
+  background:#FFF; border-radius:10px; margin-bottom:6px;
+  box-shadow:0 1px 4px rgba(0,0,0,0.03); transition:all 0.2s;
+  cursor:pointer; flex-wrap:wrap;
+}
+.expense-item:hover { box-shadow:0 2px 8px rgba(0,0,0,0.06); }
+.expense-item .exp-desc { flex:1; min-width:100px; font-size:14px; font-weight:600; }
+.expense-item .exp-meta { font-size:12px; color:var(--muted); white-space:nowrap; }
+.expense-item .exp-rmb { font-size:14px; font-weight:700; color:var(--emerald); white-space:nowrap; text-align:right; }
+.expense-item .exp-actions { display:flex; gap:2px; flex-shrink:0; }
+
+/* summary */
+.expense-summary {
+  background:linear-gradient(170deg,#F0F9F4,#E8F5E9);
+  border-radius:14px; padding:14px 16px; margin-top:12px;
+  border:1px solid rgba(26,107,74,0.1);
+}
+.expense-summary .sum-row { display:flex; justify-content:space-between; padding:4px 0; font-size:14px; }
+.expense-summary .sum-row.total { font-size:17px; font-weight:800; border-top:2px solid rgba(26,107,74,0.15); margin-top:4px; padding-top:10px; }
+.expense-summary .sum-diff { color:var(--emerald); }
+.expense-summary .sum-over { color:#DC2626; }
+
+.add-expense-btn {
+  display:block; width:100%; padding:12px; border:2px dashed #D1CBB8;
+  border-radius:12px; background:transparent; color:var(--muted);
+  font-size:14px; font-weight:600; cursor:pointer; transition:all 0.3s;
+  margin-bottom:10px;
+}
+.add-expense-btn:hover { border-color:var(--gold); color:var(--gold); background:rgba(200,151,74,0.04); }
+
+.empty-expenses {
+  text-align:center; padding:16px; color:var(--muted); font-size:13px;
+}
 
 /* checklist */
 .cl-item { display:flex; gap:10px; align-items:center; padding:10px 4px; font-size:15px; cursor:pointer; transition:all 0.2s; border-radius:8px; }
@@ -479,14 +653,24 @@ body {
   .info-item .i-title { font-size:10px; letter-spacing:1px; }
   .info-item .i-value { font-size:12px; }
   .info-item .i-sub { font-size:10px; }
-  .tips-grid { grid-template-columns:1fr; gap:8px; }
-  .tip-title { font-size:11px; margin-bottom:4px; }
-  .tip-body { font-size:10px; }
-  .tip-list { font-size:11px; padding-left:14px; }
+  .tips-grid { grid-template-columns:1fr; gap:10px; }
+  .tips-grid .info-item { padding:14px 12px; }
+  .tip-title { font-size:12px; margin-bottom:6px; }
+  .tip-body { font-size:12px; }
+  .tip-list { font-size:12px; }
+  .tip-list li { padding:3px 0 3px 18px; margin-bottom:3px; }
+  .tip-list li::before { left:4px; font-size:13px; }
   .budget-section { padding:14px; }
   .budget-table { font-size:12px; }
   .budget-table td { padding:6px 8px; }
   .budget-table tr.total td { font-size:14px; }
+  .expense-form { padding:12px; gap:8px; }
+  .expense-form input, .expense-form select { font-size:13px; padding:7px 8px; }
+  .expense-item { padding:8px 10px; gap:6px; }
+  .expense-item .exp-desc { font-size:13px; }
+  .expense-item .exp-rmb { font-size:13px; }
+  .btn-sm { padding:6px 12px; font-size:12px; }
+  .split-toggle button { padding:6px 10px; font-size:11px; }
   .wide-grid { grid-template-columns:1fr; gap:12px; }
   .sticky-col { position:static; }
   .footer { padding:30px 16px 28px; font-size:12px; }
@@ -512,6 +696,11 @@ body {
   .day-grid { gap:10px; }
   .cd-ring-item svg { width:48px; height:48px; }
   .cd-ring-label .val { font-size:13px; }
+  .expense-form-row { flex-direction:column; }
+  .expense-form .desc-input, .expense-form .amount-input { min-width:auto; width:100%; }
+  .expense-form .currency-select { width:100%; }
+  .expense-item { flex-direction:column; align-items:flex-start; gap:4px; }
+  .expense-item .exp-rmb { text-align:left; }
 }
 
 /* ── Global mobile touch targets ── */
@@ -519,6 +708,9 @@ body {
 .tl-row { min-height:44px; }
 .day-preview { -webkit-tap-highlight-color:rgba(200,151,74,0.15); }
 #now-bar { padding:8px 16px; font-size:13px; }
+.btn-sm-del { min-width:32px; min-height:32px; display:inline-flex; align-items:center; justify-content:center; }
+.expense-item { -webkit-tap-highlight-color:transparent; user-select:none; }
+.add-expense-btn { min-height:48px; }
 </style>
 </head>
 <body>
@@ -527,6 +719,9 @@ body {
 
 <!-- ═══ HERO ═══ -->
 <div class="hero">
+  <div class="hero-bg-layer active" id="hero-bg-1" style="background-image:url('./assets/photos/hero-bg-1.jpg')"></div>
+  <div class="hero-bg-layer" id="hero-bg-2" style="background-image:url('./assets/photos/hero-bg-2.jpg')"></div>
+  <div class="hero-bg-overlay"></div>
   <div class="hero-content">
     <div class="hero-badge">HANOI · VIETNAM</div>
     <h1>🇻🇳 河内 <span>×</span> 下龙湾</h1>
@@ -660,7 +855,7 @@ body {
 
 <!-- ═══ DYNAMIC ITINERARY ═══ -->
 <div class="section">
-  <div class="sec-head"><div class="dot" style="background:#E85D3A"></div><div class="title">每日行程 · 点击展开 · 数据实时加载自 CloudBase</div></div>
+  <div class="sec-head"><div class="dot" style="background:#E85D3A"></div><div class="title">每日行程 · 点击展开 · 覆盖绝大部分景点，实际行程根据时间与体力进行调整取舍</div></div>
   <div class="day-grid" id="day-grid">
     <div class="loading-placeholder">
       <div class="loading-spinner"></div>
@@ -855,7 +1050,7 @@ body {
 
 <!-- ═══ BUDGET ═══ -->
 <div class="section">
-  <div class="sec-head"><div class="dot" style="background:var(--muted)"></div><div class="title">💰 预算（人均）</div></div>
+  <div class="sec-head"><div class="dot" style="background:var(--muted)"></div><div class="title">💰 预算 & 记账</div></div>
   <div class="budget-section fade-in">
     <table class="budget-table">
       <tr><td>✈️ 机票往返 ZH107+ZH106</td><td>¥2,080</td></tr>
@@ -868,8 +1063,50 @@ body {
       <tr><td>🎫 门票+水上木偶剧</td><td>~¥150</td></tr>
       <tr><td>💆 按摩SPA（越式洗头+按摩+足疗）</td><td>~¥200</td></tr>
       <tr><td>🎒 杂项（小费·零食·咖啡）</td><td>~¥200</td></tr>
-      <tr class="total"><td>合计</td><td>~¥4,610</td></tr>
+      <tr class="total"><td>预算合计（人均）</td><td>~¥4,610</td></tr>
     </table>
+  </div>
+
+  <!-- ═══ Expense Tracker ═══ -->
+  <div class="expense-tracker fade-in">
+    <button class="add-expense-btn" onclick="showExpenseForm()" id="add-expense-btn">+ 添加一笔实际花费</button>
+
+    <div class="expense-form" id="expense-form" style="display:none;">
+      <input type="hidden" id="exp-edit-id" value="">
+      <div class="expense-form-row">
+        <input class="desc-input" id="exp-desc" placeholder="花费描述，如：午餐 Phở Thìn" maxlength="40">
+        <input class="amount-input" id="exp-amount" type="number" placeholder="金额" min="0" step="1">
+        <select class="currency-select" id="exp-currency" onchange="onCurrencyChange()">
+          <option value="VND">₫ VND</option>
+          <option value="USD">$ USD</option>
+          <option value="CNY">¥ RMB</option>
+        </select>
+      </div>
+      <div class="expense-form-row" style="justify-content:space-between;">
+        <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted);">
+          <span>分摊方式</span>
+          <div class="split-toggle" id="split-toggle">
+            <button id="split-per" onclick="setSplitType('perPerson')">人均</button>
+            <button id="split-total" class="active" onclick="setSplitType('total')">总共</button>
+          </div>
+          <span id="people-wrap" style="display:flex;align-items:center;gap:4px;">
+            <span>&times;</span>
+            <input id="exp-people" type="number" value="2" min="1" max="20" style="width:42px;text-align:center;padding:6px 4px;font-size:13px;">
+            <span>人</span>
+          </span>
+        </div>
+        <div class="btn-row" style="display:flex;gap:8px;">
+          <button class="btn-sm btn-sm-cancel" onclick="cancelExpense()">取消</button>
+          <button class="btn-sm btn-sm-save" onclick="saveExpense()">保存</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="expense-list" id="expense-list">
+      <div class="empty-expenses">暂无实际花费记录，点击上方按钮添加</div>
+    </div>
+
+    <div class="expense-summary" id="expense-summary" style="display:none;"></div>
   </div>
 </div>
 
@@ -1378,5 +1615,246 @@ document.querySelectorAll('.fade-in').forEach(el=>new IntersectionObserver(es=>e
 })();
 </script>
 
+
+
+<!-- ═══ EXPENSE TRACKER ═══ -->
+<script>
+// Exchange rates (July 2026)
+// 1 USD ≈ 6.80 RMB, 1 RMB ≈ 3,880 VND
+const FX_RATES = {
+  CNY: 1,
+  USD: 6.80,
+  VND: 1 / 3880   // ≈ 0.0002577
+};
+const FX_SYMBOLS = { CNY:'\u00a5', USD:'$', VND:'\u20ab' };
+
+const BUDGET_TOTAL = 4610; // per person RMB
+const EXPENSES_API = 'https://hanoi-d4gj8vd2q1e7a3dc0.service.tcloudbase.com/api/expenses';
+
+let expenses = [];
+let currentSplitType = 'total';
+let editingId = null;
+let saving = false;
+
+// Load from CloudBase
+async function loadExpenses() {
+  try {
+    const resp = await fetch(EXPENSES_API);
+    const json = await resp.json();
+    if (json.success) {
+      expenses = json.data.map(item => ({
+        desc: item.desc,
+        amount: item.amount,
+        currency: item.currency,
+        splitType: item.splitType,
+        people: item.people || 1
+      }));
+    }
+  } catch(e) { console.error('加载花费失败:', e); }
+}
+
+// Save to CloudBase (batch replace)
+async function persistExpenses() {
+  if (saving) return;
+  saving = true;
+  try {
+    await fetch(EXPENSES_API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ items: expenses })
+    });
+  } catch(e) { console.error('保存花费失败:', e); }
+  saving = false;
+}
+
+// Convert to per-person RMB
+function toPerPersonRMB(item) {
+  const rate = FX_RATES[item.currency] || 1;
+  const rmbTotal = item.amount * rate;
+  if (item.splitType === 'perPerson') return rmbTotal;
+  return rmbTotal / (item.people || 2);
+}
+
+// Format currency
+function fmtRMB(n) { return '\u00a5' + n.toFixed(0); }
+function fmtOrig(item) {
+  const sym = FX_SYMBOLS[item.currency] || '';
+  if (item.currency === 'VND') {
+    if (item.amount >= 1000) return (item.amount/1000).toFixed(0) + 'k ' + sym;
+    return item.amount + ' ' + sym;
+  }
+  return sym + item.amount.toLocaleString();
+}
+
+function renderExpenses() {
+  const listEl = document.getElementById('expense-list');
+  const summaryEl = document.getElementById('expense-summary');
+  const emptyEl = listEl.querySelector('.empty-expenses');
+
+  if (expenses.length === 0) {
+    listEl.innerHTML = '<div class="empty-expenses">\u6682\u65e0\u5b9e\u9645\u82b1\u8d39\u8bb0\u5f55\uff0c\u70b9\u51fb\u4e0a\u65b9\u6309\u94ae\u6dfb\u52a0</div>';
+    summaryEl.style.display = 'none';
+    return;
+  }
+
+  let html = '';
+  let totalPerPerson = 0;
+
+  expenses.forEach((item, idx) => {
+    const ppRmb = toPerPersonRMB(item);
+    totalPerPerson += ppRmb;
+    const typeLabel = item.splitType === 'perPerson' ? '\u4eba\u5747' : ('\u5171 ' + (item.people||2) + '\u4eba');
+    html += '<div class="expense-item" onclick="editExpense(' + idx + ')">' +
+      '<div class="exp-desc">' + escHtml(item.desc) + '</div>' +
+      '<div class="exp-meta">' + fmtOrig(item) + ' (' + typeLabel + ')</div>' +
+      '<div class="exp-rmb">\u2248' + fmtRMB(ppRmb) + '/\u4eba</div>' +
+      '<div class="exp-actions" onclick="event.stopPropagation()">' +
+        '<button class="btn-sm btn-sm-del" onclick="deleteExpense(' + idx + ')" title="\u5220\u9664">\u00d7</button>' +
+      '</div>' +
+    '</div>';
+  });
+
+  listEl.innerHTML = html;
+
+  // Summary
+  const diff = BUDGET_TOTAL - totalPerPerson;
+  const pct = Math.round((totalPerPerson / BUDGET_TOTAL) * 100);
+  const diffClass = diff >= 0 ? 'sum-diff' : 'sum-over';
+  const diffSign = diff >= 0 ? '' : '';
+  summaryEl.style.display = 'block';
+  summaryEl.innerHTML =
+    '<div class="sum-row"><span>\u5b9e\u9645\u5408\u8ba1\uff08\u4eba\u5747\uff09</span><span style="font-weight:700;">' + fmtRMB(totalPerPerson) + '</span></div>' +
+    '<div class="sum-row"><span>\u9884\u7b97\u5408\u8ba1\uff08\u4eba\u5747\uff09</span><span>' + fmtRMB(BUDGET_TOTAL) + '</span></div>' +
+    '<div class="sum-row total"><span>' + (diff >= 0 ? '\u2714 \u8282\u7701' : '\u26a0 \u8d85\u652f') + '</span><span class="' + diffClass + '">' + diffSign + fmtRMB(Math.abs(diff)) + '</span></div>' +
+    '<div style="margin-top:8px;background:#E5E0D5;border-radius:6px;height:8px;overflow:hidden;">' +
+      '<div style="height:100%;width:' + Math.min(pct,100) + '%;background:' + (diff >= 0 ? 'var(--emerald)' : '#DC2626') + ';border-radius:6px;transition:width 0.5s;"></div>' +
+    '</div>' +
+    '<div style="font-size:11px;color:var(--muted);margin-top:2px;text-align:right;">' + pct + '% \u5df2\u7528</div>';
+}
+
+function escHtml(s) {
+  const d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
+}
+
+function showExpenseForm(editIdx) {
+  const form = document.getElementById('expense-form');
+  const btn = document.getElementById('add-expense-btn');
+  form.style.display = 'flex';
+  btn.style.display = 'none';
+  document.getElementById('exp-desc').focus();
+
+  if (editIdx !== undefined && expenses[editIdx]) {
+    const item = expenses[editIdx];
+    editingId = editIdx;
+    document.getElementById('exp-edit-id').value = editIdx;
+    document.getElementById('exp-desc').value = item.desc;
+    document.getElementById('exp-amount').value = item.amount;
+    document.getElementById('exp-currency').value = item.currency;
+    setSplitType(item.splitType);
+    document.getElementById('exp-people').value = item.people || 2;
+  } else {
+    editingId = null;
+    document.getElementById('exp-edit-id').value = '';
+    document.getElementById('exp-desc').value = '';
+    document.getElementById('exp-amount').value = '';
+    document.getElementById('exp-currency').value = 'VND';
+    setSplitType('total');
+    document.getElementById('exp-people').value = 2;
+  }
+}
+
+function editExpense(idx) {
+  showExpenseForm(idx);
+}
+
+function cancelExpense() {
+  document.getElementById('expense-form').style.display = 'none';
+  document.getElementById('add-expense-btn').style.display = 'block';
+  editingId = null;
+}
+
+function saveExpense() {
+  const desc = document.getElementById('exp-desc').value.trim();
+  const amountStr = document.getElementById('exp-amount').value;
+  const currency = document.getElementById('exp-currency').value;
+  const people = parseInt(document.getElementById('exp-people').value) || 2;
+
+  if (!desc) { alert('\u8bf7\u586b\u5199\u82b1\u8d39\u63cf\u8ff0'); return; }
+  if (!amountStr || isNaN(parseFloat(amountStr)) || parseFloat(amountStr) <= 0) {
+    alert('\u8bf7\u586b\u5199\u6709\u6548\u91d1\u989d'); return;
+  }
+
+  const item = {
+    desc: desc,
+    amount: parseFloat(amountStr),
+    currency: currency,
+    splitType: currentSplitType,
+    people: currentSplitType === 'total' ? people : 1
+  };
+
+  if (editingId !== null) {
+    expenses[editingId] = item;
+  } else {
+    expenses.push(item);
+  }
+
+  persistExpenses();
+  renderExpenses();
+  cancelExpense();
+}
+
+function deleteExpense(idx) {
+  expenses.splice(idx, 1);
+  persistExpenses();
+  renderExpenses();
+}
+
+function setSplitType(type) {
+  currentSplitType = type;
+  document.getElementById('split-per').classList.toggle('active', type === 'perPerson');
+  document.getElementById('split-total').classList.toggle('active', type === 'total');
+  document.getElementById('people-wrap').style.display = type === 'total' ? 'flex' : 'none';
+}
+
+function onCurrencyChange() {
+  // placeholder for future use
+}
+
+// Init (async)
+(async function initExpenses() {
+  await loadExpenses();
+  renderExpenses();
+})();
+</script>
+
+<!-- ═══ HERO BACKGROUND SLIDESHOW ═══ -->
+<script>
+(function(){
+  const HERO_IMAGES = [
+    './assets/photos/hero-bg-1.jpg',
+    './assets/photos/hero-bg-2.jpg',
+    './assets/photos/hero-bg-3.jpg',
+    './assets/photos/hero-bg-4.jpg'
+  ];
+  let currentIndex = 1;
+  let activeLayer = 1;
+
+  function rotateHeroBg() {
+    const nextLayer = activeLayer === 1 ? 2 : 1;
+    const currentEl = document.getElementById('hero-bg-' + activeLayer);
+    const nextEl = document.getElementById('hero-bg-' + nextLayer);
+    if (!currentEl || !nextEl) return;
+    nextEl.style.backgroundImage = 'url(\'' + HERO_IMAGES[currentIndex] + '\')';
+    currentEl.classList.remove('active');
+    nextEl.classList.add('active');
+    currentIndex = (currentIndex + 1) % HERO_IMAGES.length;
+    activeLayer = nextLayer;
+  }
+
+  setInterval(rotateHeroBg, 5000);
+})();
+</script>
 </body>
 </html>

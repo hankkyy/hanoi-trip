@@ -1,0 +1,8 @@
+{
+  "name": "expenses-api",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "@cloudbase/node-sdk": "^2.0.0"
+  }
+}
