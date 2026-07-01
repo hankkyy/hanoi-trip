@@ -8,18 +8,22 @@
 <title>Hanoi</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏝️</text></svg>">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<link rel="preload" as="image" href="./assets/photos/hero-bg-1.jpg">
+<link rel="preload" as="image" href="./assets/photos/hero-bg-2.jpg">
+<link rel="preload" as="image" href="./assets/photos/hero-bg-3.jpg">
+<link rel="preload" as="image" href="./assets/photos/hero-bg-4.jpg">
 <style>
 :root {
   --gold:#C8974A; --emerald:#1A6B4A; --bg:#FEFCF5; --card:#FFF;
   --text:#1E293B; --muted:#64748B; --radius:16px; --max-w:1100px;
 }
 * { margin:0; padding:0; box-sizing:border-box; }
-html { scroll-behavior:smooth; overflow-x:hidden; }
+html { scroll-behavior:smooth; overflow-x:hidden; overflow-y:auto; }
 body {
   font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
   background:var(--bg); color:var(--text); line-height:1.55;
   -webkit-font-smoothing:antialiased; -webkit-tap-highlight-color:transparent;
-  font-size:16px; overscroll-behavior-y:contain; overflow-x:hidden; width:100%; max-width:100vw;
+  font-size:16px; touch-action:manipulation; overflow-x:hidden; width:100%; max-width:100vw;
   word-break:break-word; overflow-wrap:break-word;
   -webkit-overflow-scrolling:touch;
 }
@@ -139,7 +143,7 @@ body {
 .flight-card.tapped .fextra { max-height:32px; opacity:1; padding:2px 18px 10px; }
 .flight-card.tapped .bp-perf { margin-bottom:0; }
 
-.page { max-width:var(--max-w); margin:0 auto; padding:0 20px; width:100%; }
+.page { max-width:var(--max-w); margin:0 auto; padding:0 20px; width:100%; overflow-x:hidden; }
 
 /* weather */
 .weather-row { display:flex; flex-direction:column; align-items:center; padding:14px 0 0; }
@@ -327,7 +331,7 @@ body {
   z-index:1;
 }
 .wide-grid { display:grid; grid-template-columns:1.6fr 1fr; gap:20px; align-items:start; max-width:100%; min-width:0; }
-.wide-grid > * { min-width:0; max-width:100%; overflow:hidden; }
+.wide-grid > * { min-width:0; max-width:100%; }
 @media(max-width:860px){ .wide-grid { grid-template-columns:1fr; } }
 .sticky-col { position:sticky; top:56px; min-width:0; max-width:100%; }
 @media(max-width:860px){ .sticky-col { position:static; } }
@@ -392,7 +396,7 @@ body {
 .tips-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:14px; }
 
 /* ── Phrase table ── */
-.phrase-table { width:100%; border-collapse:collapse; background:#FFF; border-radius:14px; overflow:hidden; box-shadow:0 2px 12px rgba(0,0,0,0.04); display:block; overflow-x:auto; overflow-y:hidden; -webkit-overflow-scrolling:touch; overscroll-behavior:contain; }
+.phrase-table { width:100%; border-collapse:collapse; background:#FFF; border-radius:14px; overflow:hidden; box-shadow:0 2px 12px rgba(0,0,0,0.04); table-layout:fixed; }
 .phrase-table thead th { background:linear-gradient(135deg,#1A6B4A,#0D9488); color:#FFF; padding:12px 14px; font-size:13px; font-weight:700; letter-spacing:1px; text-align:left; }
 .phrase-table thead th:first-child { width:30%; }
 .phrase-table thead th:last-child { width:30%; }
@@ -628,6 +632,7 @@ body {
 
 /* ── Mobile optimizations ── */
 .fold-arrow { display:none; }
+.fold-peek { display:none; }
 @media(max-width:480px){
   body { font-size:15px; }
   .hero { padding:24px 16px 20px; }
@@ -735,10 +740,16 @@ body {
   .bl-icon { font-size:24px; }
   .bl-info .bl-title { font-size:14px; }
   .fold-arrow { display:inline-block; font-size:13px; color:var(--muted); transition:transform 0.3s; flex-shrink:0; margin-left:auto; }
-  .mobile-fold-header { cursor:pointer; }
   .mobile-fold-body { display:none; }
+  .mobile-fold-section .fold-peek { display:flex; align-items:center; gap:12px; padding:14px 16px; background:#FFF; border-radius:16px; box-shadow:0 1px 8px rgba(0,0,0,0.04); cursor:pointer; border:1.5px solid transparent; transition:all 0.3s; }
+  .mobile-fold-section .fold-peek:active { box-shadow:0 4px 20px rgba(0,0,0,0.07); border-color:#EDEAE2; }
+  .mobile-fold-section .fold-peek .fp-icon { font-size:28px; flex-shrink:0; }
+  .mobile-fold-section .fold-peek .fp-info { flex:1; min-width:0; }
+  .mobile-fold-section .fold-peek .fp-title { font-size:14px; font-weight:700; color:var(--text); line-height:1.3; }
+  .mobile-fold-section .fold-peek .fp-sub { font-size:12px; color:var(--muted); margin-top:2px; }
+  .mobile-fold-section .fold-peek .fp-arrow { font-size:14px; color:var(--muted); flex-shrink:0; transition:transform 0.3s; }
+  .mobile-fold-section.open .fold-peek .fp-arrow { transform:rotate(180deg); }
   .mobile-fold-section.open .mobile-fold-body { display:block; }
-  .mobile-fold-section.open .fold-arrow { transform:rotate(180deg); }
   .flight-row { gap:12px; }
   .weather-box { padding:14px 18px; gap:12px; }
   .weather-box .w-icon { font-size:36px; }
@@ -1033,6 +1044,9 @@ body {
       🧠 选人潮多翻桌率高的店 · 避免生水不明冰块 · 还剑湖周边贵 20-30%，老城深巷更实惠
     </div>
   </div>
+  </div>
+
+<div class="sticky-col">
   <!-- souvenirs -->
   <div class="section">
     <div class="sec-head"><div class="dot" style="background:#F59E0B"></div><div class="title">🛍️ 伴手礼</div></div>
@@ -1083,12 +1097,10 @@ body {
       </div>
     </div>
   </div>
-</div>
-
-<div class="sticky-col">
   <!-- vietnamese phrases -->
   <div class="section mobile-fold-section" id="phrase-section">
-    <div class="sec-head mobile-fold-header" onclick="toggleMobileFold('phrase-section')"><div class="dot" style="background:var(--gold)"></div><div class="title">🇻🇳 越南语速成 · 谐音救急（北音）</div><span class="fold-arrow">▼</span></div>
+    <div class="sec-head mobile-fold-header" onclick="toggleMobileFold('phrase-section')"><div class="dot" style="background:var(--gold)"></div><div class="title">🇻🇳 越南语速成</div><span class="fold-arrow">▼</span></div>
+    <div class="fold-peek" onclick="toggleMobileFold('phrase-section')"><span class="fp-icon">🇻🇳</span><div class="fp-info"><div class="fp-title">15句实用短语</div><div class="fp-sub">问候 · 购物餐饮 · 应急</div></div><span class="fp-arrow">▼</span></div>
     <div class="mobile-fold-body">
     <table class="phrase-table">
       <thead><tr><th>中文</th><th>越南语</th><th>谐音</th></tr></thead>
@@ -1096,35 +1108,21 @@ body {
         <tr class="phr-cat"><td colspan="3">👋 问候</td></tr>
         <tr class="phr-row"><td>你好</td><td>Xin chào</td><td>新早</td></tr>
         <tr class="phr-row"><td>谢谢</td><td>Cảm ơn</td><td>感恩</td></tr>
-        <tr class="phr-row"><td>再见</td><td>Tạm biệt</td><td>担别</td></tr>
         <tr class="phr-row"><td>对不起</td><td>Xin lỗi</td><td>新罗伊</td></tr>
-        <tr class="phr-cat"><td colspan="3">🛒 购物砍价</td></tr>
+        <tr class="phr-row"><td>再见</td><td>Tạm biệt</td><td>担别</td></tr>
+        <tr class="phr-cat"><td colspan="3">🛒 购物 · 餐饮</td></tr>
         <tr class="phr-row"><td>多少钱？</td><td>Bao nhiêu tiền?</td><td>包妞典</td></tr>
         <tr class="phr-row"><td>太贵了</td><td>Đắt quá</td><td>搭瓜</td></tr>
         <tr class="phr-row"><td>便宜点</td><td>Rẻ một chút</td><td>也莫煮</td></tr>
-        <tr class="phr-row"><td>我买了 / 要这个</td><td>Tôi lấy cái này</td><td>堆来盖奶</td></tr>
-        <tr class="phr-cat"><td colspan="3">🍜 餐饮</td></tr>
         <tr class="phr-row"><td>好吃！</td><td>Ngon!</td><td>翁</td></tr>
         <tr class="phr-row"><td>买单</td><td>Tính tiền</td><td>丁典</td></tr>
-        <tr class="phr-row"><td>咖啡 / 茶</td><td>Cà phê / Trà</td><td>卡啡 / 眨</td></tr>
-        <tr class="phr-row"><td>瓶装水</td><td>Nước suối</td><td>努虽</td></tr>
-        <tr class="phr-cat"><td colspan="3">🚗 出行问路</td></tr>
-        <tr class="phr-row"><td>在哪？</td><td>Ở đâu?</td><td>鹅捞</td></tr>
-        <tr class="phr-row"><td>厕所</td><td>Nhà vệ sinh</td><td>雅野星</td></tr>
-        <tr class="phr-row"><td>酒店</td><td>Khách sạn</td><td>卡散</td></tr>
-        <tr class="phr-row"><td>去机场</td><td>Đi sân bay</td><td>低生掰</td></tr>
-        <tr class="phr-cat"><td colspan="3">🔢 数字</td></tr>
-        <tr class="phr-row"><td>一 / 二 / 三 / 四 / 五</td><td>Một / Hai / Ba / Bốn / Năm</td><td>木 / 害 / 八 / 门 / 难</td></tr>
-        <tr class="phr-row"><td>六 / 七 / 八 / 九 / 十</td><td>Sáu / Bảy / Tám / Chín / Mười</td><td>扫 / 百 / 当 / 斤 / 美</td></tr>
-        <tr class="phr-row"><td>千</td><td>Nghìn</td><td>银</td></tr>
-        <tr class="phr-cat"><td colspan="3">💬 应急万能句</td></tr>
+        <tr class="phr-cat"><td colspan="3">💬 应急</td></tr>
         <tr class="phr-row"><td>是 / 有</td><td>Có</td><td>锅</td></tr>
         <tr class="phr-row"><td>不 / 没有</td><td>Không</td><td>空</td></tr>
-        <tr class="phr-row"><td>不要，谢谢</td><td>Không, cảm ơn</td><td>空，感恩</td></tr>
-        <tr class="phr-row"><td>听不懂，请打字</td><td>Không hiểu, gõ máy</td><td>空喝油，高买</td></tr>
       </tbody>
     </table>
   </div>
+</div>
 </div>
 </div>
 
@@ -1157,6 +1155,7 @@ body {
 <!-- ═══ 旅行贴士 ═══ -->
 <div class="section mobile-fold-section" id="tips-section">
   <div class="sec-head mobile-fold-header" onclick="toggleMobileFold('tips-section')"><div class="dot" style="background:#DC2626"></div><div class="title">📌 旅行贴士 · Tips & 避雷</div><span class="fold-arrow">▼</span></div>
+  <div class="fold-peek" onclick="toggleMobileFold('tips-section')"><span class="fp-icon">📌</span><div class="fp-info"><div class="fp-title">天气 · 礼仪 · 防骗 · 景点避雷</div><div class="fp-sub">7大板块 · 行前必读实用贴士</div></div><span class="fp-arrow">▼</span></div>
   <div class="mobile-fold-body">
   <div class="tips-grid">
     <div class="info-item">
@@ -1291,7 +1290,6 @@ body {
 
     <div class="expense-summary" id="expense-summary" style="display:none;"></div>
   </div>
-</div>
 
 </div><!-- /page -->
 
@@ -1829,19 +1827,33 @@ document.querySelectorAll('.fade-in').forEach(el=>new IntersectionObserver(es=>e
 (function initMap(){
   if(!document.getElementById('hanoi-map')) return;
   const mapDiv = document.getElementById('hanoi-map');
-  
+
+  // WGS-84 → GCJ-02 坐标转换（适配高德地图火星坐标系）
+  function wgs84ToGcj02(lat, lng) {
+    const a=6378245.0, ee=0.00669342162296594323, PI=Math.PI;
+    function tLng(x,y){let r=300+x+2*y+0.1*x*x+0.1*x*y+0.1*Math.sqrt(Math.abs(x));r+=(20*Math.sin(6*x*PI)+20*Math.sin(2*x*PI))*2/3;r+=(20*Math.sin(x*PI)+40*Math.sin(x/3*PI))*2/3;r+=(150*Math.sin(x/12*PI)+300*Math.sin(x/30*PI))*2/3;return r}
+    function tLat(x,y){let r=-100+2*x+3*y+0.2*y*y+0.1*x*y+0.2*Math.sqrt(Math.abs(x));r+=(20*Math.sin(6*x*PI)+20*Math.sin(2*x*PI))*2/3;r+=(20*Math.sin(y*PI)+40*Math.sin(y/3*PI))*2/3;r+=(160*Math.sin(y/12*PI)+320*Math.sin(y*PI/30))*2/3;return r}
+    const dLat=tLat(lng-105,lat-35),dLng=tLng(lng-105,lat-35);
+    const r=lat/180*PI,m=1-ee*Math.sin(r)*Math.sin(r),s=Math.sqrt(m);
+    return [lat+dLat*180/(a*(1-ee)/(m*s)*PI),lng+dLng*180/(a/s*Math.cos(r)*PI)];
+  }
 
   // Init Leaflet map — center between Hanoi and Ha Long Bay
   const map = L.map('hanoi-map', {
-    center: [20.98, 105.95],
+    center: wgs84ToGcj02(20.98, 105.95),
     zoom: 9,
     zoomControl: true,
     scrollWheelZoom: true,
     attributionControl: false
   });
   
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 18,
+  // 高德地图瓦片（国内无需VPN，秒开）
+  // 使用 wprd CDN（比 webrd 更稳定，高缩放级别瓦片不会消失）
+  L.tileLayer('https://wprd0{s}.is.autonavi.com/appmaptile?x={x}&y={y}&z={z}&lang=zh_cn&size=1&scl=1&style=8', {
+    subdomains: '1234',
+    maxNativeZoom: 18,
+    maxZoom: 20,
+    attribution: '© 高德地图',
   }).addTo(map);
   
   L.control.attribution({position:'bottomright',prefix:false}).addTo(map);
@@ -1926,7 +1938,7 @@ document.querySelectorAll('.fade-in').forEach(el=>new IntersectionObserver(es=>e
   ];
   
   // Create bounds to fit all markers
-  const bounds = L.latLngBounds(spots.map(s => [s.lat, s.lng]));
+  const bounds = L.latLngBounds(spots.map(s => wgs84ToGcj02(s.lat, s.lng)));
   
   spots.forEach(s => {
     const popupHTML = `
@@ -1957,7 +1969,8 @@ document.querySelectorAll('.fade-in').forEach(el=>new IntersectionObserver(es=>e
       iconAnchor: [60, 18]
     });
 
-    const marker = L.marker([s.lat, s.lng], {icon}).addTo(map);
+    const gcj = wgs84ToGcj02(s.lat, s.lng);
+    const marker = L.marker(gcj, {icon}).addTo(map);
     marker.bindPopup(popupHTML, {maxWidth:300,className:'custom-popup'});
   });
   
