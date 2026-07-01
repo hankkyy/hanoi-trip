@@ -387,7 +387,7 @@ body {
 .tips-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:14px; }
 
 /* ── Phrase table ── */
-.phrase-table { width:100%; border-collapse:collapse; background:#FFF; border-radius:14px; overflow:hidden; box-shadow:0 2px 12px rgba(0,0,0,0.04); }
+.phrase-table { width:100%; border-collapse:collapse; background:#FFF; border-radius:14px; overflow:hidden; box-shadow:0 2px 12px rgba(0,0,0,0.04); display:block; overflow-x:auto; -webkit-overflow-scrolling:touch; }
 .phrase-table thead th { background:linear-gradient(135deg,#1A6B4A,#0D9488); color:#FFF; padding:12px 14px; font-size:13px; font-weight:700; letter-spacing:1px; text-align:left; }
 .phrase-table thead th:first-child { width:30%; }
 .phrase-table thead th:last-child { width:30%; }
@@ -754,6 +754,14 @@ body {
   .immigration-hint .cl-text a { font-size:10px; }
   .tips-grid .info-item { padding:12px 10px; }
   .tip-list li { padding:3px 0 3px 16px; }
+  .phrase-table thead th, .phrase-table .phr-row td, .phrase-table .phr-cat td { padding:6px 7px; font-size:11px; }
+  .phrase-table .phr-row td:last-child { font-size:10px; }
+  .info-item .i-value { font-size:11px !important; }
+  .resto-info h4 { font-size:13px; }
+  .resto-preview { padding:10px; gap:8px; }
+  .resto-emoji { font-size:20px; }
+  .souv-card { padding:10px 8px; }
+  .souv-card h4 { font-size:11px; }
 }
 
 /* ── Global mobile touch targets ── */
@@ -992,7 +1000,6 @@ body {
         <div class="resto-preview"><div class="resto-emoji">🐟</div><div class="resto-info"><h4>Chả Cá Thăng Long</h4><div class="rd">Đường Thành · 120k-200k</div><span class="r-tag tag-mich">Michelin</span></div></div>
         <div class="resto-expand"><div class="resto-more">姜黄煎鱼配莳萝，桌上现煎，河内独有古法！正餐硬菜，适合2人分享。配 <b>Bún + Mắm Tôm</b>（米粉+虾酱）。<br><a class="map-link" href="https://maps.google.com/?q=Cha+Ca+Thang+Long+Hanoi">🗺️ 地图</a></div></div>
       </div>
-    </div>
       <div class="resto-item fade-in" onclick="this.classList.toggle('tapped')">
         <div class="resto-preview"><div class="resto-emoji">🍗</div><div class="resto-info"><h4>Phở Gà Hà</h4><div class="rd">15 Hàng Hòm · 45k-55k</div><span class="r-tag tag-bib">Bib Gourmand</span></div></div>
         <div class="resto-expand"><div class="resto-more">Michelin 推荐的鸡肉河粉！汤底鲜甜不靠味精，鸡肉嫩滑。可点干拌版（汤另上）。推荐：<b>Phở Gà Trộn</b>（干拌鸡粉）+ Quẩy（油条）。<br><a class="map-link" href="https://maps.google.com/?q=Pho+Ga+Ha+15+Hang+Hom+Hanoi">🗺️ 地图</a></div></div>
