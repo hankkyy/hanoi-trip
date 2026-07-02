@@ -324,11 +324,19 @@ body {
 .spot-popup .popup-title { font-size:17px; font-weight:800; color:var(--text); margin-bottom:6px; }
 .spot-popup .popup-desc { font-size:13px; color:var(--muted); line-height:1.7; }
 
-.trip-map {
-  position:relative; min-height:320px; height:500px; border-radius:16px; overflow:hidden;
+.trip-map-wrap {
+  border-radius:16px; overflow:hidden;
   box-shadow:0 2px 16px rgba(0,0,0,0.08);
   border:1px solid rgba(26,107,74,0.1);
+}
+.trip-map {
+  position:relative; min-height:320px; height:500px;
   z-index:1;
+  /* 移动端 GPU 合成修复：防止缩放时瓦片消失 */
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
 }
 .wide-grid { display:grid; grid-template-columns:1.6fr 1fr; gap:20px; align-items:start; max-width:100%; min-width:0; }
 .wide-grid > * { min-width:0; max-width:100%; }
@@ -667,6 +675,10 @@ body {
   .cd-ring-label .lbl { font-size:10px; }
   .trip-map {
     min-height:380px; height:380px;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
   }
   .top-cards { gap:6px; margin-top:8px; }
   .top-card { padding:10px 6px; }
@@ -910,7 +922,7 @@ body {
     <span style="background:#64748B;color:#fff;font-size:10px;padding:3px 8px;border-radius:10px;font-weight:600;">🚉 交通</span>
     <span style="background:#DC2626;color:#fff;font-size:10px;padding:3px 8px;border-radius:10px;font-weight:600;">🛫 出发</span>
   </div>
-  <div id="hanoi-map" class="trip-map"></div>
+  <div class="trip-map-wrap"><div id="hanoi-map" class="trip-map"></div></div>
 </div>
 
 <div class="cdown fade-in" id="countdown">
@@ -1838,22 +1850,20 @@ document.querySelectorAll('.fade-in').forEach(el=>new IntersectionObserver(es=>e
   });
 
   // OpenStreetMap 瓦片（全球覆盖，越南街道级细节完整，无需VPN）
-  // 同时注册 CartoDB 轻量版作为备选底图
-  const osmLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  const tileLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxNativeZoom: 19,
     maxZoom: 20,
     attribution: '© OpenStreetMap contributors',
   }).addTo(map);
 
-  const cartoLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-    subdomains: 'abcd',
-    maxNativeZoom: 19,
-    maxZoom: 20,
-    attribution: '© CartoDB',
+  // 瓦片加载失败计数器（用于诊断）
+  let tileErrorCount = 0;
+  tileLayer.on('tileerror', function(e) {
+    tileErrorCount++;
+    if (tileErrorCount <= 3) {
+      console.warn('Tile load error:', e.tile.src, 'total errors:', tileErrorCount);
+    }
   });
-
-  // 底图切换控件：OSM（默认）/ CartoDB 轻量版
-  L.control.layers({ 'OSM 标准': osmLayer, 'CartoDB 轻量': cartoLayer }, null, { position: 'topright', collapsed: true }).addTo(map);
   
   L.control.attribution({position:'bottomright',prefix:false}).addTo(map);
   
@@ -1975,6 +1985,10 @@ document.querySelectorAll('.fade-in').forEach(el=>new IntersectionObserver(es=>e
   map.fitBounds(bounds, {padding:[30,30]});
   map.setMinZoom(7);
   map.setMaxZoom(17);
+
+  // 强制重绘地图尺寸（修复移动端渲染问题）
+  setTimeout(() => { map.invalidateSize(); }, 200);
+  setTimeout(() => { map.invalidateSize(); }, 600);
 })();
 </script>
 
